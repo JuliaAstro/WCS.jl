@@ -192,14 +192,14 @@ immutable Array_160_Uint8
     d159::Uint8
     d160::Uint8
 end
-type wcserr
+immutable wcserr
     status::Cint
     line_no::Cint
     _function::Ptr{Uint8}
     file::Ptr{Uint8}
     msg::Array_160_Uint8
 end
-type linprm
+immutable linprm
     flag::Cint
     naxis::Cint
     crpix::Ptr{Cdouble}
@@ -311,7 +311,7 @@ immutable Array_10_Cdouble
     d9::Cdouble
     d10::Cdouble
 end
-type prjprm
+immutable prjprm
     flag::Cint
     code::Array_4_Uint8
     r0::Cdouble
@@ -350,7 +350,7 @@ immutable Array_5_Cdouble
     d4::Cdouble
     d5::Cdouble
 end
-type celprm
+immutable celprm
     flag::Cint
     offset::Cint
     phi0::Cdouble
@@ -363,7 +363,7 @@ type celprm
     err::Ptr{wcserr}
     padding::Ptr{None}
 end
-type spxprm
+immutable spxprm
     restfrq::Cdouble
     restwav::Cdouble
     wavetype::Cint
@@ -435,7 +435,7 @@ immutable Array_6_Cdouble
     d5::Cdouble
     d6::Cdouble
 end
-type spcprm
+immutable spcprm
     flag::Cint
     _type::Array_8_Uint8
     code::Array_4_Uint8
@@ -453,7 +453,7 @@ type spcprm
     spxS2P::Ptr{Void}
     spxP2X::Ptr{Void}
 end
-type tabprm
+immutable tabprm
     flag::Cint
     M::Cint
     K::Ptr{Cint}
@@ -496,7 +496,7 @@ const WCSERR_NO_SOLUTION = 11
 const WCSERR_BAD_SUBIMAGE = 12
 const WCSERR_NON_SEPARABLE = 13
 # end enum wcs_errmsg_enum
-type pvcard
+immutable pvcard
     i::Cint
     m::Cint
     value::Cdouble
@@ -575,12 +575,12 @@ immutable Array_72_Uint8
     d71::Uint8
     d72::Uint8
 end
-type pscard
+immutable pscard
     i::Cint
     m::Cint
     value::Array_72_Uint8
 end
-type wtbarr
+immutable wtbarr
     i::Cint
     m::Cint
     kind::Cint
@@ -598,7 +598,7 @@ immutable Array_3_Cdouble
     d2::Cdouble
     d3::Cdouble
 end
-type wcsprm
+immutable wcsprm
     flag::Cint
     naxis::Cint
     crpix::Ptr{Cdouble}
