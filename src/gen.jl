@@ -16,8 +16,10 @@ WCS_INCDIR = abspath("../deps/usr/include/wcslib")
 
 context = wrap_c.init(clang_includes = clang_includes,
                       common_file = "libwcs_common.jl",
-                      cursor_wrapped = (name,cursor) -> !contains(name,"_errmsg"),
+                      cursor_wrapped = (name,cursor) -> !endswith(name,"_errmsg"),
                       header_library = x -> "libwcs",
                       output_file = "libwcs_h.jl")
+
+context.options.immutable_structs = true
 
 wrap_c.wrap_c_headers(context, [joinpath(WCS_INCDIR,"wcs.h")])

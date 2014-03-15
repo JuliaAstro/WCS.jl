@@ -1,4 +1,4 @@
-# Julia wrapper for header: /scratch/nolta/julia-pkg/WCS/deps/usr/include/wcslib/wcs.h
+# Julia wrapper for header: /scratch/nolta/julia-pkg/WCSLIB/deps/usr/include/wcslib/wcs.h
 # Automatically generated using Clang.jl wrap_c, version 0.0.0
 
 function wcserr_enable(enable::Cint)

@@ -21,15 +21,6 @@ const WCSSUB_SPECTRAL = 0x1008
 const WCSSUB_STOKES = 0x1010
 # Skipping MacroDefinition: WCSLEN(sizeof(structwcsprm)/sizeof(int))
 # Skipping MacroDefinition: wcscopy(alloc,wcssrc,wcsdst)wcssub(alloc,wcssrc,0x0,0x0,wcsdst)
-const wcsini_errmsg = wcs_errmsg
-const wcssub_errmsg = wcs_errmsg
-const wcscopy_errmsg = wcs_errmsg
-const wcsfree_errmsg = wcs_errmsg
-const wcsprt_errmsg = wcs_errmsg
-const wcsset_errmsg = wcs_errmsg
-const wcsp2s_errmsg = wcs_errmsg
-const wcss2p_errmsg = wcs_errmsg
-const wcsmix_errmsg = wcs_errmsg
 immutable Array_160_Uint8
     d1::Uint8
     d2::Uint8
@@ -199,6 +190,13 @@ immutable wcserr
     file::Ptr{Uint8}
     msg::Array_160_Uint8
 end
+# begin enum lin_errmsg_enum
+typealias lin_errmsg_enum Uint32
+const LINERR_SUCCESS = 0
+const LINERR_NULL_POINTER = 1
+const LINERR_MEMORY = 2
+const LINERR_SINGULAR_MTX = 3
+# end enum lin_errmsg_enum
 immutable linprm
     flag::Cint
     naxis::Cint
@@ -219,6 +217,14 @@ immutable linprm
     m_cdelt::Ptr{Cdouble}
     padding2::Ptr{None}
 end
+# begin enum prj_errmsg_enum
+typealias prj_errmsg_enum Uint32
+const PRJERR_SUCCESS = 0
+const PRJERR_NULL_POINTER = 1
+const PRJERR_BAD_PARAM = 2
+const PRJERR_BAD_PIX = 3
+const PRJERR_BAD_WORLD = 4
+# end enum prj_errmsg_enum
 immutable Array_4_Uint8
     d1::Uint8
     d2::Uint8
@@ -337,6 +343,16 @@ immutable prjprm
     prjx2s::Ptr{Void}
     prjs2x::Ptr{Void}
 end
+# begin enum cel_errmsg_enum
+typealias cel_errmsg_enum Uint32
+const CELERR_SUCCESS = 0
+const CELERR_NULL_POINTER = 1
+const CELERR_BAD_PARAM = 2
+const CELERR_BAD_COORD_TRANS = 3
+const CELERR_ILL_COORD_TRANS = 4
+const CELERR_BAD_PIX = 5
+const CELERR_BAD_WORLD = 6
+# end enum cel_errmsg_enum
 immutable Array_4_Cdouble
     d1::Cdouble
     d2::Cdouble
@@ -408,6 +424,15 @@ immutable spxprm
     err::Ptr{wcserr}
     padding::Ptr{None}
 end
+# begin enum spc_errmsg_enum
+typealias spc_errmsg_enum Cint
+const SPCERR_NO_CHANGE = -1
+const SPCERR_SUCCESS = 0
+const SPCERR_NULL_POINTER = 1
+const SPCERR_BAD_SPEC_PARAMS = 2
+const SPCERR_BAD_X = 3
+const SPCERR_BAD_SPEC = 4
+# end enum spc_errmsg_enum
 immutable Array_8_Uint8
     d1::Uint8
     d2::Uint8
@@ -453,6 +478,15 @@ immutable spcprm
     spxS2P::Ptr{Void}
     spxP2X::Ptr{Void}
 end
+# begin enum tab_errmsg_enum
+typealias tab_errmsg_enum Uint32
+const TABERR_SUCCESS = 0
+const TABERR_NULL_POINTER = 1
+const TABERR_MEMORY = 2
+const TABERR_BAD_PARAMS = 3
+const TABERR_BAD_X = 4
+const TABERR_BAD_WORLD = 5
+# end enum tab_errmsg_enum
 immutable tabprm
     flag::Cint
     M::Cint
