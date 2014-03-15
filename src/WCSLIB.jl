@@ -1,4 +1,4 @@
-module WCS
+module WCSLIB
 
 using BinDeps
 @BinDeps.load_dependencies

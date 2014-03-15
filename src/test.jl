@@ -1,3 +1,3 @@
-include("WCS.jl")
-using WCS
+include("WCSLIB.jl")
+using WCSLIB
 using .Test
