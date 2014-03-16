@@ -14,7 +14,10 @@ clang_includes = [joinpath(LLVM_PATH,f)::ASCIIString for f in (
 
 WCS_INCDIR = abspath("../deps/usr/include/wcslib")
 
+const exports = Symbol[]
+
 function func_rewriter(e::Expr)
+    push!(exports, e.args[1].args[1])
     for a in e.args[1].args[2:end]
         if a.args[2] == :Cint
             a.args[2] = :Integer
@@ -35,3 +38,11 @@ context = wrap_c.init(clang_includes = clang_includes,
 context.options.immutable_structs = true
 
 wrap_c.wrap_c_headers(context, [joinpath(WCS_INCDIR,"wcs.h")])
+
+open("libwcs_h.jl", "a") do f
+    print(f, "export ", exports[1])
+    for ex in exports[2:end]
+        print(f, ",\n       ", ex)
+    end
+    println(f)
+end
