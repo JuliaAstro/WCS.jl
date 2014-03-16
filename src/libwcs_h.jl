@@ -1,517 +1,517 @@
 # Julia wrapper for header: /scratch/nolta/julia-pkg/WCSLIB/deps/usr/include/wcslib/wcs.h
 # Automatically generated using Clang.jl wrap_c, version 0.0.0
 
-function wcserr_enable(enable::Cint)
-  ccall( (:wcserr_enable, libwcs), Cint, (Cint,), enable)
+function wcserr_enable(enable::Integer)
+    ccall((:wcserr_enable,libwcs),Cint,(Cint,),enable)
 end
-function wcserr_prt(err::Ptr{wcserr}, prefix::Ptr{Uint8})
-  ccall( (:wcserr_prt, libwcs), Cint, (Ptr{wcserr}, Ptr{Uint8}), err, prefix)
+function wcserr_prt(err::Ptr{wcserr},prefix::Ptr{Uint8})
+    ccall((:wcserr_prt,libwcs),Cint,(Ptr{wcserr},Ptr{Uint8}),err,prefix)
 end
 function wcserr_clear(err::Ptr{Ptr{wcserr}})
-  ccall( (:wcserr_clear, libwcs), Cint, (Ptr{Ptr{wcserr}},), err)
+    ccall((:wcserr_clear,libwcs),Cint,(Ptr{Ptr{wcserr}},),err)
 end
-function wcserr_copy(src::Ptr{wcserr}, dst::Ptr{wcserr})
-  ccall( (:wcserr_copy, libwcs), Cint, (Ptr{wcserr}, Ptr{wcserr}), src, dst)
+function wcserr_copy(src::Ptr{wcserr},dst::Ptr{wcserr})
+    ccall((:wcserr_copy,libwcs),Cint,(Ptr{wcserr},Ptr{wcserr}),src,dst)
 end
-function linini(alloc::Cint, naxis::Cint, lin::Ptr{linprm})
-  ccall( (:linini, libwcs), Cint, (Cint, Cint, Ptr{linprm}), alloc, naxis, lin)
+function linini(alloc::Integer,naxis::Integer,lin::Ptr{linprm})
+    ccall((:linini,libwcs),Cint,(Cint,Cint,Ptr{linprm}),alloc,naxis,lin)
 end
-function lincpy(alloc::Cint, linsrc::Ptr{linprm}, lindst::Ptr{linprm})
-  ccall( (:lincpy, libwcs), Cint, (Cint, Ptr{linprm}, Ptr{linprm}), alloc, linsrc, lindst)
+function lincpy(alloc::Integer,linsrc::Ptr{linprm},lindst::Ptr{linprm})
+    ccall((:lincpy,libwcs),Cint,(Cint,Ptr{linprm},Ptr{linprm}),alloc,linsrc,lindst)
 end
 function linfree(lin::Ptr{linprm})
-  ccall( (:linfree, libwcs), Cint, (Ptr{linprm},), lin)
+    ccall((:linfree,libwcs),Cint,(Ptr{linprm},),lin)
 end
 function linprt(lin::Ptr{linprm})
-  ccall( (:linprt, libwcs), Cint, (Ptr{linprm},), lin)
+    ccall((:linprt,libwcs),Cint,(Ptr{linprm},),lin)
 end
 function linset(lin::Ptr{linprm})
-  ccall( (:linset, libwcs), Cint, (Ptr{linprm},), lin)
+    ccall((:linset,libwcs),Cint,(Ptr{linprm},),lin)
 end
-function linp2x(lin::Ptr{linprm}, ncoord::Cint, nelem::Cint, pixcrd::Ptr{Cdouble}, imgcrd::Ptr{Cdouble})
-  ccall( (:linp2x, libwcs), Cint, (Ptr{linprm}, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}), lin, ncoord, nelem, pixcrd, imgcrd)
+function linp2x(lin::Ptr{linprm},ncoord::Integer,nelem::Integer,pixcrd::Ptr{Cdouble},imgcrd::Ptr{Cdouble})
+    ccall((:linp2x,libwcs),Cint,(Ptr{linprm},Cint,Cint,Ptr{Cdouble},Ptr{Cdouble}),lin,ncoord,nelem,pixcrd,imgcrd)
 end
-function linx2p(lin::Ptr{linprm}, ncoord::Cint, nelem::Cint, imgcrd::Ptr{Cdouble}, pixcrd::Ptr{Cdouble})
-  ccall( (:linx2p, libwcs), Cint, (Ptr{linprm}, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}), lin, ncoord, nelem, imgcrd, pixcrd)
+function linx2p(lin::Ptr{linprm},ncoord::Integer,nelem::Integer,imgcrd::Ptr{Cdouble},pixcrd::Ptr{Cdouble})
+    ccall((:linx2p,libwcs),Cint,(Ptr{linprm},Cint,Cint,Ptr{Cdouble},Ptr{Cdouble}),lin,ncoord,nelem,imgcrd,pixcrd)
 end
-function matinv(n::Cint, mat::Ptr{Cdouble}, inv::Ptr{Cdouble})
-  ccall( (:matinv, libwcs), Cint, (Cint, Ptr{Cdouble}, Ptr{Cdouble}), n, mat, inv)
+function matinv(n::Integer,mat::Ptr{Cdouble},inv::Ptr{Cdouble})
+    ccall((:matinv,libwcs),Cint,(Cint,Ptr{Cdouble},Ptr{Cdouble}),n,mat,inv)
 end
 function prjini(prj::Ptr{prjprm})
-  ccall( (:prjini, libwcs), Cint, (Ptr{prjprm},), prj)
+    ccall((:prjini,libwcs),Cint,(Ptr{prjprm},),prj)
 end
 function prjfree(prj::Ptr{prjprm})
-  ccall( (:prjfree, libwcs), Cint, (Ptr{prjprm},), prj)
+    ccall((:prjfree,libwcs),Cint,(Ptr{prjprm},),prj)
 end
 function prjprt(prj::Ptr{prjprm})
-  ccall( (:prjprt, libwcs), Cint, (Ptr{prjprm},), prj)
+    ccall((:prjprt,libwcs),Cint,(Ptr{prjprm},),prj)
 end
 function prjset(prj::Ptr{prjprm})
-  ccall( (:prjset, libwcs), Cint, (Ptr{prjprm},), prj)
+    ccall((:prjset,libwcs),Cint,(Ptr{prjprm},),prj)
 end
-function prjx2s(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, x::Ptr{Cdouble}, y::Ptr{Cdouble}, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:prjx2s, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, x, y, phi, theta, stat)
+function prjx2s(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,x::Ptr{Cdouble},y::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:prjx2s,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,x,y,phi,theta,stat)
 end
-function prjs2x(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, x::Ptr{Cdouble}, y::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:prjs2x, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, phi, theta, x, y, stat)
+function prjs2x(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,phi::Ptr{Cdouble},theta::Ptr{Cdouble},x::Ptr{Cdouble},y::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:prjs2x,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,phi,theta,x,y,stat)
 end
 function azpset(prj::Ptr{prjprm})
-  ccall( (:azpset, libwcs), Cint, (Ptr{prjprm},), prj)
+    ccall((:azpset,libwcs),Cint,(Ptr{prjprm},),prj)
 end
-function azpx2s(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, x::Ptr{Cdouble}, y::Ptr{Cdouble}, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:azpx2s, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, x, y, phi, theta, stat)
+function azpx2s(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,x::Ptr{Cdouble},y::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:azpx2s,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,x,y,phi,theta,stat)
 end
-function azps2x(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, x::Ptr{Cdouble}, y::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:azps2x, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, phi, theta, x, y, stat)
+function azps2x(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,phi::Ptr{Cdouble},theta::Ptr{Cdouble},x::Ptr{Cdouble},y::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:azps2x,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,phi,theta,x,y,stat)
 end
 function szpset(prj::Ptr{prjprm})
-  ccall( (:szpset, libwcs), Cint, (Ptr{prjprm},), prj)
+    ccall((:szpset,libwcs),Cint,(Ptr{prjprm},),prj)
 end
-function szpx2s(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, x::Ptr{Cdouble}, y::Ptr{Cdouble}, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:szpx2s, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, x, y, phi, theta, stat)
+function szpx2s(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,x::Ptr{Cdouble},y::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:szpx2s,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,x,y,phi,theta,stat)
 end
-function szps2x(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, x::Ptr{Cdouble}, y::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:szps2x, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, phi, theta, x, y, stat)
+function szps2x(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,phi::Ptr{Cdouble},theta::Ptr{Cdouble},x::Ptr{Cdouble},y::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:szps2x,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,phi,theta,x,y,stat)
 end
 function tanset(prj::Ptr{prjprm})
-  ccall( (:tanset, libwcs), Cint, (Ptr{prjprm},), prj)
+    ccall((:tanset,libwcs),Cint,(Ptr{prjprm},),prj)
 end
-function tanx2s(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, x::Ptr{Cdouble}, y::Ptr{Cdouble}, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:tanx2s, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, x, y, phi, theta, stat)
+function tanx2s(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,x::Ptr{Cdouble},y::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:tanx2s,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,x,y,phi,theta,stat)
 end
-function tans2x(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, x::Ptr{Cdouble}, y::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:tans2x, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, phi, theta, x, y, stat)
+function tans2x(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,phi::Ptr{Cdouble},theta::Ptr{Cdouble},x::Ptr{Cdouble},y::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:tans2x,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,phi,theta,x,y,stat)
 end
 function stgset(prj::Ptr{prjprm})
-  ccall( (:stgset, libwcs), Cint, (Ptr{prjprm},), prj)
+    ccall((:stgset,libwcs),Cint,(Ptr{prjprm},),prj)
 end
-function stgx2s(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, x::Ptr{Cdouble}, y::Ptr{Cdouble}, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:stgx2s, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, x, y, phi, theta, stat)
+function stgx2s(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,x::Ptr{Cdouble},y::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:stgx2s,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,x,y,phi,theta,stat)
 end
-function stgs2x(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, x::Ptr{Cdouble}, y::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:stgs2x, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, phi, theta, x, y, stat)
+function stgs2x(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,phi::Ptr{Cdouble},theta::Ptr{Cdouble},x::Ptr{Cdouble},y::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:stgs2x,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,phi,theta,x,y,stat)
 end
 function sinset(prj::Ptr{prjprm})
-  ccall( (:sinset, libwcs), Cint, (Ptr{prjprm},), prj)
+    ccall((:sinset,libwcs),Cint,(Ptr{prjprm},),prj)
 end
-function sinx2s(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, x::Ptr{Cdouble}, y::Ptr{Cdouble}, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:sinx2s, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, x, y, phi, theta, stat)
+function sinx2s(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,x::Ptr{Cdouble},y::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:sinx2s,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,x,y,phi,theta,stat)
 end
-function sins2x(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, x::Ptr{Cdouble}, y::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:sins2x, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, phi, theta, x, y, stat)
+function sins2x(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,phi::Ptr{Cdouble},theta::Ptr{Cdouble},x::Ptr{Cdouble},y::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:sins2x,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,phi,theta,x,y,stat)
 end
 function arcset(prj::Ptr{prjprm})
-  ccall( (:arcset, libwcs), Cint, (Ptr{prjprm},), prj)
+    ccall((:arcset,libwcs),Cint,(Ptr{prjprm},),prj)
 end
-function arcx2s(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, x::Ptr{Cdouble}, y::Ptr{Cdouble}, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:arcx2s, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, x, y, phi, theta, stat)
+function arcx2s(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,x::Ptr{Cdouble},y::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:arcx2s,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,x,y,phi,theta,stat)
 end
-function arcs2x(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, x::Ptr{Cdouble}, y::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:arcs2x, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, phi, theta, x, y, stat)
+function arcs2x(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,phi::Ptr{Cdouble},theta::Ptr{Cdouble},x::Ptr{Cdouble},y::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:arcs2x,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,phi,theta,x,y,stat)
 end
 function zpnset(prj::Ptr{prjprm})
-  ccall( (:zpnset, libwcs), Cint, (Ptr{prjprm},), prj)
+    ccall((:zpnset,libwcs),Cint,(Ptr{prjprm},),prj)
 end
-function zpnx2s(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, x::Ptr{Cdouble}, y::Ptr{Cdouble}, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:zpnx2s, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, x, y, phi, theta, stat)
+function zpnx2s(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,x::Ptr{Cdouble},y::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:zpnx2s,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,x,y,phi,theta,stat)
 end
-function zpns2x(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, x::Ptr{Cdouble}, y::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:zpns2x, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, phi, theta, x, y, stat)
+function zpns2x(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,phi::Ptr{Cdouble},theta::Ptr{Cdouble},x::Ptr{Cdouble},y::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:zpns2x,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,phi,theta,x,y,stat)
 end
 function zeaset(prj::Ptr{prjprm})
-  ccall( (:zeaset, libwcs), Cint, (Ptr{prjprm},), prj)
+    ccall((:zeaset,libwcs),Cint,(Ptr{prjprm},),prj)
 end
-function zeax2s(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, x::Ptr{Cdouble}, y::Ptr{Cdouble}, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:zeax2s, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, x, y, phi, theta, stat)
+function zeax2s(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,x::Ptr{Cdouble},y::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:zeax2s,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,x,y,phi,theta,stat)
 end
-function zeas2x(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, x::Ptr{Cdouble}, y::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:zeas2x, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, phi, theta, x, y, stat)
+function zeas2x(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,phi::Ptr{Cdouble},theta::Ptr{Cdouble},x::Ptr{Cdouble},y::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:zeas2x,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,phi,theta,x,y,stat)
 end
 function airset(prj::Ptr{prjprm})
-  ccall( (:airset, libwcs), Cint, (Ptr{prjprm},), prj)
+    ccall((:airset,libwcs),Cint,(Ptr{prjprm},),prj)
 end
-function airx2s(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, x::Ptr{Cdouble}, y::Ptr{Cdouble}, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:airx2s, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, x, y, phi, theta, stat)
+function airx2s(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,x::Ptr{Cdouble},y::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:airx2s,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,x,y,phi,theta,stat)
 end
-function airs2x(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, x::Ptr{Cdouble}, y::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:airs2x, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, phi, theta, x, y, stat)
+function airs2x(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,phi::Ptr{Cdouble},theta::Ptr{Cdouble},x::Ptr{Cdouble},y::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:airs2x,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,phi,theta,x,y,stat)
 end
 function cypset(prj::Ptr{prjprm})
-  ccall( (:cypset, libwcs), Cint, (Ptr{prjprm},), prj)
+    ccall((:cypset,libwcs),Cint,(Ptr{prjprm},),prj)
 end
-function cypx2s(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, x::Ptr{Cdouble}, y::Ptr{Cdouble}, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:cypx2s, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, x, y, phi, theta, stat)
+function cypx2s(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,x::Ptr{Cdouble},y::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:cypx2s,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,x,y,phi,theta,stat)
 end
-function cyps2x(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, x::Ptr{Cdouble}, y::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:cyps2x, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, phi, theta, x, y, stat)
+function cyps2x(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,phi::Ptr{Cdouble},theta::Ptr{Cdouble},x::Ptr{Cdouble},y::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:cyps2x,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,phi,theta,x,y,stat)
 end
 function ceaset(prj::Ptr{prjprm})
-  ccall( (:ceaset, libwcs), Cint, (Ptr{prjprm},), prj)
+    ccall((:ceaset,libwcs),Cint,(Ptr{prjprm},),prj)
 end
-function ceax2s(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, x::Ptr{Cdouble}, y::Ptr{Cdouble}, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:ceax2s, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, x, y, phi, theta, stat)
+function ceax2s(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,x::Ptr{Cdouble},y::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:ceax2s,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,x,y,phi,theta,stat)
 end
-function ceas2x(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, x::Ptr{Cdouble}, y::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:ceas2x, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, phi, theta, x, y, stat)
+function ceas2x(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,phi::Ptr{Cdouble},theta::Ptr{Cdouble},x::Ptr{Cdouble},y::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:ceas2x,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,phi,theta,x,y,stat)
 end
 function carset(prj::Ptr{prjprm})
-  ccall( (:carset, libwcs), Cint, (Ptr{prjprm},), prj)
+    ccall((:carset,libwcs),Cint,(Ptr{prjprm},),prj)
 end
-function carx2s(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, x::Ptr{Cdouble}, y::Ptr{Cdouble}, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:carx2s, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, x, y, phi, theta, stat)
+function carx2s(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,x::Ptr{Cdouble},y::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:carx2s,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,x,y,phi,theta,stat)
 end
-function cars2x(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, x::Ptr{Cdouble}, y::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:cars2x, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, phi, theta, x, y, stat)
+function cars2x(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,phi::Ptr{Cdouble},theta::Ptr{Cdouble},x::Ptr{Cdouble},y::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:cars2x,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,phi,theta,x,y,stat)
 end
 function merset(prj::Ptr{prjprm})
-  ccall( (:merset, libwcs), Cint, (Ptr{prjprm},), prj)
+    ccall((:merset,libwcs),Cint,(Ptr{prjprm},),prj)
 end
-function merx2s(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, x::Ptr{Cdouble}, y::Ptr{Cdouble}, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:merx2s, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, x, y, phi, theta, stat)
+function merx2s(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,x::Ptr{Cdouble},y::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:merx2s,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,x,y,phi,theta,stat)
 end
-function mers2x(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, x::Ptr{Cdouble}, y::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:mers2x, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, phi, theta, x, y, stat)
+function mers2x(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,phi::Ptr{Cdouble},theta::Ptr{Cdouble},x::Ptr{Cdouble},y::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:mers2x,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,phi,theta,x,y,stat)
 end
 function sflset(prj::Ptr{prjprm})
-  ccall( (:sflset, libwcs), Cint, (Ptr{prjprm},), prj)
+    ccall((:sflset,libwcs),Cint,(Ptr{prjprm},),prj)
 end
-function sflx2s(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, x::Ptr{Cdouble}, y::Ptr{Cdouble}, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:sflx2s, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, x, y, phi, theta, stat)
+function sflx2s(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,x::Ptr{Cdouble},y::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:sflx2s,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,x,y,phi,theta,stat)
 end
-function sfls2x(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, x::Ptr{Cdouble}, y::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:sfls2x, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, phi, theta, x, y, stat)
+function sfls2x(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,phi::Ptr{Cdouble},theta::Ptr{Cdouble},x::Ptr{Cdouble},y::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:sfls2x,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,phi,theta,x,y,stat)
 end
 function parset(prj::Ptr{prjprm})
-  ccall( (:parset, libwcs), Cint, (Ptr{prjprm},), prj)
+    ccall((:parset,libwcs),Cint,(Ptr{prjprm},),prj)
 end
-function parx2s(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, x::Ptr{Cdouble}, y::Ptr{Cdouble}, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:parx2s, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, x, y, phi, theta, stat)
+function parx2s(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,x::Ptr{Cdouble},y::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:parx2s,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,x,y,phi,theta,stat)
 end
-function pars2x(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, x::Ptr{Cdouble}, y::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:pars2x, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, phi, theta, x, y, stat)
+function pars2x(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,phi::Ptr{Cdouble},theta::Ptr{Cdouble},x::Ptr{Cdouble},y::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:pars2x,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,phi,theta,x,y,stat)
 end
 function molset(prj::Ptr{prjprm})
-  ccall( (:molset, libwcs), Cint, (Ptr{prjprm},), prj)
+    ccall((:molset,libwcs),Cint,(Ptr{prjprm},),prj)
 end
-function molx2s(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, x::Ptr{Cdouble}, y::Ptr{Cdouble}, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:molx2s, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, x, y, phi, theta, stat)
+function molx2s(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,x::Ptr{Cdouble},y::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:molx2s,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,x,y,phi,theta,stat)
 end
-function mols2x(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, x::Ptr{Cdouble}, y::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:mols2x, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, phi, theta, x, y, stat)
+function mols2x(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,phi::Ptr{Cdouble},theta::Ptr{Cdouble},x::Ptr{Cdouble},y::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:mols2x,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,phi,theta,x,y,stat)
 end
 function aitset(prj::Ptr{prjprm})
-  ccall( (:aitset, libwcs), Cint, (Ptr{prjprm},), prj)
+    ccall((:aitset,libwcs),Cint,(Ptr{prjprm},),prj)
 end
-function aitx2s(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, x::Ptr{Cdouble}, y::Ptr{Cdouble}, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:aitx2s, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, x, y, phi, theta, stat)
+function aitx2s(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,x::Ptr{Cdouble},y::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:aitx2s,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,x,y,phi,theta,stat)
 end
-function aits2x(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, x::Ptr{Cdouble}, y::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:aits2x, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, phi, theta, x, y, stat)
+function aits2x(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,phi::Ptr{Cdouble},theta::Ptr{Cdouble},x::Ptr{Cdouble},y::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:aits2x,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,phi,theta,x,y,stat)
 end
 function copset(prj::Ptr{prjprm})
-  ccall( (:copset, libwcs), Cint, (Ptr{prjprm},), prj)
+    ccall((:copset,libwcs),Cint,(Ptr{prjprm},),prj)
 end
-function copx2s(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, x::Ptr{Cdouble}, y::Ptr{Cdouble}, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:copx2s, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, x, y, phi, theta, stat)
+function copx2s(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,x::Ptr{Cdouble},y::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:copx2s,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,x,y,phi,theta,stat)
 end
-function cops2x(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, x::Ptr{Cdouble}, y::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:cops2x, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, phi, theta, x, y, stat)
+function cops2x(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,phi::Ptr{Cdouble},theta::Ptr{Cdouble},x::Ptr{Cdouble},y::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:cops2x,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,phi,theta,x,y,stat)
 end
 function coeset(prj::Ptr{prjprm})
-  ccall( (:coeset, libwcs), Cint, (Ptr{prjprm},), prj)
+    ccall((:coeset,libwcs),Cint,(Ptr{prjprm},),prj)
 end
-function coex2s(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, x::Ptr{Cdouble}, y::Ptr{Cdouble}, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:coex2s, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, x, y, phi, theta, stat)
+function coex2s(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,x::Ptr{Cdouble},y::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:coex2s,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,x,y,phi,theta,stat)
 end
-function coes2x(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, x::Ptr{Cdouble}, y::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:coes2x, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, phi, theta, x, y, stat)
+function coes2x(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,phi::Ptr{Cdouble},theta::Ptr{Cdouble},x::Ptr{Cdouble},y::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:coes2x,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,phi,theta,x,y,stat)
 end
 function codset(prj::Ptr{prjprm})
-  ccall( (:codset, libwcs), Cint, (Ptr{prjprm},), prj)
+    ccall((:codset,libwcs),Cint,(Ptr{prjprm},),prj)
 end
-function codx2s(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, x::Ptr{Cdouble}, y::Ptr{Cdouble}, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:codx2s, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, x, y, phi, theta, stat)
+function codx2s(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,x::Ptr{Cdouble},y::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:codx2s,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,x,y,phi,theta,stat)
 end
-function cods2x(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, x::Ptr{Cdouble}, y::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:cods2x, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, phi, theta, x, y, stat)
+function cods2x(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,phi::Ptr{Cdouble},theta::Ptr{Cdouble},x::Ptr{Cdouble},y::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:cods2x,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,phi,theta,x,y,stat)
 end
 function cooset(prj::Ptr{prjprm})
-  ccall( (:cooset, libwcs), Cint, (Ptr{prjprm},), prj)
+    ccall((:cooset,libwcs),Cint,(Ptr{prjprm},),prj)
 end
-function coox2s(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, x::Ptr{Cdouble}, y::Ptr{Cdouble}, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:coox2s, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, x, y, phi, theta, stat)
+function coox2s(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,x::Ptr{Cdouble},y::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:coox2s,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,x,y,phi,theta,stat)
 end
-function coos2x(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, x::Ptr{Cdouble}, y::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:coos2x, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, phi, theta, x, y, stat)
+function coos2x(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,phi::Ptr{Cdouble},theta::Ptr{Cdouble},x::Ptr{Cdouble},y::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:coos2x,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,phi,theta,x,y,stat)
 end
 function bonset(prj::Ptr{prjprm})
-  ccall( (:bonset, libwcs), Cint, (Ptr{prjprm},), prj)
+    ccall((:bonset,libwcs),Cint,(Ptr{prjprm},),prj)
 end
-function bonx2s(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, x::Ptr{Cdouble}, y::Ptr{Cdouble}, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:bonx2s, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, x, y, phi, theta, stat)
+function bonx2s(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,x::Ptr{Cdouble},y::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:bonx2s,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,x,y,phi,theta,stat)
 end
-function bons2x(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, x::Ptr{Cdouble}, y::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:bons2x, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, phi, theta, x, y, stat)
+function bons2x(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,phi::Ptr{Cdouble},theta::Ptr{Cdouble},x::Ptr{Cdouble},y::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:bons2x,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,phi,theta,x,y,stat)
 end
 function pcoset(prj::Ptr{prjprm})
-  ccall( (:pcoset, libwcs), Cint, (Ptr{prjprm},), prj)
+    ccall((:pcoset,libwcs),Cint,(Ptr{prjprm},),prj)
 end
-function pcox2s(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, x::Ptr{Cdouble}, y::Ptr{Cdouble}, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:pcox2s, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, x, y, phi, theta, stat)
+function pcox2s(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,x::Ptr{Cdouble},y::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:pcox2s,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,x,y,phi,theta,stat)
 end
-function pcos2x(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, x::Ptr{Cdouble}, y::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:pcos2x, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, phi, theta, x, y, stat)
+function pcos2x(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,phi::Ptr{Cdouble},theta::Ptr{Cdouble},x::Ptr{Cdouble},y::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:pcos2x,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,phi,theta,x,y,stat)
 end
 function tscset(prj::Ptr{prjprm})
-  ccall( (:tscset, libwcs), Cint, (Ptr{prjprm},), prj)
+    ccall((:tscset,libwcs),Cint,(Ptr{prjprm},),prj)
 end
-function tscx2s(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, x::Ptr{Cdouble}, y::Ptr{Cdouble}, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:tscx2s, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, x, y, phi, theta, stat)
+function tscx2s(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,x::Ptr{Cdouble},y::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:tscx2s,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,x,y,phi,theta,stat)
 end
-function tscs2x(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, x::Ptr{Cdouble}, y::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:tscs2x, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, phi, theta, x, y, stat)
+function tscs2x(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,phi::Ptr{Cdouble},theta::Ptr{Cdouble},x::Ptr{Cdouble},y::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:tscs2x,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,phi,theta,x,y,stat)
 end
 function cscset(prj::Ptr{prjprm})
-  ccall( (:cscset, libwcs), Cint, (Ptr{prjprm},), prj)
+    ccall((:cscset,libwcs),Cint,(Ptr{prjprm},),prj)
 end
-function cscx2s(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, x::Ptr{Cdouble}, y::Ptr{Cdouble}, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:cscx2s, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, x, y, phi, theta, stat)
+function cscx2s(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,x::Ptr{Cdouble},y::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:cscx2s,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,x,y,phi,theta,stat)
 end
-function cscs2x(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, x::Ptr{Cdouble}, y::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:cscs2x, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, phi, theta, x, y, stat)
+function cscs2x(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,phi::Ptr{Cdouble},theta::Ptr{Cdouble},x::Ptr{Cdouble},y::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:cscs2x,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,phi,theta,x,y,stat)
 end
 function qscset(prj::Ptr{prjprm})
-  ccall( (:qscset, libwcs), Cint, (Ptr{prjprm},), prj)
+    ccall((:qscset,libwcs),Cint,(Ptr{prjprm},),prj)
 end
-function qscx2s(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, x::Ptr{Cdouble}, y::Ptr{Cdouble}, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:qscx2s, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, x, y, phi, theta, stat)
+function qscx2s(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,x::Ptr{Cdouble},y::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:qscx2s,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,x,y,phi,theta,stat)
 end
-function qscs2x(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, x::Ptr{Cdouble}, y::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:qscs2x, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, phi, theta, x, y, stat)
+function qscs2x(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,phi::Ptr{Cdouble},theta::Ptr{Cdouble},x::Ptr{Cdouble},y::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:qscs2x,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,phi,theta,x,y,stat)
 end
 function hpxset(prj::Ptr{prjprm})
-  ccall( (:hpxset, libwcs), Cint, (Ptr{prjprm},), prj)
+    ccall((:hpxset,libwcs),Cint,(Ptr{prjprm},),prj)
 end
-function hpxx2s(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, x::Ptr{Cdouble}, y::Ptr{Cdouble}, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:hpxx2s, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, x, y, phi, theta, stat)
+function hpxx2s(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,x::Ptr{Cdouble},y::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:hpxx2s,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,x,y,phi,theta,stat)
 end
-function hpxs2x(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, x::Ptr{Cdouble}, y::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:hpxs2x, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, phi, theta, x, y, stat)
+function hpxs2x(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,phi::Ptr{Cdouble},theta::Ptr{Cdouble},x::Ptr{Cdouble},y::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:hpxs2x,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,phi,theta,x,y,stat)
 end
 function xphset(prj::Ptr{prjprm})
-  ccall( (:xphset, libwcs), Cint, (Ptr{prjprm},), prj)
+    ccall((:xphset,libwcs),Cint,(Ptr{prjprm},),prj)
 end
-function xphx2s(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, x::Ptr{Cdouble}, y::Ptr{Cdouble}, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:xphx2s, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, x, y, phi, theta, stat)
+function xphx2s(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,x::Ptr{Cdouble},y::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:xphx2s,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,x,y,phi,theta,stat)
 end
-function xphs2x(prj::Ptr{prjprm}, nx::Cint, ny::Cint, sxy::Cint, spt::Cint, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, x::Ptr{Cdouble}, y::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:xphs2x, libwcs), Cint, (Ptr{prjprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), prj, nx, ny, sxy, spt, phi, theta, x, y, stat)
+function xphs2x(prj::Ptr{prjprm},nx::Integer,ny::Integer,sxy::Integer,spt::Integer,phi::Ptr{Cdouble},theta::Ptr{Cdouble},x::Ptr{Cdouble},y::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:xphs2x,libwcs),Cint,(Ptr{prjprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),prj,nx,ny,sxy,spt,phi,theta,x,y,stat)
 end
 function celini(cel::Ptr{celprm})
-  ccall( (:celini, libwcs), Cint, (Ptr{celprm},), cel)
+    ccall((:celini,libwcs),Cint,(Ptr{celprm},),cel)
 end
 function celfree(cel::Ptr{celprm})
-  ccall( (:celfree, libwcs), Cint, (Ptr{celprm},), cel)
+    ccall((:celfree,libwcs),Cint,(Ptr{celprm},),cel)
 end
 function celprt(cel::Ptr{celprm})
-  ccall( (:celprt, libwcs), Cint, (Ptr{celprm},), cel)
+    ccall((:celprt,libwcs),Cint,(Ptr{celprm},),cel)
 end
 function celset(cel::Ptr{celprm})
-  ccall( (:celset, libwcs), Cint, (Ptr{celprm},), cel)
+    ccall((:celset,libwcs),Cint,(Ptr{celprm},),cel)
 end
-function celx2s(cel::Ptr{celprm}, nx::Cint, ny::Cint, sxy::Cint, sll::Cint, x::Ptr{Cdouble}, y::Ptr{Cdouble}, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, lng::Ptr{Cdouble}, lat::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:celx2s, libwcs), Cint, (Ptr{celprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), cel, nx, ny, sxy, sll, x, y, phi, theta, lng, lat, stat)
+function celx2s(cel::Ptr{celprm},nx::Integer,ny::Integer,sxy::Integer,sll::Integer,x::Ptr{Cdouble},y::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},lng::Ptr{Cdouble},lat::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:celx2s,libwcs),Cint,(Ptr{celprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),cel,nx,ny,sxy,sll,x,y,phi,theta,lng,lat,stat)
 end
-function cels2x(cel::Ptr{celprm}, nlng::Cint, nlat::Cint, sll::Cint, sxy::Cint, lng::Ptr{Cdouble}, lat::Ptr{Cdouble}, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, x::Ptr{Cdouble}, y::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:cels2x, libwcs), Cint, (Ptr{celprm}, Cint, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), cel, nlng, nlat, sll, sxy, lng, lat, phi, theta, x, y, stat)
+function cels2x(cel::Ptr{celprm},nlng::Integer,nlat::Integer,sll::Integer,sxy::Integer,lng::Ptr{Cdouble},lat::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},x::Ptr{Cdouble},y::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:cels2x,libwcs),Cint,(Ptr{celprm},Cint,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),cel,nlng,nlat,sll,sxy,lng,lat,phi,theta,x,y,stat)
 end
-function specx(_type::Ptr{Uint8}, spec::Cdouble, restfrq::Cdouble, restwav::Cdouble, specs::Ptr{spxprm})
-  ccall( (:specx, libwcs), Cint, (Ptr{Uint8}, Cdouble, Cdouble, Cdouble, Ptr{spxprm}), _type, spec, restfrq, restwav, specs)
+function specx(_type::Ptr{Uint8},spec::Real,restfrq::Real,restwav::Real,specs::Ptr{spxprm})
+    ccall((:specx,libwcs),Cint,(Ptr{Uint8},Cdouble,Cdouble,Cdouble,Ptr{spxprm}),_type,spec,restfrq,restwav,specs)
 end
-function freqafrq(param::Cdouble, nspec::Cint, instep::Cint, outstep::Cint, inspec::Ptr{Cdouble}, outspec::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:freqafrq, libwcs), Cint, (Cdouble, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), param, nspec, instep, outstep, inspec, outspec, stat)
+function freqafrq(param::Real,nspec::Integer,instep::Integer,outstep::Integer,inspec::Ptr{Cdouble},outspec::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:freqafrq,libwcs),Cint,(Cdouble,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),param,nspec,instep,outstep,inspec,outspec,stat)
 end
-function afrqfreq(param::Cdouble, nspec::Cint, instep::Cint, outstep::Cint, inspec::Ptr{Cdouble}, outspec::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:afrqfreq, libwcs), Cint, (Cdouble, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), param, nspec, instep, outstep, inspec, outspec, stat)
+function afrqfreq(param::Real,nspec::Integer,instep::Integer,outstep::Integer,inspec::Ptr{Cdouble},outspec::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:afrqfreq,libwcs),Cint,(Cdouble,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),param,nspec,instep,outstep,inspec,outspec,stat)
 end
-function freqener(param::Cdouble, nspec::Cint, instep::Cint, outstep::Cint, inspec::Ptr{Cdouble}, outspec::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:freqener, libwcs), Cint, (Cdouble, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), param, nspec, instep, outstep, inspec, outspec, stat)
+function freqener(param::Real,nspec::Integer,instep::Integer,outstep::Integer,inspec::Ptr{Cdouble},outspec::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:freqener,libwcs),Cint,(Cdouble,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),param,nspec,instep,outstep,inspec,outspec,stat)
 end
-function enerfreq(param::Cdouble, nspec::Cint, instep::Cint, outstep::Cint, inspec::Ptr{Cdouble}, outspec::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:enerfreq, libwcs), Cint, (Cdouble, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), param, nspec, instep, outstep, inspec, outspec, stat)
+function enerfreq(param::Real,nspec::Integer,instep::Integer,outstep::Integer,inspec::Ptr{Cdouble},outspec::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:enerfreq,libwcs),Cint,(Cdouble,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),param,nspec,instep,outstep,inspec,outspec,stat)
 end
-function freqwavn(param::Cdouble, nspec::Cint, instep::Cint, outstep::Cint, inspec::Ptr{Cdouble}, outspec::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:freqwavn, libwcs), Cint, (Cdouble, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), param, nspec, instep, outstep, inspec, outspec, stat)
+function freqwavn(param::Real,nspec::Integer,instep::Integer,outstep::Integer,inspec::Ptr{Cdouble},outspec::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:freqwavn,libwcs),Cint,(Cdouble,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),param,nspec,instep,outstep,inspec,outspec,stat)
 end
-function wavnfreq(param::Cdouble, nspec::Cint, instep::Cint, outstep::Cint, inspec::Ptr{Cdouble}, outspec::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:wavnfreq, libwcs), Cint, (Cdouble, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), param, nspec, instep, outstep, inspec, outspec, stat)
+function wavnfreq(param::Real,nspec::Integer,instep::Integer,outstep::Integer,inspec::Ptr{Cdouble},outspec::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:wavnfreq,libwcs),Cint,(Cdouble,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),param,nspec,instep,outstep,inspec,outspec,stat)
 end
-function freqwave(param::Cdouble, nspec::Cint, instep::Cint, outstep::Cint, inspec::Ptr{Cdouble}, outspec::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:freqwave, libwcs), Cint, (Cdouble, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), param, nspec, instep, outstep, inspec, outspec, stat)
+function freqwave(param::Real,nspec::Integer,instep::Integer,outstep::Integer,inspec::Ptr{Cdouble},outspec::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:freqwave,libwcs),Cint,(Cdouble,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),param,nspec,instep,outstep,inspec,outspec,stat)
 end
-function wavefreq(param::Cdouble, nspec::Cint, instep::Cint, outstep::Cint, inspec::Ptr{Cdouble}, outspec::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:wavefreq, libwcs), Cint, (Cdouble, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), param, nspec, instep, outstep, inspec, outspec, stat)
+function wavefreq(param::Real,nspec::Integer,instep::Integer,outstep::Integer,inspec::Ptr{Cdouble},outspec::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:wavefreq,libwcs),Cint,(Cdouble,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),param,nspec,instep,outstep,inspec,outspec,stat)
 end
-function freqawav(param::Cdouble, nspec::Cint, instep::Cint, outstep::Cint, inspec::Ptr{Cdouble}, outspec::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:freqawav, libwcs), Cint, (Cdouble, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), param, nspec, instep, outstep, inspec, outspec, stat)
+function freqawav(param::Real,nspec::Integer,instep::Integer,outstep::Integer,inspec::Ptr{Cdouble},outspec::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:freqawav,libwcs),Cint,(Cdouble,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),param,nspec,instep,outstep,inspec,outspec,stat)
 end
-function awavfreq(param::Cdouble, nspec::Cint, instep::Cint, outstep::Cint, inspec::Ptr{Cdouble}, outspec::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:awavfreq, libwcs), Cint, (Cdouble, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), param, nspec, instep, outstep, inspec, outspec, stat)
+function awavfreq(param::Real,nspec::Integer,instep::Integer,outstep::Integer,inspec::Ptr{Cdouble},outspec::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:awavfreq,libwcs),Cint,(Cdouble,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),param,nspec,instep,outstep,inspec,outspec,stat)
 end
-function waveawav(param::Cdouble, nspec::Cint, instep::Cint, outstep::Cint, inspec::Ptr{Cdouble}, outspec::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:waveawav, libwcs), Cint, (Cdouble, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), param, nspec, instep, outstep, inspec, outspec, stat)
+function waveawav(param::Real,nspec::Integer,instep::Integer,outstep::Integer,inspec::Ptr{Cdouble},outspec::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:waveawav,libwcs),Cint,(Cdouble,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),param,nspec,instep,outstep,inspec,outspec,stat)
 end
-function awavwave(param::Cdouble, nspec::Cint, instep::Cint, outstep::Cint, inspec::Ptr{Cdouble}, outspec::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:awavwave, libwcs), Cint, (Cdouble, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), param, nspec, instep, outstep, inspec, outspec, stat)
+function awavwave(param::Real,nspec::Integer,instep::Integer,outstep::Integer,inspec::Ptr{Cdouble},outspec::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:awavwave,libwcs),Cint,(Cdouble,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),param,nspec,instep,outstep,inspec,outspec,stat)
 end
-function velobeta(param::Cdouble, nspec::Cint, instep::Cint, outstep::Cint, inspec::Ptr{Cdouble}, outspec::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:velobeta, libwcs), Cint, (Cdouble, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), param, nspec, instep, outstep, inspec, outspec, stat)
+function velobeta(param::Real,nspec::Integer,instep::Integer,outstep::Integer,inspec::Ptr{Cdouble},outspec::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:velobeta,libwcs),Cint,(Cdouble,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),param,nspec,instep,outstep,inspec,outspec,stat)
 end
-function betavelo(param::Cdouble, nspec::Cint, instep::Cint, outstep::Cint, inspec::Ptr{Cdouble}, outspec::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:betavelo, libwcs), Cint, (Cdouble, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), param, nspec, instep, outstep, inspec, outspec, stat)
+function betavelo(param::Real,nspec::Integer,instep::Integer,outstep::Integer,inspec::Ptr{Cdouble},outspec::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:betavelo,libwcs),Cint,(Cdouble,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),param,nspec,instep,outstep,inspec,outspec,stat)
 end
-function freqvelo(param::Cdouble, nspec::Cint, instep::Cint, outstep::Cint, inspec::Ptr{Cdouble}, outspec::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:freqvelo, libwcs), Cint, (Cdouble, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), param, nspec, instep, outstep, inspec, outspec, stat)
+function freqvelo(param::Real,nspec::Integer,instep::Integer,outstep::Integer,inspec::Ptr{Cdouble},outspec::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:freqvelo,libwcs),Cint,(Cdouble,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),param,nspec,instep,outstep,inspec,outspec,stat)
 end
-function velofreq(param::Cdouble, nspec::Cint, instep::Cint, outstep::Cint, inspec::Ptr{Cdouble}, outspec::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:velofreq, libwcs), Cint, (Cdouble, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), param, nspec, instep, outstep, inspec, outspec, stat)
+function velofreq(param::Real,nspec::Integer,instep::Integer,outstep::Integer,inspec::Ptr{Cdouble},outspec::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:velofreq,libwcs),Cint,(Cdouble,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),param,nspec,instep,outstep,inspec,outspec,stat)
 end
-function freqvrad(param::Cdouble, nspec::Cint, instep::Cint, outstep::Cint, inspec::Ptr{Cdouble}, outspec::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:freqvrad, libwcs), Cint, (Cdouble, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), param, nspec, instep, outstep, inspec, outspec, stat)
+function freqvrad(param::Real,nspec::Integer,instep::Integer,outstep::Integer,inspec::Ptr{Cdouble},outspec::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:freqvrad,libwcs),Cint,(Cdouble,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),param,nspec,instep,outstep,inspec,outspec,stat)
 end
-function vradfreq(param::Cdouble, nspec::Cint, instep::Cint, outstep::Cint, inspec::Ptr{Cdouble}, outspec::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:vradfreq, libwcs), Cint, (Cdouble, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), param, nspec, instep, outstep, inspec, outspec, stat)
+function vradfreq(param::Real,nspec::Integer,instep::Integer,outstep::Integer,inspec::Ptr{Cdouble},outspec::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:vradfreq,libwcs),Cint,(Cdouble,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),param,nspec,instep,outstep,inspec,outspec,stat)
 end
-function wavevelo(param::Cdouble, nspec::Cint, instep::Cint, outstep::Cint, inspec::Ptr{Cdouble}, outspec::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:wavevelo, libwcs), Cint, (Cdouble, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), param, nspec, instep, outstep, inspec, outspec, stat)
+function wavevelo(param::Real,nspec::Integer,instep::Integer,outstep::Integer,inspec::Ptr{Cdouble},outspec::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:wavevelo,libwcs),Cint,(Cdouble,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),param,nspec,instep,outstep,inspec,outspec,stat)
 end
-function velowave(param::Cdouble, nspec::Cint, instep::Cint, outstep::Cint, inspec::Ptr{Cdouble}, outspec::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:velowave, libwcs), Cint, (Cdouble, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), param, nspec, instep, outstep, inspec, outspec, stat)
+function velowave(param::Real,nspec::Integer,instep::Integer,outstep::Integer,inspec::Ptr{Cdouble},outspec::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:velowave,libwcs),Cint,(Cdouble,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),param,nspec,instep,outstep,inspec,outspec,stat)
 end
-function awavvelo(param::Cdouble, nspec::Cint, instep::Cint, outstep::Cint, inspec::Ptr{Cdouble}, outspec::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:awavvelo, libwcs), Cint, (Cdouble, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), param, nspec, instep, outstep, inspec, outspec, stat)
+function awavvelo(param::Real,nspec::Integer,instep::Integer,outstep::Integer,inspec::Ptr{Cdouble},outspec::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:awavvelo,libwcs),Cint,(Cdouble,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),param,nspec,instep,outstep,inspec,outspec,stat)
 end
-function veloawav(param::Cdouble, nspec::Cint, instep::Cint, outstep::Cint, inspec::Ptr{Cdouble}, outspec::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:veloawav, libwcs), Cint, (Cdouble, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), param, nspec, instep, outstep, inspec, outspec, stat)
+function veloawav(param::Real,nspec::Integer,instep::Integer,outstep::Integer,inspec::Ptr{Cdouble},outspec::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:veloawav,libwcs),Cint,(Cdouble,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),param,nspec,instep,outstep,inspec,outspec,stat)
 end
-function wavevopt(param::Cdouble, nspec::Cint, instep::Cint, outstep::Cint, inspec::Ptr{Cdouble}, outspec::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:wavevopt, libwcs), Cint, (Cdouble, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), param, nspec, instep, outstep, inspec, outspec, stat)
+function wavevopt(param::Real,nspec::Integer,instep::Integer,outstep::Integer,inspec::Ptr{Cdouble},outspec::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:wavevopt,libwcs),Cint,(Cdouble,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),param,nspec,instep,outstep,inspec,outspec,stat)
 end
-function voptwave(param::Cdouble, nspec::Cint, instep::Cint, outstep::Cint, inspec::Ptr{Cdouble}, outspec::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:voptwave, libwcs), Cint, (Cdouble, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), param, nspec, instep, outstep, inspec, outspec, stat)
+function voptwave(param::Real,nspec::Integer,instep::Integer,outstep::Integer,inspec::Ptr{Cdouble},outspec::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:voptwave,libwcs),Cint,(Cdouble,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),param,nspec,instep,outstep,inspec,outspec,stat)
 end
-function wavezopt(param::Cdouble, nspec::Cint, instep::Cint, outstep::Cint, inspec::Ptr{Cdouble}, outspec::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:wavezopt, libwcs), Cint, (Cdouble, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), param, nspec, instep, outstep, inspec, outspec, stat)
+function wavezopt(param::Real,nspec::Integer,instep::Integer,outstep::Integer,inspec::Ptr{Cdouble},outspec::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:wavezopt,libwcs),Cint,(Cdouble,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),param,nspec,instep,outstep,inspec,outspec,stat)
 end
-function zoptwave(param::Cdouble, nspec::Cint, instep::Cint, outstep::Cint, inspec::Ptr{Cdouble}, outspec::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:zoptwave, libwcs), Cint, (Cdouble, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), param, nspec, instep, outstep, inspec, outspec, stat)
+function zoptwave(param::Real,nspec::Integer,instep::Integer,outstep::Integer,inspec::Ptr{Cdouble},outspec::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:zoptwave,libwcs),Cint,(Cdouble,Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),param,nspec,instep,outstep,inspec,outspec,stat)
 end
 function spcini(spc::Ptr{spcprm})
-  ccall( (:spcini, libwcs), Cint, (Ptr{spcprm},), spc)
+    ccall((:spcini,libwcs),Cint,(Ptr{spcprm},),spc)
 end
 function spcfree(spc::Ptr{spcprm})
-  ccall( (:spcfree, libwcs), Cint, (Ptr{spcprm},), spc)
+    ccall((:spcfree,libwcs),Cint,(Ptr{spcprm},),spc)
 end
 function spcprt(spc::Ptr{spcprm})
-  ccall( (:spcprt, libwcs), Cint, (Ptr{spcprm},), spc)
+    ccall((:spcprt,libwcs),Cint,(Ptr{spcprm},),spc)
 end
 function spcset(spc::Ptr{spcprm})
-  ccall( (:spcset, libwcs), Cint, (Ptr{spcprm},), spc)
+    ccall((:spcset,libwcs),Cint,(Ptr{spcprm},),spc)
 end
-function spcx2s(spc::Ptr{spcprm}, nx::Cint, sx::Cint, sspec::Cint, x::Ptr{Cdouble}, spec::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:spcx2s, libwcs), Cint, (Ptr{spcprm}, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), spc, nx, sx, sspec, x, spec, stat)
+function spcx2s(spc::Ptr{spcprm},nx::Integer,sx::Integer,sspec::Integer,x::Ptr{Cdouble},spec::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:spcx2s,libwcs),Cint,(Ptr{spcprm},Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),spc,nx,sx,sspec,x,spec,stat)
 end
-function spcs2x(spc::Ptr{spcprm}, nspec::Cint, sspec::Cint, sx::Cint, spec::Ptr{Cdouble}, x::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:spcs2x, libwcs), Cint, (Ptr{spcprm}, Cint, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), spc, nspec, sspec, sx, spec, x, stat)
+function spcs2x(spc::Ptr{spcprm},nspec::Integer,sspec::Integer,sx::Integer,spec::Ptr{Cdouble},x::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:spcs2x,libwcs),Cint,(Ptr{spcprm},Cint,Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),spc,nspec,sspec,sx,spec,x,stat)
 end
-function spctype(ctype::Ptr{Uint8}, stype::Ptr{Uint8}, scode::Ptr{Uint8}, sname::Ptr{Uint8}, units::Ptr{Uint8}, ptype::Ptr{Uint8}, xtype::Ptr{Uint8}, restreq::Ptr{Cint}, err::Ptr{Ptr{wcserr}})
-  ccall( (:spctype, libwcs), Cint, (Ptr{Uint8}, Ptr{Uint8}, Ptr{Uint8}, Ptr{Uint8}, Ptr{Uint8}, Ptr{Uint8}, Ptr{Uint8}, Ptr{Cint}, Ptr{Ptr{wcserr}}), ctype, stype, scode, sname, units, ptype, xtype, restreq, err)
+function spctype(ctype::Ptr{Uint8},stype::Ptr{Uint8},scode::Ptr{Uint8},sname::Ptr{Uint8},units::Ptr{Uint8},ptype::Ptr{Uint8},xtype::Ptr{Uint8},restreq::Ptr{Cint},err::Ptr{Ptr{wcserr}})
+    ccall((:spctype,libwcs),Cint,(Ptr{Uint8},Ptr{Uint8},Ptr{Uint8},Ptr{Uint8},Ptr{Uint8},Ptr{Uint8},Ptr{Uint8},Ptr{Cint},Ptr{Ptr{wcserr}}),ctype,stype,scode,sname,units,ptype,xtype,restreq,err)
 end
-function spcspxe(ctypeS::Ptr{Uint8}, crvalS::Cdouble, restfrq::Cdouble, restwav::Cdouble, ptype::Ptr{Uint8}, xtype::Ptr{Uint8}, restreq::Ptr{Cint}, crvalX::Ptr{Cdouble}, dXdS::Ptr{Cdouble}, err::Ptr{Ptr{wcserr}})
-  ccall( (:spcspxe, libwcs), Cint, (Ptr{Uint8}, Cdouble, Cdouble, Cdouble, Ptr{Uint8}, Ptr{Uint8}, Ptr{Cint}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Ptr{wcserr}}), ctypeS, crvalS, restfrq, restwav, ptype, xtype, restreq, crvalX, dXdS, err)
+function spcspxe(ctypeS::Ptr{Uint8},crvalS::Real,restfrq::Real,restwav::Real,ptype::Ptr{Uint8},xtype::Ptr{Uint8},restreq::Ptr{Cint},crvalX::Ptr{Cdouble},dXdS::Ptr{Cdouble},err::Ptr{Ptr{wcserr}})
+    ccall((:spcspxe,libwcs),Cint,(Ptr{Uint8},Cdouble,Cdouble,Cdouble,Ptr{Uint8},Ptr{Uint8},Ptr{Cint},Ptr{Cdouble},Ptr{Cdouble},Ptr{Ptr{wcserr}}),ctypeS,crvalS,restfrq,restwav,ptype,xtype,restreq,crvalX,dXdS,err)
 end
-function spcxpse(ctypeS::Ptr{Uint8}, crvalX::Cdouble, restfrq::Cdouble, restwav::Cdouble, ptype::Ptr{Uint8}, xtype::Ptr{Uint8}, restreq::Ptr{Cint}, crvalS::Ptr{Cdouble}, dSdX::Ptr{Cdouble}, err::Ptr{Ptr{wcserr}})
-  ccall( (:spcxpse, libwcs), Cint, (Ptr{Uint8}, Cdouble, Cdouble, Cdouble, Ptr{Uint8}, Ptr{Uint8}, Ptr{Cint}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Ptr{wcserr}}), ctypeS, crvalX, restfrq, restwav, ptype, xtype, restreq, crvalS, dSdX, err)
+function spcxpse(ctypeS::Ptr{Uint8},crvalX::Real,restfrq::Real,restwav::Real,ptype::Ptr{Uint8},xtype::Ptr{Uint8},restreq::Ptr{Cint},crvalS::Ptr{Cdouble},dSdX::Ptr{Cdouble},err::Ptr{Ptr{wcserr}})
+    ccall((:spcxpse,libwcs),Cint,(Ptr{Uint8},Cdouble,Cdouble,Cdouble,Ptr{Uint8},Ptr{Uint8},Ptr{Cint},Ptr{Cdouble},Ptr{Cdouble},Ptr{Ptr{wcserr}}),ctypeS,crvalX,restfrq,restwav,ptype,xtype,restreq,crvalS,dSdX,err)
 end
-function spctrne(ctypeS1::Ptr{Uint8}, crvalS1::Cdouble, cdeltS1::Cdouble, restfrq::Cdouble, restwav::Cdouble, ctypeS2::Ptr{Uint8}, crvalS2::Ptr{Cdouble}, cdeltS2::Ptr{Cdouble}, err::Ptr{Ptr{wcserr}})
-  ccall( (:spctrne, libwcs), Cint, (Ptr{Uint8}, Cdouble, Cdouble, Cdouble, Cdouble, Ptr{Uint8}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Ptr{wcserr}}), ctypeS1, crvalS1, cdeltS1, restfrq, restwav, ctypeS2, crvalS2, cdeltS2, err)
+function spctrne(ctypeS1::Ptr{Uint8},crvalS1::Real,cdeltS1::Real,restfrq::Real,restwav::Real,ctypeS2::Ptr{Uint8},crvalS2::Ptr{Cdouble},cdeltS2::Ptr{Cdouble},err::Ptr{Ptr{wcserr}})
+    ccall((:spctrne,libwcs),Cint,(Ptr{Uint8},Cdouble,Cdouble,Cdouble,Cdouble,Ptr{Uint8},Ptr{Cdouble},Ptr{Cdouble},Ptr{Ptr{wcserr}}),ctypeS1,crvalS1,cdeltS1,restfrq,restwav,ctypeS2,crvalS2,cdeltS2,err)
 end
-function spcaips(ctypeA::Ptr{Uint8}, velref::Cint, ctype::Ptr{Uint8}, specsys::Ptr{Uint8})
-  ccall( (:spcaips, libwcs), Cint, (Ptr{Uint8}, Cint, Ptr{Uint8}, Ptr{Uint8}), ctypeA, velref, ctype, specsys)
+function spcaips(ctypeA::Ptr{Uint8},velref::Integer,ctype::Ptr{Uint8},specsys::Ptr{Uint8})
+    ccall((:spcaips,libwcs),Cint,(Ptr{Uint8},Cint,Ptr{Uint8},Ptr{Uint8}),ctypeA,velref,ctype,specsys)
 end
-function spctyp(ctype::Ptr{Uint8}, stype::Ptr{Uint8}, scode::Ptr{Uint8}, sname::Ptr{Uint8}, units::Ptr{Uint8}, ptype::Ptr{Uint8}, xtype::Ptr{Uint8}, restreq::Ptr{Cint})
-  ccall( (:spctyp, libwcs), Cint, (Ptr{Uint8}, Ptr{Uint8}, Ptr{Uint8}, Ptr{Uint8}, Ptr{Uint8}, Ptr{Uint8}, Ptr{Uint8}, Ptr{Cint}), ctype, stype, scode, sname, units, ptype, xtype, restreq)
+function spctyp(ctype::Ptr{Uint8},stype::Ptr{Uint8},scode::Ptr{Uint8},sname::Ptr{Uint8},units::Ptr{Uint8},ptype::Ptr{Uint8},xtype::Ptr{Uint8},restreq::Ptr{Cint})
+    ccall((:spctyp,libwcs),Cint,(Ptr{Uint8},Ptr{Uint8},Ptr{Uint8},Ptr{Uint8},Ptr{Uint8},Ptr{Uint8},Ptr{Uint8},Ptr{Cint}),ctype,stype,scode,sname,units,ptype,xtype,restreq)
 end
-function spcspx(ctypeS::Ptr{Uint8}, crvalS::Cdouble, restfrq::Cdouble, restwav::Cdouble, ptype::Ptr{Uint8}, xtype::Ptr{Uint8}, restreq::Ptr{Cint}, crvalX::Ptr{Cdouble}, dXdS::Ptr{Cdouble})
-  ccall( (:spcspx, libwcs), Cint, (Ptr{Uint8}, Cdouble, Cdouble, Cdouble, Ptr{Uint8}, Ptr{Uint8}, Ptr{Cint}, Ptr{Cdouble}, Ptr{Cdouble}), ctypeS, crvalS, restfrq, restwav, ptype, xtype, restreq, crvalX, dXdS)
+function spcspx(ctypeS::Ptr{Uint8},crvalS::Real,restfrq::Real,restwav::Real,ptype::Ptr{Uint8},xtype::Ptr{Uint8},restreq::Ptr{Cint},crvalX::Ptr{Cdouble},dXdS::Ptr{Cdouble})
+    ccall((:spcspx,libwcs),Cint,(Ptr{Uint8},Cdouble,Cdouble,Cdouble,Ptr{Uint8},Ptr{Uint8},Ptr{Cint},Ptr{Cdouble},Ptr{Cdouble}),ctypeS,crvalS,restfrq,restwav,ptype,xtype,restreq,crvalX,dXdS)
 end
-function spcxps(ctypeS::Ptr{Uint8}, crvalX::Cdouble, restfrq::Cdouble, restwav::Cdouble, ptype::Ptr{Uint8}, xtype::Ptr{Uint8}, restreq::Ptr{Cint}, crvalS::Ptr{Cdouble}, dSdX::Ptr{Cdouble})
-  ccall( (:spcxps, libwcs), Cint, (Ptr{Uint8}, Cdouble, Cdouble, Cdouble, Ptr{Uint8}, Ptr{Uint8}, Ptr{Cint}, Ptr{Cdouble}, Ptr{Cdouble}), ctypeS, crvalX, restfrq, restwav, ptype, xtype, restreq, crvalS, dSdX)
+function spcxps(ctypeS::Ptr{Uint8},crvalX::Real,restfrq::Real,restwav::Real,ptype::Ptr{Uint8},xtype::Ptr{Uint8},restreq::Ptr{Cint},crvalS::Ptr{Cdouble},dSdX::Ptr{Cdouble})
+    ccall((:spcxps,libwcs),Cint,(Ptr{Uint8},Cdouble,Cdouble,Cdouble,Ptr{Uint8},Ptr{Uint8},Ptr{Cint},Ptr{Cdouble},Ptr{Cdouble}),ctypeS,crvalX,restfrq,restwav,ptype,xtype,restreq,crvalS,dSdX)
 end
-function spctrn(ctypeS1::Ptr{Uint8}, crvalS1::Cdouble, cdeltS1::Cdouble, restfrq::Cdouble, restwav::Cdouble, ctypeS2::Ptr{Uint8}, crvalS2::Ptr{Cdouble}, cdeltS2::Ptr{Cdouble})
-  ccall( (:spctrn, libwcs), Cint, (Ptr{Uint8}, Cdouble, Cdouble, Cdouble, Cdouble, Ptr{Uint8}, Ptr{Cdouble}, Ptr{Cdouble}), ctypeS1, crvalS1, cdeltS1, restfrq, restwav, ctypeS2, crvalS2, cdeltS2)
+function spctrn(ctypeS1::Ptr{Uint8},crvalS1::Real,cdeltS1::Real,restfrq::Real,restwav::Real,ctypeS2::Ptr{Uint8},crvalS2::Ptr{Cdouble},cdeltS2::Ptr{Cdouble})
+    ccall((:spctrn,libwcs),Cint,(Ptr{Uint8},Cdouble,Cdouble,Cdouble,Cdouble,Ptr{Uint8},Ptr{Cdouble},Ptr{Cdouble}),ctypeS1,crvalS1,cdeltS1,restfrq,restwav,ctypeS2,crvalS2,cdeltS2)
 end
-function tabini(alloc::Cint, M::Cint, K::Ptr{Cint}, tab::Ptr{tabprm})
-  ccall( (:tabini, libwcs), Cint, (Cint, Cint, Ptr{Cint}, Ptr{tabprm}), alloc, M, K, tab)
+function tabini(alloc::Integer,M::Integer,K::Ptr{Cint},tab::Ptr{tabprm})
+    ccall((:tabini,libwcs),Cint,(Cint,Cint,Ptr{Cint},Ptr{tabprm}),alloc,M,K,tab)
 end
 function tabmem(tab::Ptr{tabprm})
-  ccall( (:tabmem, libwcs), Cint, (Ptr{tabprm},), tab)
+    ccall((:tabmem,libwcs),Cint,(Ptr{tabprm},),tab)
 end
-function tabcpy(alloc::Cint, tabsrc::Ptr{tabprm}, tabdst::Ptr{tabprm})
-  ccall( (:tabcpy, libwcs), Cint, (Cint, Ptr{tabprm}, Ptr{tabprm}), alloc, tabsrc, tabdst)
+function tabcpy(alloc::Integer,tabsrc::Ptr{tabprm},tabdst::Ptr{tabprm})
+    ccall((:tabcpy,libwcs),Cint,(Cint,Ptr{tabprm},Ptr{tabprm}),alloc,tabsrc,tabdst)
 end
 function tabfree(tab::Ptr{tabprm})
-  ccall( (:tabfree, libwcs), Cint, (Ptr{tabprm},), tab)
+    ccall((:tabfree,libwcs),Cint,(Ptr{tabprm},),tab)
 end
 function tabprt(tab::Ptr{tabprm})
-  ccall( (:tabprt, libwcs), Cint, (Ptr{tabprm},), tab)
+    ccall((:tabprt,libwcs),Cint,(Ptr{tabprm},),tab)
 end
 function tabset(tab::Ptr{tabprm})
-  ccall( (:tabset, libwcs), Cint, (Ptr{tabprm},), tab)
+    ccall((:tabset,libwcs),Cint,(Ptr{tabprm},),tab)
 end
-function tabx2s(tab::Ptr{tabprm}, ncoord::Cint, nelem::Cint, x::Ptr{Cdouble}, world::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:tabx2s, libwcs), Cint, (Ptr{tabprm}, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), tab, ncoord, nelem, x, world, stat)
+function tabx2s(tab::Ptr{tabprm},ncoord::Integer,nelem::Integer,x::Ptr{Cdouble},world::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:tabx2s,libwcs),Cint,(Ptr{tabprm},Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),tab,ncoord,nelem,x,world,stat)
 end
-function tabs2x(tab::Ptr{tabprm}, ncoord::Cint, nelem::Cint, world::Ptr{Cdouble}, x::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:tabs2x, libwcs), Cint, (Ptr{tabprm}, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), tab, ncoord, nelem, world, x, stat)
+function tabs2x(tab::Ptr{tabprm},ncoord::Integer,nelem::Integer,world::Ptr{Cdouble},x::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:tabs2x,libwcs),Cint,(Ptr{tabprm},Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),tab,ncoord,nelem,world,x,stat)
 end
-function wcsnpv(n::Cint)
-  ccall( (:wcsnpv, libwcs), Cint, (Cint,), n)
+function wcsnpv(n::Integer)
+    ccall((:wcsnpv,libwcs),Cint,(Cint,),n)
 end
-function wcsnps(n::Cint)
-  ccall( (:wcsnps, libwcs), Cint, (Cint,), n)
+function wcsnps(n::Integer)
+    ccall((:wcsnps,libwcs),Cint,(Cint,),n)
 end
-function wcsini(alloc::Cint, naxis::Cint, wcs::Ptr{wcsprm})
-  ccall( (:wcsini, libwcs), Cint, (Cint, Cint, Ptr{wcsprm}), alloc, naxis, wcs)
+function wcsini(alloc::Integer,naxis::Integer,wcs::Ptr{wcsprm})
+    ccall((:wcsini,libwcs),Cint,(Cint,Cint,Ptr{wcsprm}),alloc,naxis,wcs)
 end
-function wcssub(alloc::Cint, wcssrc::Ptr{wcsprm}, nsub::Ptr{Cint}, axes::Ptr{Cint}, wcsdst::Ptr{wcsprm})
-  ccall( (:wcssub, libwcs), Cint, (Cint, Ptr{wcsprm}, Ptr{Cint}, Ptr{Cint}, Ptr{wcsprm}), alloc, wcssrc, nsub, axes, wcsdst)
+function wcssub(alloc::Integer,wcssrc::Ptr{wcsprm},nsub::Ptr{Cint},axes::Ptr{Cint},wcsdst::Ptr{wcsprm})
+    ccall((:wcssub,libwcs),Cint,(Cint,Ptr{wcsprm},Ptr{Cint},Ptr{Cint},Ptr{wcsprm}),alloc,wcssrc,nsub,axes,wcsdst)
 end
 function wcsfree(wcs::Ptr{wcsprm})
-  ccall( (:wcsfree, libwcs), Cint, (Ptr{wcsprm},), wcs)
+    ccall((:wcsfree,libwcs),Cint,(Ptr{wcsprm},),wcs)
 end
 function wcsprt(wcs::Ptr{wcsprm})
-  ccall( (:wcsprt, libwcs), Cint, (Ptr{wcsprm},), wcs)
+    ccall((:wcsprt,libwcs),Cint,(Ptr{wcsprm},),wcs)
 end
-function wcsperr(wcs::Ptr{wcsprm}, prefix::Ptr{Uint8})
-  ccall( (:wcsperr, libwcs), Cint, (Ptr{wcsprm}, Ptr{Uint8}), wcs, prefix)
+function wcsperr(wcs::Ptr{wcsprm},prefix::Ptr{Uint8})
+    ccall((:wcsperr,libwcs),Cint,(Ptr{wcsprm},Ptr{Uint8}),wcs,prefix)
 end
-function wcsbchk(wcs::Ptr{wcsprm}, bounds::Cint)
-  ccall( (:wcsbchk, libwcs), Cint, (Ptr{wcsprm}, Cint), wcs, bounds)
+function wcsbchk(wcs::Ptr{wcsprm},bounds::Integer)
+    ccall((:wcsbchk,libwcs),Cint,(Ptr{wcsprm},Cint),wcs,bounds)
 end
 function wcsset(wcs::Ptr{wcsprm})
-  ccall( (:wcsset, libwcs), Cint, (Ptr{wcsprm},), wcs)
+    ccall((:wcsset,libwcs),Cint,(Ptr{wcsprm},),wcs)
 end
-function wcsp2s(wcs::Ptr{wcsprm}, ncoord::Cint, nelem::Cint, pixcrd::Ptr{Cdouble}, imgcrd::Ptr{Cdouble}, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, world::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:wcsp2s, libwcs), Cint, (Ptr{wcsprm}, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), wcs, ncoord, nelem, pixcrd, imgcrd, phi, theta, world, stat)
+function wcsp2s(wcs::Ptr{wcsprm},ncoord::Integer,nelem::Integer,pixcrd::Ptr{Cdouble},imgcrd::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},world::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:wcsp2s,libwcs),Cint,(Ptr{wcsprm},Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),wcs,ncoord,nelem,pixcrd,imgcrd,phi,theta,world,stat)
 end
-function wcss2p(wcs::Ptr{wcsprm}, ncoord::Cint, nelem::Cint, world::Ptr{Cdouble}, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, imgcrd::Ptr{Cdouble}, pixcrd::Ptr{Cdouble}, stat::Ptr{Cint})
-  ccall( (:wcss2p, libwcs), Cint, (Ptr{wcsprm}, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}), wcs, ncoord, nelem, world, phi, theta, imgcrd, pixcrd, stat)
+function wcss2p(wcs::Ptr{wcsprm},ncoord::Integer,nelem::Integer,world::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},imgcrd::Ptr{Cdouble},pixcrd::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:wcss2p,libwcs),Cint,(Ptr{wcsprm},Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),wcs,ncoord,nelem,world,phi,theta,imgcrd,pixcrd,stat)
 end
-function wcsmix(wcs::Ptr{wcsprm}, mixpix::Cint, mixcel::Cint, vspan::Ptr{Cdouble}, vstep::Cdouble, viter::Cint, world::Ptr{Cdouble}, phi::Ptr{Cdouble}, theta::Ptr{Cdouble}, imgcrd::Ptr{Cdouble}, pixcrd::Ptr{Cdouble})
-  ccall( (:wcsmix, libwcs), Cint, (Ptr{wcsprm}, Cint, Cint, Ptr{Cdouble}, Cdouble, Cint, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}), wcs, mixpix, mixcel, vspan, vstep, viter, world, phi, theta, imgcrd, pixcrd)
+function wcsmix(wcs::Ptr{wcsprm},mixpix::Integer,mixcel::Integer,vspan::Ptr{Cdouble},vstep::Real,viter::Integer,world::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},imgcrd::Ptr{Cdouble},pixcrd::Ptr{Cdouble})
+    ccall((:wcsmix,libwcs),Cint,(Ptr{wcsprm},Cint,Cint,Ptr{Cdouble},Cdouble,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble}),wcs,mixpix,mixcel,vspan,vstep,viter,world,phi,theta,imgcrd,pixcrd)
 end
-function wcssptr(wcs::Ptr{wcsprm}, i::Ptr{Cint}, ctype::Ptr{Uint8})
-  ccall( (:wcssptr, libwcs), Cint, (Ptr{wcsprm}, Ptr{Cint}, Ptr{Uint8}), wcs, i, ctype)
+function wcssptr(wcs::Ptr{wcsprm},i::Ptr{Cint},ctype::Ptr{Uint8})
+    ccall((:wcssptr,libwcs),Cint,(Ptr{wcsprm},Ptr{Cint},Ptr{Uint8}),wcs,i,ctype)
 end
 

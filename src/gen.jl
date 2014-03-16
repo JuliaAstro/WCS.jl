@@ -14,9 +14,21 @@ clang_includes = [joinpath(LLVM_PATH,f)::ASCIIString for f in (
 
 WCS_INCDIR = abspath("../deps/usr/include/wcslib")
 
+function func_rewriter(e::Expr)
+    for a in e.args[1].args[2:end]
+        if a.args[2] == :Cint
+            a.args[2] = :Integer
+        elseif a.args[2] == :Cdouble
+            a.args[2] = :Real
+        end
+    end
+    e
+end
+
 context = wrap_c.init(clang_includes = clang_includes,
                       common_file = "libwcs_common.jl",
                       cursor_wrapped = (name,cursor) -> !endswith(name,"_errmsg"),
+                      func_rewriter = func_rewriter,
                       header_library = x -> "libwcs",
                       output_file = "libwcs_h.jl")
 

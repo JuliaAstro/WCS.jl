@@ -14,7 +14,7 @@ function wcsalloc(naxis::Integer)
     p = convert(Ptr{wcsprm}, c_malloc(sizeof(wcsprm)))
     pflag = p + wcsprm_offset[:flag]
     unsafe_store!(convert(Ptr{Cint}, pflag), -1)
-    stat = wcsini(int32(1), int32(naxis), p)
+    stat = wcsini(1, naxis, p)
     @assert stat == 0
     p
 end
