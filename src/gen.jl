@@ -12,7 +12,7 @@ clang_includes = [joinpath(LLVM_PATH,f)::ASCIIString for f in (
     "include"
     )]
 
-WCS_INCDIR = abspath("../deps/usr/include/wcslib")
+WCS_INCDIR = "../deps/usr/include/wcslib"
 
 const exports = Symbol[]
 
@@ -40,9 +40,7 @@ context.options.immutable_structs = true
 wrap_c.wrap_c_headers(context, [joinpath(WCS_INCDIR,"wcs.h")])
 
 open("libwcs_h.jl", "a") do f
-    print(f, "export ", exports[1])
-    for ex in exports[2:end]
-        print(f, ",\n       ", ex)
+    for ex in exports
+        println(f, "export ", ex)
     end
-    println(f)
 end
