@@ -1,4 +1,4 @@
-# Julia wrapper for header: ../deps/usr/include/wcslib/wcs.h
+# Julia wrapper for header: ../deps/usr/include/wcslib/wcshdr.h
 # Automatically generated using Clang.jl wrap_c, version 0.0.0
 
 function wcserr_enable(enable::Integer)
@@ -514,6 +514,27 @@ end
 function wcssptr(wcs::Ptr{wcsprm},i::Ptr{Cint},ctype::Ptr{Uint8})
     ccall((:wcssptr,libwcs),Cint,(Ptr{wcsprm},Ptr{Cint},Ptr{Uint8}),wcs,i,ctype)
 end
+function wcspih(header::Ptr{Uint8},nkeyrec::Integer,relax::Integer,ctrl::Integer,nreject::Ptr{Cint},nwcs::Ptr{Cint},wcs::Ptr{Ptr{wcsprm}})
+    ccall((:wcspih,libwcs),Cint,(Ptr{Uint8},Cint,Cint,Cint,Ptr{Cint},Ptr{Cint},Ptr{Ptr{wcsprm}}),header,nkeyrec,relax,ctrl,nreject,nwcs,wcs)
+end
+function wcsbth(header::Ptr{Uint8},nkeyrec::Integer,relax::Integer,ctrl::Integer,keysel::Integer,colsel::Ptr{Cint},nreject::Ptr{Cint},nwcs::Ptr{Cint},wcs::Ptr{Ptr{wcsprm}})
+    ccall((:wcsbth,libwcs),Cint,(Ptr{Uint8},Cint,Cint,Cint,Cint,Ptr{Cint},Ptr{Cint},Ptr{Cint},Ptr{Ptr{wcsprm}}),header,nkeyrec,relax,ctrl,keysel,colsel,nreject,nwcs,wcs)
+end
+function wcstab(wcs::Ptr{wcsprm})
+    ccall((:wcstab,libwcs),Cint,(Ptr{wcsprm},),wcs)
+end
+function wcsidx(nwcs::Integer,wcs::Ptr{Ptr{wcsprm}},alts::Ptr{Cint})
+    ccall((:wcsidx,libwcs),Cint,(Cint,Ptr{Ptr{wcsprm}},Ptr{Cint}),nwcs,wcs,alts)
+end
+function wcsbdx(nwcs::Integer,wcs::Ptr{Ptr{wcsprm}},_type::Integer,alts::Ptr{Array_28_Int16})
+    ccall((:wcsbdx,libwcs),Cint,(Cint,Ptr{Ptr{wcsprm}},Cint,Ptr{Array_28_Int16}),nwcs,wcs,_type,alts)
+end
+function wcsvfree(nwcs::Ptr{Cint},wcs::Ptr{Ptr{wcsprm}})
+    ccall((:wcsvfree,libwcs),Cint,(Ptr{Cint},Ptr{Ptr{wcsprm}}),nwcs,wcs)
+end
+function wcshdo(relax::Integer,wcs::Ptr{wcsprm},nkeyrec::Ptr{Cint},header::Ptr{Ptr{Uint8}})
+    ccall((:wcshdo,libwcs),Cint,(Cint,Ptr{wcsprm},Ptr{Cint},Ptr{Ptr{Uint8}}),relax,wcs,nkeyrec,header)
+end
 
 export wcserr_enable
 export wcserr_prt
@@ -686,3 +707,10 @@ export wcsp2s
 export wcss2p
 export wcsmix
 export wcssptr
+export wcspih
+export wcsbth
+export wcstab
+export wcsidx
+export wcsbdx
+export wcsvfree
+export wcshdo

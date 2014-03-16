@@ -21,6 +21,34 @@ const WCSSUB_SPECTRAL = 0x1008
 const WCSSUB_STOKES = 0x1010
 # Skipping MacroDefinition: WCSLEN(sizeof(structwcsprm)/sizeof(int))
 # Skipping MacroDefinition: wcscopy(alloc,wcssrc,wcsdst)wcssub(alloc,wcssrc,0x0,0x0,wcsdst)
+const WCSHDR_none = 0x00000000
+const WCSHDR_all = 0x000FFFFF
+const WCSHDR_reject = 0x10000000
+const WCSHDR_CROTAia = 0x00000001
+const WCSHDR_EPOCHa = 0x00000002
+const WCSHDR_VELREFa = 0x00000004
+const WCSHDR_CD00i00j = 0x00000008
+const WCSHDR_PC00i00j = 0x00000010
+const WCSHDR_PROJPn = 0x00000020
+const WCSHDR_RADECSYS = 0x00000040
+const WCSHDR_VSOURCE = 0x00000080
+const WCSHDR_DOBSn = 0x00000100
+const WCSHDR_LONGKEY = 0x00000200
+const WCSHDR_CNAMn = 0x00000400
+const WCSHDR_AUXIMG = 0x00000800
+const WCSHDR_ALLIMG = 0x00001000
+const WCSHDR_IMGHEAD = 0x00010000
+const WCSHDR_BIMGARR = 0x00020000
+const WCSHDR_PIXLIST = 0x00040000
+const WCSHDO_none = 0x00
+const WCSHDO_all = 0xFF
+const WCSHDO_safe = 0x0F
+const WCSHDO_DOBSn = 0x01
+const WCSHDO_TPCn_ka = 0x02
+const WCSHDO_PVn_ma = 0x04
+const WCSHDO_CRPXna = 0x08
+const WCSHDO_CNAMna = 0x10
+const WCSHDO_WCSNna = 0x20
 immutable Array_160_Uint8
     d1::Uint8
     d2::Uint8
@@ -710,4 +738,43 @@ immutable wcsprm
     m_csyer::Ptr{Cdouble}
     m_tab::Ptr{tabprm}
     m_wtb::Ptr{wtbarr}
+end
+# begin enum wcshdr_errmsg_enum
+typealias wcshdr_errmsg_enum Uint32
+const WCSHDRERR_SUCCESS = 0
+const WCSHDRERR_NULL_POINTER = 1
+const WCSHDRERR_MEMORY = 2
+const WCSHDRERR_BAD_COLUMN = 3
+const WCSHDRERR_PARSER = 4
+const WCSHDRERR_BAD_TABULAR_PARAMS = 5
+# end enum wcshdr_errmsg_enum
+immutable Array_28_Int16
+    d1::Int16
+    d2::Int16
+    d3::Int16
+    d4::Int16
+    d5::Int16
+    d6::Int16
+    d7::Int16
+    d8::Int16
+    d9::Int16
+    d10::Int16
+    d11::Int16
+    d12::Int16
+    d13::Int16
+    d14::Int16
+    d15::Int16
+    d16::Int16
+    d17::Int16
+    d18::Int16
+    d19::Int16
+    d20::Int16
+    d21::Int16
+    d22::Int16
+    d23::Int16
+    d24::Int16
+    d25::Int16
+    d26::Int16
+    d27::Int16
+    d28::Int16
 end
