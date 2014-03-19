@@ -20,6 +20,9 @@ wcsp2s(w, pixcrd, imgcrd, phi, theta, world, stat)
 expected_world = [ 267.96547027  -73.73660749;
  276.53931377  -71.97412809;
  287.77080792  -69.67813884]'
-@test maximum(abs(world-expected_world)) < 5e-9
+@test maximum(abs(world .- expected_world)) < 5e-9
+pixcrd2 = similar(pixcrd)
+wcss2p(w, world, phi, theta, imgcrd, pixcrd2, stat)
+@test maximum(abs(pixcrd .- pixcrd2)) < 1e-9
 
 wcsfree(w)
