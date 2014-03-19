@@ -4,7 +4,7 @@
 function wcserr_enable(enable::Integer)
     ccall((:wcserr_enable,libwcs),Cint,(Cint,),enable)
 end
-function wcserr_prt(err::Ptr{wcserr},prefix::Ptr{Uint8})
+function wcserr_prt(err::Ptr{wcserr},prefix::ASCIIString)
     ccall((:wcserr_prt,libwcs),Cint,(Ptr{wcserr},Ptr{Uint8}),err,prefix)
 end
 function wcserr_clear(err::Ptr{Ptr{wcserr}})
@@ -493,7 +493,7 @@ end
 function wcsprt(wcs::wcsprm)
     ccall((:wcsprt,libwcs),Cint,(Ptr{wcsprm},),&wcs)
 end
-function wcsperr(wcs::wcsprm,prefix::Ptr{Uint8})
+function wcsperr(wcs::wcsprm,prefix::ASCIIString)
     ccall((:wcsperr,libwcs),Cint,(Ptr{wcsprm},Ptr{Uint8}),&wcs,prefix)
 end
 function wcsbchk(wcs::wcsprm,bounds::Integer)

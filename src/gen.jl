@@ -17,15 +17,22 @@ WCS_INCDIR = "../deps/usr/include/wcslib"
 const exports = Symbol[]
 
 function func_rewriter(e::Expr)
-    push!(exports, e.args[1].args[1])
+    fun = e.args[1].args[1]
+    push!(exports, fun)
+    r_ascii = r".+-prefix"
 
     for a in e.args[1].args[2:end]
+        s = "$fun-$(a.args[1])"
         if a.args[2] == :Cint
             a.args[2] = :Integer
         elseif a.args[2] == :Cdouble
             a.args[2] = :Real
         elseif a.args[2] == :(Ptr{wcsprm})
             a.args[2] = :wcsprm
+        elseif a.args[2] == :(Ptr{Uint8})
+            if ismatch(r_ascii, s)
+                a.args[2] = :ASCIIString
+            end
         end
     end
 
