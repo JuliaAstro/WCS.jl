@@ -68,6 +68,8 @@ wrap_c.wrap_c_headers(context, [joinpath(WCS_INCDIR,"wcshdr.h")])
 
 open("libwcs_h.jl", "a") do f
     for ex in exports
-        println(f, "export ", ex)
+        if beginswith(string(ex), "wcs")
+            println(f, "export ", ex)
+        end
     end
 end
