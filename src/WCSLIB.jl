@@ -47,6 +47,13 @@ function wcsmodify(w::wcsprm; kvs...)
     end
 end
 
+function wcsprm(naxis::Integer; kvs...)
+    w = wcsprm()
+    wcsini(1, naxis, w)
+    wcsmodify(w; kvs...)
+    w
+end
+
 function wcsp2s(wcs::wcsprm,
                 pixcrd::Matrix{Float64}, imgcrd::Matrix{Float64},
                 phi::Matrix{Float64}, theta::Matrix{Float64},

@@ -2,9 +2,8 @@ include("WCSLIB.jl")
 using WCSLIB
 using .Test
 
-w = wcsprm()
-wcsini(1, 2, w)
-wcsmodify(w; cdelt = [-0.066667, 0.066667],
+w = wcsprm(2;
+             cdelt = [-0.066667, 0.066667],
              ctype = ["RA---AIR", "DEC--AIR"],
              crpix = [-234.75, 8.3393],
              crval = [0., -90],
