@@ -1,8 +1,8 @@
 module WCSLIB
 
 export pvcard,
-       wcsalloc,
-       wcsmodify
+       wcsmodify,
+       wcsprm
 
 using BinDeps
 @BinDeps.load_dependencies
@@ -10,28 +10,13 @@ using BinDeps
 include("libwcs_common.jl")
 include("libwcs_h.jl")
 
-for (name,offset) in zip(names(wcsprm),fieldoffsets(wcsprm))
-    if name in (:flag,:npv)
-        @eval const $(symbol(string("_",name,"_offset"))) = $offset
-    end
-end
-
-function wcsalloc(naxis::Integer)
-    p = convert(Ptr{wcsprm}, c_malloc(sizeof(wcsprm)))
-    unsafe_store!(convert(Ptr{Cint}, p+_flag_offset), -1)
-    stat = wcsini(1, naxis, p)
-    @assert stat == 0
-    p
-end
-
 function unsafe_store_vec!{T}(p::Ptr{T}, v::Vector{T})
     for i = 1:length(v)
         unsafe_store!(p, v[i], i)
     end
 end
 
-function wcsmodify(p::Ptr{wcsprm}; kvs...)
-    w = unsafe_load(p)
+function wcsmodify(w::wcsprm; kvs...)
     naxis = w.naxis
     for (k,v) in kvs
         if k in (:cdelt,:crder,:crpix,:crval,:csyer)
@@ -54,7 +39,7 @@ function wcsmodify(p::Ptr{wcsprm}; kvs...)
             @assert isa(v, Vector{pvcard})
             @assert npv <= w.npvmax
             unsafe_store_vec!(w.pv, v)
-            unsafe_store!(convert(Ptr{Cint}, p+_npv_offset), npv)
+            w.npv = npv
 
         else
             error("unrecognized keyword argument \"$k\"")

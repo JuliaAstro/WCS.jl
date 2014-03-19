@@ -481,38 +481,38 @@ end
 function wcsnps(n::Integer)
     ccall((:wcsnps,libwcs),Cint,(Cint,),n)
 end
-function wcsini(alloc::Integer,naxis::Integer,wcs::Ptr{wcsprm})
-    ccall((:wcsini,libwcs),Cint,(Cint,Cint,Ptr{wcsprm}),alloc,naxis,wcs)
+function wcsini(alloc::Integer,naxis::Integer,wcs::wcsprm)
+    ccall((:wcsini,libwcs),Cint,(Cint,Cint,Ptr{wcsprm}),alloc,naxis,&wcs)
 end
-function wcssub(alloc::Integer,wcssrc::Ptr{wcsprm},nsub::Ptr{Cint},axes::Ptr{Cint},wcsdst::Ptr{wcsprm})
-    ccall((:wcssub,libwcs),Cint,(Cint,Ptr{wcsprm},Ptr{Cint},Ptr{Cint},Ptr{wcsprm}),alloc,wcssrc,nsub,axes,wcsdst)
+function wcssub(alloc::Integer,wcssrc::wcsprm,nsub::Ptr{Cint},axes::Ptr{Cint},wcsdst::wcsprm)
+    ccall((:wcssub,libwcs),Cint,(Cint,Ptr{wcsprm},Ptr{Cint},Ptr{Cint},Ptr{wcsprm}),alloc,&wcssrc,nsub,axes,&wcsdst)
 end
-function wcsfree(wcs::Ptr{wcsprm})
-    ccall((:wcsfree,libwcs),Cint,(Ptr{wcsprm},),wcs)
+function wcsfree(wcs::wcsprm)
+    ccall((:wcsfree,libwcs),Cint,(Ptr{wcsprm},),&wcs)
 end
-function wcsprt(wcs::Ptr{wcsprm})
-    ccall((:wcsprt,libwcs),Cint,(Ptr{wcsprm},),wcs)
+function wcsprt(wcs::wcsprm)
+    ccall((:wcsprt,libwcs),Cint,(Ptr{wcsprm},),&wcs)
 end
-function wcsperr(wcs::Ptr{wcsprm},prefix::Ptr{Uint8})
-    ccall((:wcsperr,libwcs),Cint,(Ptr{wcsprm},Ptr{Uint8}),wcs,prefix)
+function wcsperr(wcs::wcsprm,prefix::Ptr{Uint8})
+    ccall((:wcsperr,libwcs),Cint,(Ptr{wcsprm},Ptr{Uint8}),&wcs,prefix)
 end
-function wcsbchk(wcs::Ptr{wcsprm},bounds::Integer)
-    ccall((:wcsbchk,libwcs),Cint,(Ptr{wcsprm},Cint),wcs,bounds)
+function wcsbchk(wcs::wcsprm,bounds::Integer)
+    ccall((:wcsbchk,libwcs),Cint,(Ptr{wcsprm},Cint),&wcs,bounds)
 end
-function wcsset(wcs::Ptr{wcsprm})
-    ccall((:wcsset,libwcs),Cint,(Ptr{wcsprm},),wcs)
+function wcsset(wcs::wcsprm)
+    ccall((:wcsset,libwcs),Cint,(Ptr{wcsprm},),&wcs)
 end
-function wcsp2s(wcs::Ptr{wcsprm},ncoord::Integer,nelem::Integer,pixcrd::Ptr{Cdouble},imgcrd::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},world::Ptr{Cdouble},stat::Ptr{Cint})
-    ccall((:wcsp2s,libwcs),Cint,(Ptr{wcsprm},Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),wcs,ncoord,nelem,pixcrd,imgcrd,phi,theta,world,stat)
+function wcsp2s(wcs::wcsprm,ncoord::Integer,nelem::Integer,pixcrd::Ptr{Cdouble},imgcrd::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},world::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:wcsp2s,libwcs),Cint,(Ptr{wcsprm},Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),&wcs,ncoord,nelem,pixcrd,imgcrd,phi,theta,world,stat)
 end
-function wcss2p(wcs::Ptr{wcsprm},ncoord::Integer,nelem::Integer,world::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},imgcrd::Ptr{Cdouble},pixcrd::Ptr{Cdouble},stat::Ptr{Cint})
-    ccall((:wcss2p,libwcs),Cint,(Ptr{wcsprm},Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),wcs,ncoord,nelem,world,phi,theta,imgcrd,pixcrd,stat)
+function wcss2p(wcs::wcsprm,ncoord::Integer,nelem::Integer,world::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},imgcrd::Ptr{Cdouble},pixcrd::Ptr{Cdouble},stat::Ptr{Cint})
+    ccall((:wcss2p,libwcs),Cint,(Ptr{wcsprm},Cint,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cint}),&wcs,ncoord,nelem,world,phi,theta,imgcrd,pixcrd,stat)
 end
-function wcsmix(wcs::Ptr{wcsprm},mixpix::Integer,mixcel::Integer,vspan::Ptr{Cdouble},vstep::Real,viter::Integer,world::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},imgcrd::Ptr{Cdouble},pixcrd::Ptr{Cdouble})
-    ccall((:wcsmix,libwcs),Cint,(Ptr{wcsprm},Cint,Cint,Ptr{Cdouble},Cdouble,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble}),wcs,mixpix,mixcel,vspan,vstep,viter,world,phi,theta,imgcrd,pixcrd)
+function wcsmix(wcs::wcsprm,mixpix::Integer,mixcel::Integer,vspan::Ptr{Cdouble},vstep::Real,viter::Integer,world::Ptr{Cdouble},phi::Ptr{Cdouble},theta::Ptr{Cdouble},imgcrd::Ptr{Cdouble},pixcrd::Ptr{Cdouble})
+    ccall((:wcsmix,libwcs),Cint,(Ptr{wcsprm},Cint,Cint,Ptr{Cdouble},Cdouble,Cint,Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble},Ptr{Cdouble}),&wcs,mixpix,mixcel,vspan,vstep,viter,world,phi,theta,imgcrd,pixcrd)
 end
-function wcssptr(wcs::Ptr{wcsprm},i::Ptr{Cint},ctype::Ptr{Uint8})
-    ccall((:wcssptr,libwcs),Cint,(Ptr{wcsprm},Ptr{Cint},Ptr{Uint8}),wcs,i,ctype)
+function wcssptr(wcs::wcsprm,i::Ptr{Cint},ctype::Ptr{Uint8})
+    ccall((:wcssptr,libwcs),Cint,(Ptr{wcsprm},Ptr{Cint},Ptr{Uint8}),&wcs,i,ctype)
 end
 function wcspih(header::Ptr{Uint8},nkeyrec::Integer,relax::Integer,ctrl::Integer,nreject::Ptr{Cint},nwcs::Ptr{Cint},wcs::Ptr{Ptr{wcsprm}})
     ccall((:wcspih,libwcs),Cint,(Ptr{Uint8},Cint,Cint,Cint,Ptr{Cint},Ptr{Cint},Ptr{Ptr{wcsprm}}),header,nkeyrec,relax,ctrl,nreject,nwcs,wcs)
@@ -520,8 +520,8 @@ end
 function wcsbth(header::Ptr{Uint8},nkeyrec::Integer,relax::Integer,ctrl::Integer,keysel::Integer,colsel::Ptr{Cint},nreject::Ptr{Cint},nwcs::Ptr{Cint},wcs::Ptr{Ptr{wcsprm}})
     ccall((:wcsbth,libwcs),Cint,(Ptr{Uint8},Cint,Cint,Cint,Cint,Ptr{Cint},Ptr{Cint},Ptr{Cint},Ptr{Ptr{wcsprm}}),header,nkeyrec,relax,ctrl,keysel,colsel,nreject,nwcs,wcs)
 end
-function wcstab(wcs::Ptr{wcsprm})
-    ccall((:wcstab,libwcs),Cint,(Ptr{wcsprm},),wcs)
+function wcstab(wcs::wcsprm)
+    ccall((:wcstab,libwcs),Cint,(Ptr{wcsprm},),&wcs)
 end
 function wcsidx(nwcs::Integer,wcs::Ptr{Ptr{wcsprm}},alts::Ptr{Cint})
     ccall((:wcsidx,libwcs),Cint,(Cint,Ptr{Ptr{wcsprm}},Ptr{Cint}),nwcs,wcs,alts)
@@ -532,8 +532,8 @@ end
 function wcsvfree(nwcs::Ptr{Cint},wcs::Ptr{Ptr{wcsprm}})
     ccall((:wcsvfree,libwcs),Cint,(Ptr{Cint},Ptr{Ptr{wcsprm}}),nwcs,wcs)
 end
-function wcshdo(relax::Integer,wcs::Ptr{wcsprm},nkeyrec::Ptr{Cint},header::Ptr{Ptr{Uint8}})
-    ccall((:wcshdo,libwcs),Cint,(Cint,Ptr{wcsprm},Ptr{Cint},Ptr{Ptr{Uint8}}),relax,wcs,nkeyrec,header)
+function wcshdo(relax::Integer,wcs::wcsprm,nkeyrec::Ptr{Cint},header::Ptr{Ptr{Uint8}})
+    ccall((:wcshdo,libwcs),Cint,(Cint,Ptr{wcsprm},Ptr{Cint},Ptr{Ptr{Uint8}}),relax,&wcs,nkeyrec,header)
 end
 
 export wcserr_enable

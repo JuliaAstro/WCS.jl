@@ -243,7 +243,7 @@ immutable linprm
     m_crpix::Ptr{Cdouble}
     m_pc::Ptr{Cdouble}
     m_cdelt::Ptr{Cdouble}
-    padding2::Ptr{None}
+    padding2::Ptr{Void}
 end
 # begin enum prj_errmsg_enum
 typealias prj_errmsg_enum Uint32
@@ -364,7 +364,7 @@ immutable prjprm
     x0::Cdouble
     y0::Cdouble
     err::Ptr{wcserr}
-    padding::Ptr{None}
+    padding::Ptr{Void}
     w::Array_10_Cdouble
     m::Cint
     n::Cint
@@ -405,7 +405,7 @@ immutable celprm
     latpreq::Cint
     isolat::Cint
     err::Ptr{wcserr}
-    padding::Ptr{None}
+    padding::Ptr{Void}
 end
 immutable spxprm
     restfrq::Cdouble
@@ -450,7 +450,7 @@ immutable spxprm
     dvelobeta::Cdouble
     dbetavelo::Cdouble
     err::Ptr{wcserr}
-    padding::Ptr{None}
+    padding::Ptr{Void}
 end
 # begin enum spc_errmsg_enum
 typealias spc_errmsg_enum Cint
@@ -500,7 +500,7 @@ immutable spcprm
     isGrism::Cint
     padding1::Cint
     err::Ptr{wcserr}
-    padding2::Ptr{None}
+    padding2::Ptr{Void}
     spxX2P::Ptr{Void}
     spxP2S::Ptr{Void}
     spxS2P::Ptr{Void}
@@ -660,7 +660,7 @@ immutable Array_3_Cdouble
     d2::Cdouble
     d3::Cdouble
 end
-immutable wcsprm
+type wcsprm
     flag::Cint
     naxis::Cint
     crpix::Ptr{Cdouble}
@@ -714,12 +714,12 @@ immutable wcsprm
     spec::Cint
     cubeface::Cint
     types::Ptr{Cint}
-    padding::Ptr{None}
+    padding::Ptr{Void}
     lin::linprm
     cel::celprm
     spc::spcprm
     err::Ptr{wcserr}
-    m_padding::Ptr{None}
+    m_padding::Ptr{Void}
     m_flag::Cint
     m_naxis::Cint
     m_crpix::Ptr{Cdouble}
@@ -738,6 +738,7 @@ immutable wcsprm
     m_csyer::Ptr{Cdouble}
     m_tab::Ptr{tabprm}
     m_wtb::Ptr{wtbarr}
+    wcsprm() = new(-1)
 end
 # begin enum wcshdr_errmsg_enum
 typealias wcshdr_errmsg_enum Uint32

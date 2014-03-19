@@ -18,12 +18,31 @@ const exports = Symbol[]
 
 function func_rewriter(e::Expr)
     push!(exports, e.args[1].args[1])
+
     for a in e.args[1].args[2:end]
         if a.args[2] == :Cint
             a.args[2] = :Integer
         elseif a.args[2] == :Cdouble
             a.args[2] = :Real
+        elseif a.args[2] == :(Ptr{wcsprm})
+            a.args[2] = :wcsprm
         end
+    end
+
+    eccall = e.args[2].args[1]
+    for (i,t) in enumerate(eccall.args[3].args)
+        if t == :(Ptr{wcsprm})
+            eccall.args[3+i] = Expr(:&, eccall.args[3+i])
+        end
+    end
+
+    e
+end
+
+function type_rewriter(e::Expr)
+    if e.args[2] == :wcsprm
+        e.args[1] = true
+        push!(e.args[3].args, :(wcsprm() = new(-1)))
     end
     e
 end
@@ -32,6 +51,7 @@ context = wrap_c.init(clang_includes = clang_includes,
                       common_file = "libwcs_common.jl",
                       cursor_wrapped = (name,cursor) -> !endswith(name,"_errmsg"),
                       func_rewriter = func_rewriter,
+                      type_rewriter = type_rewriter,
                       header_library = x -> "libwcs",
                       output_file = "libwcs_h.jl")
 
