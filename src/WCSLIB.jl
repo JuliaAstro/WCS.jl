@@ -72,10 +72,9 @@ function wcss2p(wcs::wcsprm, world::Matrix{Float64},
            pointer(imgcrd), pointer(pixcrd), pointer(stat))
 end
 
-function wcspih(header::ASCIIString; relax::Integer=0, ctrl::Integer=0)
+function wcspih(header::ASCIIString; nkeyrec::Integer=div(length(header),80),
+                                     relax::Integer=0, ctrl::Integer=0)
     @assert ctrl >= 0 # < 0 modifies the header
-    nkeyrec = div(length(header), 80)
-    @assert 80nkeyrec == length(header)
     nreject = Cint[0]
     nwcs = Cint[0]
     wcs = Ptr{wcsprm}[0]
@@ -88,10 +87,10 @@ function wcspih(header::ASCIIString; relax::Integer=0, ctrl::Integer=0)
     (a, int(nreject[1]))
 end
 
-function wcsbth(header::ASCIIString; relax::Integer=0, ctrl::Integer=0, keysel::Integer=0)
+function wcsbth(header::ASCIIString; nkeyrec::Integer=div(length(header),80),
+                                     relax::Integer=0, ctrl::Integer=0,
+                                     keysel::Integer=0)
     @assert ctrl >= 0 # < 0 modifies the header
-    nkeyrec = div(length(header), 80)
-    @assert 80nkeyrec == length(header)
     nreject = Cint[0]
     nwcs = Cint[0]
     wcs = Ptr{wcsprm}[0]
