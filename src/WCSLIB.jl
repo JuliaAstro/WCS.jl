@@ -104,4 +104,15 @@ function wcsbth(header::ASCIIString; relax::Integer=0, ctrl::Integer=0, keysel::
     (a, int(nreject[1]))
 end
 
+function wcshdo(w::wcsprm; relax::Integer=0)
+    nkeyrec = Cint[0]
+    header = Ptr{Uint8}[0]
+    stat = wcshdo(relax, w, pointer(nkeyrec), pointer(header))
+    @assert stat == 0
+    p = header[1]
+    s = bytestring(p)
+    c_free(p)
+    s
+end
+
 end # module

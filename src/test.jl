@@ -33,6 +33,10 @@ header = "SIMPLE  =                    T / file does conform to FITS standard   
 @test eltype(ws) <: wcsprm
 @test nreject == 0
 w = ws[1]
-wcsset(w)
+@test wcsset(w) == 0
 @test w.naxis == 2
+
+header2 = wcshdo(w)
+@test header[641:end-80] == header2
+
 wcsfree(w)
