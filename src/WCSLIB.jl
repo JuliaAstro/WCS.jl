@@ -50,6 +50,7 @@ end
 function wcsprm(naxis::Integer; kvs...)
     w = wcsprm()
     wcsini(1, naxis, w)
+    finalizer(w, wcsfree)
     wcsmodify(w; kvs...)
     w
 end
