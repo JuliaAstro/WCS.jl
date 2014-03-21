@@ -79,12 +79,21 @@ function wcsprm(naxis::Integer; kvs...)
     w
 end
 
+macro same_size(a, b)
+    :(size($(esc(a))) == size($(esc(b))) || error($(string(a))," must have the same dimensions as ",$(string(b))))
+end
+
 function wcsp2s(wcs::wcsprm, pixcrd::Matrix{Float64};
                 imgcrd::Matrix{Float64}=similar(pixcrd),
                 phi::Matrix{Float64}=similar(pixcrd),
                 theta::Matrix{Float64}=similar(pixcrd),
                 world::Matrix{Float64}=similar(pixcrd),
                 stat::Matrix{Cint}=similar(pixcrd,Cint))
+    @same_size imgcrd pixcrd
+    @same_size phi pixcrd
+    @same_size theta pixcrd
+    @same_size world pixcrd
+    @same_size stat pixcrd
     (nelem, ncoord) = size(pixcrd)
     wcsp2s(wcs, ncoord, nelem, pointer(pixcrd), pointer(imgcrd),
            pointer(phi), pointer(theta), pointer(world), pointer(stat))
@@ -97,6 +106,11 @@ function wcss2p(wcs::wcsprm, world::Matrix{Float64};
                 imgcrd::Matrix{Float64}=similar(world),
                 pixcrd::Matrix{Float64}=similar(world),
                 stat::Matrix{Cint}=similar(world,Cint))
+    @same_size phi world
+    @same_size theta world
+    @same_size imgcrd world
+    @same_size pixcrd world
+    @same_size stat world
     (nelem, ncoord) = size(world)
     wcss2p(wcs, ncoord, nelem, pointer(world), pointer(phi), pointer(theta),
            pointer(imgcrd), pointer(pixcrd), pointer(stat))
