@@ -536,27 +536,3 @@ function wcshdo(relax::Integer,wcs::wcsprm,nkeyrec::Ptr{Cint},header::Ptr{Ptr{Ui
     ccall((:wcshdo,libwcs),Cint,(Cint,Ptr{wcsprm},Ptr{Cint},Ptr{Ptr{Uint8}}),relax,&wcs,nkeyrec,header)
 end
 
-export wcserr_enable
-export wcserr_prt
-export wcserr_clear
-export wcserr_copy
-export wcsnpv
-export wcsnps
-export wcsini
-export wcssub
-export wcsfree
-export wcsprt
-export wcsperr
-export wcsbchk
-export wcsset
-export wcsp2s
-export wcss2p
-export wcsmix
-export wcssptr
-export wcspih
-export wcsbth
-export wcstab
-export wcsidx
-export wcsbdx
-export wcsvfree
-export wcshdo

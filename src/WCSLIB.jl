@@ -1,8 +1,32 @@
 module WCSLIB
 
 export pvcard,
-       wcsmodify,
        wcsprm
+
+export wcsbchk,
+       wcsbdx,
+       wcsbth,
+       wcserr_clear,
+       wcserr_copy,
+       wcserr_enable,
+       wcserr_prt,
+       wcsfree,
+       wcshdo,
+       wcsidx,
+       wcsini,
+       wcsmix,
+       wcsmodify,
+       wcsnps,
+       wcsnpv,
+       wcsp2s,
+       wcsperr,
+       wcspih,
+       wcsprt,
+       wcss2p,
+       wcsset,
+       wcssptr,
+       wcssub,
+       wcstab
 
 using BinDeps
 @BinDeps.load_dependencies

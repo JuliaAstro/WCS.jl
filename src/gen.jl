@@ -65,11 +65,3 @@ context = wrap_c.init(clang_includes = clang_includes,
 context.options.immutable_structs = true
 
 wrap_c.wrap_c_headers(context, [joinpath(WCS_INCDIR,"wcshdr.h")])
-
-open("libwcs_h.jl", "a") do f
-    for ex in exports
-        if beginswith(string(ex), "wcs")
-            println(f, "export ", ex)
-        end
-    end
-end
