@@ -28,21 +28,16 @@ w = wcsprm(2; # naxis
 (ws,nrejected) = wcspih(header)
 w = ws[1]  # ws is an array of wcsprm
 
-# pixel coordinates -- note the transpose
-# (julia's arrays are column-major, while wcs expects row-major)
-pixcrd = [0. 0; 24 38; 45 98]'
-
-world  = similar(pixcrd)
-imgcrd = similar(pixcrd)
-phi    = similar(pixcrd)
-theta  = similar(pixcrd)
-stat   = similar(pixcrd, Cint)
+# pixel coordinates -- note that, because julia's arrays are column-major,
+# while wcs expects row-major, the x-values are in row 1 and the y-values in row 2
+pixcrd = [0.0  24.0  45.0;
+          0.0  38.0  98.0]
 
 # convert pixel -> world coordinates
-wcsp2s(w, pixcrd, imgcrd, phi, theta, world, stat)
+world = wcsp2s(w, pixcrd)
 
 # convert world -> pixel coordinates
-wcss2p(w, world, phi, theta, imgcrd, pixcrd, stat)
+pixcrd = wcss2p(w, world)
 
 # convert wcsprm to FITS header
 header = wcshdo(w)

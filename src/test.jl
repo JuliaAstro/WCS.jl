@@ -11,18 +11,12 @@ w = wcsprm(2;
 @test wcsset(w) == 0
 
 pixcrd = [0. 0; 24 38; 45 98]'
-imgcrd = zeros(size(pixcrd)...)
-phi = zeros(size(pixcrd)...)
-theta = zeros(size(pixcrd)...)
-world = zeros(size(pixcrd)...)
-stat = zeros(Cint, size(pixcrd)...)
-wcsp2s(w, pixcrd, imgcrd, phi, theta, world, stat)
+world = wcsp2s(w, pixcrd)
 expected_world = [ 267.96547027  -73.73660749;
  276.53931377  -71.97412809;
  287.77080792  -69.67813884]'
 @test maximum(abs(world .- expected_world)) < 5e-9
-pixcrd2 = similar(pixcrd)
-wcss2p(w, world, phi, theta, imgcrd, pixcrd2, stat)
+pixcrd2 = wcss2p(w, world)
 @test maximum(abs(pixcrd .- pixcrd2)) < 1e-9
 wcsfree(w)
 

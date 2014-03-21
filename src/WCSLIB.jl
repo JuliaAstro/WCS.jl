@@ -55,22 +55,28 @@ function wcsprm(naxis::Integer; kvs...)
     w
 end
 
-function wcsp2s(wcs::wcsprm,
-                pixcrd::Matrix{Float64}, imgcrd::Matrix{Float64},
-                phi::Matrix{Float64}, theta::Matrix{Float64},
-                world::Matrix{Float64}, stat::Matrix{Cint})
+function wcsp2s(wcs::wcsprm, pixcrd::Matrix{Float64};
+                imgcrd::Matrix{Float64}=similar(pixcrd),
+                phi::Matrix{Float64}=similar(pixcrd),
+                theta::Matrix{Float64}=similar(pixcrd),
+                world::Matrix{Float64}=similar(pixcrd),
+                stat::Matrix{Cint}=similar(pixcrd,Cint))
     (nelem, ncoord) = size(pixcrd)
     wcsp2s(wcs, ncoord, nelem, pointer(pixcrd), pointer(imgcrd),
            pointer(phi), pointer(theta), pointer(world), pointer(stat))
+    world
 end
 
-function wcss2p(wcs::wcsprm, world::Matrix{Float64},
-                phi::Matrix{Float64}, theta::Matrix{Float64},
-                imgcrd::Matrix{Float64}, pixcrd::Matrix{Float64},
-                stat::Matrix{Cint})
+function wcss2p(wcs::wcsprm, world::Matrix{Float64};
+                phi::Matrix{Float64}=similar(world),
+                theta::Matrix{Float64}=similar(world),
+                imgcrd::Matrix{Float64}=similar(world),
+                pixcrd::Matrix{Float64}=similar(world),
+                stat::Matrix{Cint}=similar(world,Cint))
     (nelem, ncoord) = size(world)
     wcss2p(wcs, ncoord, nelem, pointer(world), pointer(phi), pointer(theta),
            pointer(imgcrd), pointer(pixcrd), pointer(stat))
+    pixcrd
 end
 
 function wcspih(header::ASCIIString; nkeyrec::Integer=div(length(header),80),
