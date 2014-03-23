@@ -95,6 +95,7 @@ function wcsp2s(wcs::wcsprm, pixcrd::Matrix{Float64};
     @same_size world pixcrd
     @same_size stat pixcrd
     (nelem, ncoord) = size(pixcrd)
+    nelem >= wcs.naxis || error("number of rows must be greater than or equal to naxis")
     wcsp2s(wcs, ncoord, nelem, pointer(pixcrd), pointer(imgcrd),
            pointer(phi), pointer(theta), pointer(world), pointer(stat))
     world
@@ -112,6 +113,7 @@ function wcss2p(wcs::wcsprm, world::Matrix{Float64};
     @same_size pixcrd world
     @same_size stat world
     (nelem, ncoord) = size(world)
+    nelem >= wcs.naxis || error("number of rows must be greater than or equal to naxis")
     wcss2p(wcs, ncoord, nelem, pointer(world), pointer(phi), pointer(theta),
            pointer(imgcrd), pointer(pixcrd), pointer(stat))
     pixcrd
