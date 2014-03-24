@@ -1,6 +1,7 @@
 module WCSLIB
 
-export pvcard,
+export pscard,
+       pvcard,
        wcsprm
 
 export wcsbchk,
@@ -40,30 +41,82 @@ function unsafe_store_vec!{T}(p::Ptr{T}, v::Vector{T})
     end
 end
 
+function Base.convert(::Type{Array_72_Uint8}, s::ASCIIString)
+    @assert length(s) < 72
+    v = zeros(Uint8, 72)
+    for i = 1:length(s)
+        v[i] = s[i]
+    end
+    Array_72_Uint8(v...)
+end
+
 function wcsmodify(w::wcsprm; kvs...)
+    @assert w.flag != -1
+    w.flag = 0
     naxis = w.naxis
     for (k,v) in kvs
-        if k in (:cdelt,:crder,:crpix,:crval,:csyer)
+
+        # double[naxis]
+        if k in (:cdelt,:crder,:crota,:crpix,:crval,:csyer)
             @assert isa(v, Vector{Float64})
             @assert length(v) == naxis
             unsafe_store_vec!(w.(k), v)
 
+        # char[72,naxis]
         elseif k in (:cname,:ctype,:cunit)
             @assert isa(v, Vector{ASCIIString})
             @assert length(v) == naxis
-            pf = convert(Ptr{Uint8}, w.(k))
-            n = 72
-            for i = 1:naxis
-                @assert length(v[i]) < n
-                unsafe_store_vec!(pf + n*(i-1), v[i].data)
-            end
+            p = convert(Ptr{Array_72_Uint8}, w.(k))
+            x = [convert(Array_72_Uint8,s) for s in v]
+            unsafe_store_vec!(p, x)
 
+        # pvcard[]
         elseif k === :pv
             npv = length(v)
             @assert isa(v, Vector{pvcard})
             @assert npv <= w.npvmax
             unsafe_store_vec!(w.pv, v)
             w.npv = npv
+
+        # pscard[]
+        elseif k === :ps
+            nps = length(v)
+            @assert isa(v, Vector{pscard})
+            @assert nps <= w.npsmax
+            unsafe_store_vec!(w.ps, v)
+            w.nps = nps
+
+        # double[naxis,naxis]
+        elseif k in (:cd,:pc)
+            @assert isa(v, Matrix{Float64})
+            @assert size(v) == (naxis,naxis)
+            unsafe_store_vec!(w.(k), vec(v'))
+
+        # double
+        elseif k in (:equinox,:latpole,:lonpole,:mjdavg,:mjdobs,
+                     :restfrq,:restwav,:velangl,:velosys,:zsource)
+            w.(k) = convert(Float64, v)
+
+        # int
+        elseif k in (:colnum,)
+            w.(k) = convert(Cint, v)
+
+        # char[72]
+        elseif k in (:dateavg,:dateobs,:radesys,:specsys,:ssysobs,:ssyssrc,
+                     :wcsname)
+            w.(k) = convert(Array_72_Uint8, v)
+
+        # double[3]
+        elseif k in (:obsgeo,)
+            @assert isa(v, Vector{Float64}) && length(v) == 3
+            w.obsgeo = Array_3_Cdouble(v[1], v[2], v[3])
+
+        # char[4], but only uses first
+        elseif k in (:alt,)
+            @assert isa(v, Char)
+            @assert ('A' <= v <= 'Z') || v == ' '
+            x = 0x0
+            w.alt = Array_4_Uint8(uint8(v), x, x, x)
 
         else
             error("unrecognized keyword argument \"$k\"")
@@ -73,7 +126,8 @@ end
 
 function wcsprm(naxis::Integer; kvs...)
     w = wcsprm()
-    wcsini(1, naxis, w)
+    stat = wcsini(1, naxis, w)
+    @assert stat == 0
     finalizer(w, wcsfree)
     wcsmodify(w; kvs...)
     w

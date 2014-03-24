@@ -2,12 +2,17 @@ include("WCSLIB.jl")
 using WCSLIB
 using .Test
 
-w = wcsprm(2;
-             cdelt = [-0.066667, 0.066667],
-             ctype = ["RA---AIR", "DEC--AIR"],
-             crpix = [-234.75, 8.3393],
-             crval = [0., -90],
-             pv    = [pvcard(2, 1, 45.0)])
+w = wcsprm(2; alt     = 'B',
+              cdelt   = [-0.066667, 0.066667],
+              colnum  = 2,
+              ctype   = ["RA---AIR", "DEC--AIR"],
+              crpix   = [-234.75, 8.3393],
+              crval   = [0., -90],
+              obsgeo  = [1., 2, 3],
+              pc      = [1. 0; 0 1],
+              pv      = [pvcard(2, 1, 45.0)],
+              velangl = 3,
+              wcsname = "WCSLIB.jl")
 @test wcsset(w) == 0
 
 pixcrd = [0. 0; 24 38; 45 98]'
