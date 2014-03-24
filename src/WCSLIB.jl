@@ -7,6 +7,7 @@ export pscard,
 export wcsbchk,
        #wcsbdx,
        wcsbth,
+       wcscopy,
        wcserr_enable,
        wcserr_prt,
        wcsfree,
@@ -129,6 +130,11 @@ function wcsprm(naxis::Integer; kvs...)
     finalizer(w, wcsfree)
     wcsmodify(w; kvs...)
     w
+end
+
+function wcscopy(alloc::Integer, src::wcsprm, dst::wcsprm)
+    p = convert(Ptr{Cint}, C_NULL)
+    wcssub(alloc, src, p, p, dst)
 end
 
 macro same_size(a, b)
