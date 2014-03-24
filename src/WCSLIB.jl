@@ -28,11 +28,22 @@ export wcsbchk,
        #wcssub,
        wcstab
 
+import Base: convert
+
 using BinDeps
 @BinDeps.load_dependencies
 
 include("libwcs_common.jl")
 include("libwcs_h.jl")
+
+if VERSION < v"0.3-"
+    pscard(i,m,value) = pscard(convert(Cint,i),
+                               convert(Cint,m),
+                               convert(Array_72_Uint8,value))
+    pvcard(i,m,value) = pvcard(convert(Cint,i),
+                               convert(Cint,m),
+                               convert(Cdouble,value))
+end
 
 function unsafe_store_vec!{T}(p::Ptr{T}, v::Vector{T})
     for i = 1:length(v)
@@ -40,7 +51,7 @@ function unsafe_store_vec!{T}(p::Ptr{T}, v::Vector{T})
     end
 end
 
-function Base.convert(::Type{Array_72_Uint8}, s::ASCIIString)
+function convert(::Type{Array_72_Uint8}, s::ASCIIString)
     @assert length(s) < 72
     v = zeros(Uint8, 72)
     for i = 1:length(s)
@@ -75,7 +86,7 @@ function wcsmodify(w::wcsprm; kvs...)
             @check_type k v Vector{ASCIIString}
             @check_prop k length v (==) naxis
             p = convert(Ptr{Array_72_Uint8}, w.(k))
-            x = [convert(Array_72_Uint8,s) for s in v]
+            x = Array_72_Uint8[convert(Array_72_Uint8,s) for s in v]
             unsafe_store_vec!(p, x)
 
         # pvcard[]
@@ -193,7 +204,7 @@ function wcspih(header::ASCIIString; nkeyrec::Integer=div(length(header),80),
     nreject = Cint[0]
     nwcs = Cint[0]
     wcs = Ptr{wcsprm}[0]
-    stat = wcspih(pointer(header), nkeyrec, relax, ctrl,
+    stat = wcspih(convert(Ptr{Uint8},header), nkeyrec, relax, ctrl,
                   pointer(nreject), pointer(nwcs), pointer(wcs))
     @assert stat == 0
     p = wcs[1]
@@ -209,7 +220,7 @@ function wcsbth(header::ASCIIString; nkeyrec::Integer=div(length(header),80),
     nreject = Cint[0]
     nwcs = Cint[0]
     wcs = Ptr{wcsprm}[0]
-    stat = wcsbth(pointer(header), nkeyrec, relax, ctrl, keysel, C_NULL,
+    stat = wcsbth(convert(Ptr{Uint8},header), nkeyrec, relax, ctrl, keysel, C_NULL,
                   pointer(nreject), pointer(nwcs), pointer(wcs))
     @assert stat == 0
     p = wcs[1]
