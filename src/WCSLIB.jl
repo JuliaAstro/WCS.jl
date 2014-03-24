@@ -49,6 +49,15 @@ function Base.convert(::Type{Array_72_Uint8}, s::ASCIIString)
     Array_72_Uint8(v...)
 end
 
+macro check_type(k, v, t)
+    :(typeof($(esc(v))) <: $t || error($(esc(k))," must have type ",$t))
+end
+
+macro check_prop(k, prop, v, op, n)
+    en = esc(n)
+    :(($op)($prop($(esc(v))), $en) || error($(esc(k))," must have ",$prop," ",$op," ",$en))
+end
+
 function wcsmodify(w::wcsprm; kvs...)
     @assert w.flag != -1
     w.flag = 0
@@ -57,14 +66,14 @@ function wcsmodify(w::wcsprm; kvs...)
 
         # double[naxis]
         if k in (:cdelt,:crder,:crota,:crpix,:crval,:csyer)
-            @assert isa(v, Vector{Float64})
-            @assert length(v) == naxis
+            @check_type k v Vector{Float64}
+            @check_prop k length v (==) naxis
             unsafe_store_vec!(w.(k), v)
 
         # char[72,naxis]
         elseif k in (:cname,:ctype,:cunit)
-            @assert isa(v, Vector{ASCIIString})
-            @assert length(v) == naxis
+            @check_type k v Vector{ASCIIString}
+            @check_prop k length v (==) naxis
             p = convert(Ptr{Array_72_Uint8}, w.(k))
             x = [convert(Array_72_Uint8,s) for s in v]
             unsafe_store_vec!(p, x)
@@ -72,23 +81,23 @@ function wcsmodify(w::wcsprm; kvs...)
         # pvcard[]
         elseif k === :pv
             npv = length(v)
-            @assert isa(v, Vector{pvcard})
-            @assert npv <= w.npvmax
+            @check_type k v Vector{pvcard}
+            @check_prop k length v (<=) w.npvmax
             unsafe_store_vec!(w.pv, v)
             w.npv = npv
 
         # pscard[]
         elseif k === :ps
             nps = length(v)
-            @assert isa(v, Vector{pscard})
-            @assert nps <= w.npsmax
+            @check_type k v Vector{pscard}
+            @check_prop k length v (<=) w.npsmax
             unsafe_store_vec!(w.ps, v)
             w.nps = nps
 
         # double[naxis,naxis]
         elseif k in (:cd,:pc)
-            @assert isa(v, Matrix{Float64})
-            @assert size(v) == (naxis,naxis)
+            @check_type k v Matrix{Float64}
+            @check_prop k size v (==) (naxis,naxis)
             unsafe_store_vec!(w.(k), vec(v'))
 
         # double
@@ -107,13 +116,14 @@ function wcsmodify(w::wcsprm; kvs...)
 
         # double[3]
         elseif k in (:obsgeo,)
-            @assert isa(v, Vector{Float64}) && length(v) == 3
+            @check_type k v Vector{Float64}
+            @check_prop k length v (==) 3
             w.obsgeo = Array_3_Cdouble(v[1], v[2], v[3])
 
         # char[4], but only uses first
         elseif k in (:alt,)
-            @assert isa(v, Char)
-            @assert ('A' <= v <= 'Z') || v == ' '
+            @check_type k v Char
+            (('A' <= v <= 'Z') || v == ' ') || error("alt must be 'A'-'Z' or ' '")
             x = 0x0
             w.alt = Array_4_Uint8(uint8(v), x, x, x)
 
