@@ -37,6 +37,7 @@ include("libwcs_common.jl")
 include("libwcs_h.jl")
 
 if VERSION < v"0.3-"
+    setfield!(a,b,c) = setfield(a,b,c)
     pscard(i,m,value) = pscard(convert(Cint,i),
                                convert(Cint,m),
                                convert(Array_72_Uint8,value))
@@ -79,13 +80,13 @@ function wcsmodify(w::wcsprm; kvs...)
         if k in (:cdelt,:crder,:crota,:crpix,:crval,:csyer)
             @check_type k v Vector{Float64}
             @check_prop k length v (==) naxis
-            unsafe_store_vec!(w.(k), v)
+            unsafe_store_vec!(getfield(w,k), v)
 
         # char[72,naxis]
         elseif k in (:cname,:ctype,:cunit)
             @check_type k v Vector{ASCIIString}
             @check_prop k length v (==) naxis
-            p = convert(Ptr{Array_72_Uint8}, w.(k))
+            p = convert(Ptr{Array_72_Uint8}, getfield(w,k))
             x = Array_72_Uint8[convert(Array_72_Uint8,s) for s in v]
             unsafe_store_vec!(p, x)
 
@@ -109,21 +110,21 @@ function wcsmodify(w::wcsprm; kvs...)
         elseif k in (:cd,:pc)
             @check_type k v Matrix{Float64}
             @check_prop k size v (==) (naxis,naxis)
-            unsafe_store_vec!(w.(k), vec(v'))
+            unsafe_store_vec!(getfield(w,k), vec(v'))
 
         # double
         elseif k in (:equinox,:latpole,:lonpole,:mjdavg,:mjdobs,
                      :restfrq,:restwav,:velangl,:velosys,:zsource)
-            w.(k) = convert(Float64, v)
+            setfield!(w, k, convert(Float64,v))
 
         # int
         elseif k in (:colnum,)
-            w.(k) = convert(Cint, v)
+            setfield!(w, k, convert(Cint,v))
 
         # char[72]
         elseif k in (:dateavg,:dateobs,:radesys,:specsys,:ssysobs,:ssyssrc,
                      :wcsname)
-            w.(k) = convert(Array_72_Uint8, v)
+            setfield!(w, k, convert(Array_72_Uint8,v))
 
         # double[3]
         elseif k in (:obsgeo,)
