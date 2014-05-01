@@ -1,4 +1,4 @@
-include("WCSLIB.jl")
+include("../src/WCSLIB.jl")
 using WCSLIB
 using .Test
 
