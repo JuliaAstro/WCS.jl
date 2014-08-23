@@ -30,9 +30,7 @@ export wcsbchk,
 
 import Base: convert
 
-using BinDeps
-@BinDeps.load_dependencies
-
+include("../deps/deps.jl")
 include("libwcs_common.jl")
 include("libwcs_h.jl")
 
