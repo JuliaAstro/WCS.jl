@@ -203,7 +203,7 @@ function wcspih(header::ASCIIString; nkeyrec::Integer=div(length(header),80),
     nreject = Cint[0]
     nwcs = Cint[0]
     wcs = Ptr{wcsprm}[0]
-    stat = wcspih(convert(Ptr{Uint8},header), nkeyrec, relax, ctrl,
+    stat = wcspih(pointer(header), nkeyrec, relax, ctrl,
                   pointer(nreject), pointer(nwcs), pointer(wcs))
     @assert stat == 0
     p = wcs[1]
@@ -219,7 +219,7 @@ function wcsbth(header::ASCIIString; nkeyrec::Integer=div(length(header),80),
     nreject = Cint[0]
     nwcs = Cint[0]
     wcs = Ptr{wcsprm}[0]
-    stat = wcsbth(convert(Ptr{Uint8},header), nkeyrec, relax, ctrl, keysel, C_NULL,
+    stat = wcsbth(pointer(header), nkeyrec, relax, ctrl, keysel, C_NULL,
                   pointer(nreject), pointer(nwcs), pointer(wcs))
     @assert stat == 0
     p = wcs[1]
