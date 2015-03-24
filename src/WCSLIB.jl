@@ -1,4 +1,5 @@
 module WCSLIB
+using Compat
 
 export pscard,
        pvcard,
@@ -135,7 +136,7 @@ function wcsmodify(w::wcsprm; kvs...)
             @check_type k v Char
             (('A' <= v <= 'Z') || v == ' ') || error("alt must be 'A'-'Z' or ' '")
             x = 0x0
-            w.alt = Array_4_Uint8(uint8(v), x, x, x)
+            w.alt = Array_4_Uint8(@compat(UInt8(v)), x, x, x)
 
         else
             error("unrecognized keyword argument \"$k\"")
@@ -208,8 +209,8 @@ function wcspih(header::ASCIIString; nkeyrec::Integer=div(length(header),80),
     @assert stat == 0
     p = wcs[1]
     a = wcsprm[unsafe_load(p,i) for i = 1:nwcs[1]]
-    c_free(p)
-    (a, int(nreject[1]))
+    Libc.free(p)
+    (a, @compat(Int(nreject[1])))
 end
 
 function wcsbth(header::ASCIIString; nkeyrec::Integer=div(length(header),80),
@@ -224,8 +225,8 @@ function wcsbth(header::ASCIIString; nkeyrec::Integer=div(length(header),80),
     @assert stat == 0
     p = wcs[1]
     a = wcsprm[unsafe_load(p,i) for i = 1:nwcs[1]]
-    c_free(p)
-    (a, int(nreject[1]))
+    Libc.free(p)
+    (a, @compat(Int(nreject[1])))
 end
 
 function wcshdo(w::wcsprm; relax::Integer=0)
@@ -235,7 +236,7 @@ function wcshdo(w::wcsprm; relax::Integer=0)
     @assert stat == 0
     p = header[1]
     s = bytestring(p)
-    c_free(p)
+    Libc.free(p)
     s
 end
 
