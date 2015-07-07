@@ -16,13 +16,15 @@ Example
 ```julia
 using WCSLIB
 
-# create a wcsprm struct from scratch
-w = wcsprm(2; # naxis
-           cdelt = [-0.066667, 0.066667],
-           ctype = ["RA---AIR", "DEC--AIR"],
-           crpix = [-234.75, 8.3393],
-           crval = [0., -90],
-           pv    = [pvcard(2, 1, 45.0)])
+# create a transformation from scratch
+w = WCSTransform(2; # naxis
+                 cdelt = [-0.066667, 0.066667],
+                 ctype = ["RA---AIR", "DEC--AIR"],
+                 crpix = [-234.75, 8.3393],
+                 crval = [0., -90],
+                 pv    = [PVCard(2, 1, 45.0)])
+
+# below this point not yet implemented
 
 # ... or from a FITS header
 (ws,nrejected) = wcspih(header)

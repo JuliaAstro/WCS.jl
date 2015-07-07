@@ -1,7 +1,7 @@
 using BinDeps
 @BinDeps.setup
 
-version = "4.25.1"
+version = "5.7"
 url = "ftp://ftp.atnf.csiro.au/pub/software/wcslib/wcslib-$version.tar.bz2"
 
 wcs = library_dependency("libwcs")
