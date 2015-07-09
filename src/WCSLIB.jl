@@ -1,37 +1,41 @@
 module WCSLIB
-using export
 
-Compat PSCard, PVCard, WCSTransform
+export PSCard, PVCard, WCSTransform,
+       pix_to_world, pix_to_world!,
+       world_to_pix, world_to_pix!
 
-#=
-export wcsbchk,
-       #wcsbdx,
-       wcsbth,
-       wcscopy,
-       wcserr_enable,
-       wcserr_prt,
-       wcsfree,
-       wcshdo,
-       #wcsidx,
-       wcsini,
-       #wcsmix,
-       wcsmodify,
-       wcsnps,
-       wcsnpv,
-       wcsp2s,
-       wcsperr,
-       wcspih,
-       wcsprt,
-       wcss2p,
-       wcsset,
-       #wcssptr,
-       #wcssub,
-       wcstab
-=#
-
-import Base: convert
+import Base: convert, copy, deepcopy
 
 include("../deps/deps.jl")
+
+# -----------------------------------------------------------------------------
+# Utilities
+
+function unsafe_store_vec!{T}(p::Ptr{T}, v::Vector{T})
+    for i = 1:length(v)
+        unsafe_store!(p, v[i], i)
+    end
+end
+
+function Base.convert{N}(::Type{NTuple{N,UInt8}}, s::ASCIIString)
+    @assert length(s) < N
+    v = zeros(Uint8, N)  # intermediate array that we can fill
+    copy!(v, convert(Vector{UInt8}, s))
+    (v...)
+end
+
+macro check_type(k, v, t)
+    :(typeof($(esc(v))) <: $t || error($(esc(k))," must have type ",$t))
+end
+
+macro check_prop(k, prop, v, op, n)
+    en = esc(n)
+    :(($op)($prop($(esc(v))), $en) || error($(esc(k))," must have ",$prop," ",$op," ",$en))
+end
+
+macro same_size(a, b)
+    :(size($(esc(a))) == size($(esc(b))) || error($(string(a))," must have the same dimensions as ",$(string(b))))
+end
 
 # -----------------------------------------------------------------------------
 # error messaging
@@ -49,6 +53,7 @@ function assert_ok(i::Cint)
 end
 
 # -----------------------------------------------------------------------------
+# WCSTransform
 
 # mirror of `struct pvcard`
 immutable PVCard
@@ -159,6 +164,26 @@ immutable spcprm
 end
 
 # mirror of `wcsprm` struct in wcslib
+"""
+WCSTransform(naxis; kvs...)
+
+Construct a WCS transformation with the given number of axes `naxis`.
+Keyword arguments can be passed to set various attributes of the
+transform. Specifying keyword arguments is equivalent to setting them
+after construction:
+
+```
+julia> wcs = WCSTransform(2; crpix=[1000., 1000.])
+```
+
+is equilvalent to:
+
+```
+julia> wcs = WCSTransform(2)
+
+julia> wcs[:crpix] = [1000., 1000.]
+```
+"""
 type WCSTransform
     flag::Cint
     naxis::Cint
@@ -240,10 +265,11 @@ type WCSTransform
 
     function WCSTransform(naxis::Integer; kvs...)
         w = new(-1)
-        status = ccall((:wcsini, libwcs), Cint, (Cint, Cint, Ref{WCSTransform}),
+        status = ccall((:wcsini, libwcs), Cint,
+                       (Cint, Cint, Ref{WCSTransform}),
                        1, naxis, w)
         assert_ok(status)
-        finalizer(w, wcsfree)
+        finalizer(w, free!)
         for (k, v) in kvs
             w[k] = v
         end
@@ -251,35 +277,11 @@ type WCSTransform
     end
 end
 
-function wcsfree(wcs::WCSTransform)
-    status = ccall((:wcsfree, libwcs), Cint, (Ref{WCSTransform},), wcs)
+function free!(w::WCSTransform)
+    status = ccall((:wcsfree, libwcs), Cint, (Ref{WCSTransform},), w)
     assert_ok(status)
 end
 
-# -----------------------------------------------------------------------------
-# helpers
-
-function unsafe_store_vec!{T}(p::Ptr{T}, v::Vector{T})
-    for i = 1:length(v)
-        unsafe_store!(p, v[i], i)
-    end
-end
-
-function Base.convert{N}(::Type{NTuple{N,UInt8}}, s::ASCIIString)
-    @assert length(s) < N
-    v = zeros(Uint8, N)  # intermediate array that we can fill :(
-    copy!(v, convert(Vector{UInt8}, s))
-    (v...)
-end
-
-macro check_type(k, v, t)
-    :(typeof($(esc(v))) <: $t || error($(esc(k))," must have type ",$t))
-end
-
-macro check_prop(k, prop, v, op, n)
-    en = esc(n)
-    :(($op)($prop($(esc(v))), $en) || error($(esc(k))," must have ",$prop," ",$op," ",$en))
-end
 
 # -----------------------------------------------------------------------------
 # modifying a WCSTransform
@@ -362,67 +364,162 @@ function setindex!(w::WCSTransform, v, k::Symbol)
     end
 end
 
-#=
-function wcscopy(alloc::Integer, src::wcsprm, dst::wcsprm)
+function deepcopy(w::WCSTransform)
+    dst = WCSTransform(w.naxis)
     p = convert(Ptr{Cint}, C_NULL)
-    wcssub(alloc, src, p, p, dst)
+    ccall((:wcssub, libwcs), Cint,
+          (Cint, Ref{WCSTransform}, Ptr{Cint}, Ptr{Cint}, Ref{WCSTransform}),
+          0, w, p, p, dst)
+    return dst
 end
 
-macro same_size(a, b)
-    :(size($(esc(a))) == size($(esc(b))) || error($(string(a))," must have the same dimensions as ",$(string(b))))
+# The default Julia copy would be a gotcha, as it would leave two WCSTransforms
+# linked by their underlying C-allocated arrays... only allow deepcopy.
+copy(w::WCSTransform) = deepcopy(w)
+
+# TODO: more info here.
+function show(io::IO, wcs::WCSTransform)
+    print(io, "WCSTransform(naxis=$wcs.naxis)")
 end
 
-function wcsp2s(wcs::wcsprm, pixcrd::Matrix{Float64};
-                imgcrd::Matrix{Float64}=similar(pixcrd),
-                phi::Matrix{Float64}=similar(pixcrd),
-                theta::Matrix{Float64}=similar(pixcrd),
-                world::Matrix{Float64}=similar(pixcrd),
-                stat::Matrix{Cint}=similar(pixcrd,Cint))
-    @same_size imgcrd pixcrd
-    @same_size phi pixcrd
-    @same_size theta pixcrd
-    @same_size world pixcrd
-    @same_size stat pixcrd
-    (nelem, ncoord) = size(pixcrd)
-    nelem >= wcs.naxis || error("number of rows must be greater than or equal to naxis")
-    wcsp2s(wcs, ncoord, nelem, pointer(pixcrd), pointer(imgcrd),
-           pointer(phi), pointer(theta), pointer(world), pointer(stat))
-    world
+# -----------------------------------------------------------------------------
+# transforms
+
+"""
+pix_to_world(wcs, pixcoords)
+
+Convert the array of pixel coordinates `pixcoords` to world coordinates
+according to the WCSTransform `wcs`. `pixcoords` should be a 2-d array
+where \"pixcoords[:, i]\" is the i-th set of coordinates.
+
+The return value is the same shape as `pixcoords`.
+"""
+function pix_to_world(wcs::WCSTransform, pixcoords::Matrix{Float64})
+    worldcoords = similar(pixcoords)
+    stat = similar(pixcoords, Cint)
+    pix_to_world!(wcs, pixcoords, worldcoords, stat)
 end
 
-function wcss2p(wcs::wcsprm, world::Matrix{Float64};
-                phi::Matrix{Float64}=similar(world),
-                theta::Matrix{Float64}=similar(world),
-                imgcrd::Matrix{Float64}=similar(world),
-                pixcrd::Matrix{Float64}=similar(world),
-                stat::Matrix{Cint}=similar(world,Cint))
-    @same_size phi world
-    @same_size theta world
-    @same_size imgcrd world
-    @same_size pixcrd world
-    @same_size stat world
-    (nelem, ncoord) = size(world)
-    nelem >= wcs.naxis || error("number of rows must be greater than or equal to naxis")
-    wcss2p(wcs, ncoord, nelem, pointer(world), pointer(phi), pointer(theta),
-           pointer(imgcrd), pointer(pixcrd), pointer(stat))
-    pixcrd
+"""
+pix_to_world!(wcs, pixcoords, worldcoords, stat[; imcoords=..., phi=..., theta=...])
+
+Convert the array of pixel coordinates `pixcoords` to world coordinates
+according to the WCSTransform `wcs`, storing the result in the
+`worldcoords` and `stat` arrays. `pixcoords` should be a 2-d array where
+\"pixcoords[:, i]\" is the i-th set of coordinates. `worldcoords` must be
+the same size and type as `pixcoords` while `stat` must be the same size
+as `pixcoords`, but with type Cint.
+
+If given, the arrays `imcoords`, `phi`, `theta` will be used
+to store intermediate results. Their sizes and types must all match
+`pixcoords`.
+"""
+function pix_to_world!(wcs::WCSTransform, pixcoords::Matrix{Float64},
+                       worldcoords::Matrix{Float64}, stat::Matrix{Cint};
+                       imcoords::Matrix{Float64}=similar(pixcoords),
+                       phi::Matrix{Float64}=similar(pixcoords),
+                       theta::Matrix{Float64}=similar(pixcoords))
+    (nelem, ncoords) = size(pixcoords)
+    if nelem < wcs.naxis
+        error("size(pixcoords, 1) must be greater than or equal to naxis")
+    end
+    @same_size worldcoords pixcoords
+    @same_size imcoords pixcoords
+    @same_size phi pixcoords
+    @same_size theta pixcoords
+    @same_size stat pixcoords
+    ccall((:wcsp2s, libwcs), Cint,
+          (Ref{WCSTransform}, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble},
+           Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}),
+          wcs, ncoords, nelem, pixcoords, imcoords, phi, theta, worldcoords,
+          stat)
+    return worldcoords, stat
 end
 
-function wcspih(header::ASCIIString; nkeyrec::Integer=div(length(header),80),
-                                     relax::Integer=0, ctrl::Integer=0)
+"""
+world_to_pix(wcs, worldcoords)
+
+Convert the array of world coordinates `worldcoords` to pixel coordinates
+according to the WCSTransform `wcs`. `worldcoords` should be a 2-d array
+where \"worldcoords[:, i]\" is the i-th set of coordinates.
+
+The return value is `(pixcoords, stat)`. Both arrays are the same size as
+`worldcoords`. `stat` gives a status for each coordinate.
+"""
+function world_to_pix(wcs::WCSTransform, worldcoords::Matrix{Float64})
+    pixcoords = similar(worldcoords)
+    stat = similar(worldcoords, Cint)
+    world_to_pix!(wcs, worldcoords, pixcoords, stat)
+end
+
+"""
+world_to_pix!(wcs, worldcoords, pixcoords, stat[; phi=..., theta=..., imcoords=...])
+
+Convert the array of pixel coordinates `worldcoords` to pixel coordinates
+according to the WCSTransform `wcs`, storing the result in the
+`pixcoords` and `stat` arrays. `worldcoords` should be a 2-d array where
+\"worldcoords[:, i]\" is the i-th set of coordinates. `pixcoords` must be
+the same size and type as `worldcoords` while `stat` must be the same size
+as `worldcoords`, but with type Cint.
+
+If given, the arrays `imcoords`, `phi`, `theta` will be used
+to store intermediate results. Their sizes and types must all match
+`worldcoords`.
+"""
+function world_to_pix!(wcs::WCSTransform, worldcoords::Matrix{Float64},
+                       pixcoords::Matrix{Float64}, stat::Matrix{Cint};
+                       phi::Matrix{Float64}=similar(pixcoords),
+                       theta::Matrix{Float64}=similar(pixcoords),
+                       imcoords::Matrix{Float64}=similar(pixcoords))
+    (nelem, ncoords) = size(worldcoords)
+    if nelem < wcs.naxis
+        error("size(worldcoords, 1) must be greater than or equal to naxis")
+    end
+    @same_size pixcoords worldcoords
+    @same_size imcoords worldcoords
+    @same_size phi worldcoords
+    @same_size theta worldcoords
+    @same_size stat worldcoords
+    ccall((:wcss2p, libwcs), Cint,
+          (Ref{WCSTransform}, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble},
+           Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}),
+          wcs, ncoords, nelem, worldcoords, phi, theta, imcoords, pixcoords,
+          stat)
+    return pixcoords, stat
+end
+
+
+# -----------------------------------------------------------------------------
+# WCSTransform <--> header
+
+"""
+parse_header(header[; nkeyrec=..., relax=0, ctrl=0])
+
+Parse the FITS image header in the ASCIIString `header`.
+
+Returns a `Vector{WCSTransform}` and an `Int` giving all the transforms
+defined in the header and the number of rejected transforms.
+"""
+function parse_header(header::ASCIIString;
+                      nkeyrec::Integer=div(length(header),80),
+                      relax::Integer=0, ctrl::Integer=0)
     @assert ctrl >= 0 # < 0 modifies the header
-    nreject = Cint[0]
-    nwcs = Cint[0]
-    wcs = Ptr{wcsprm}[0]
-    stat = wcspih(pointer(header), nkeyrec, relax, ctrl,
-                  pointer(nreject), pointer(nwcs), pointer(wcs))
-    @assert stat == 0
-    p = wcs[1]
-    a = wcsprm[unsafe_load(p,i) for i = 1:nwcs[1]]
-    Libc.free(p)
-    (a, @compat(Int(nreject[1])))
+    nreject = Ref{Cint}(0)
+    nwcs = Ref{Cint}(0)
+    wcsptr = Ref{Ptr{WCSTransform}}(0)
+    status = ccall((:wcspih, libwcs), Cint,
+                   (Ptr{UInt8}, Cint, Cint, Cint, Ref{Cint}, Ref{Cint},
+                    Ref{Ptr{WCSTransform}}),
+                   header, nkeyrec, relax, ctrl, nreject, nwcs, wcsptr)
+    assert_ok(status)
+    p = wcsptr[]
+    result = WCSTransform[unsafe_load(p, i) for i = 1:nwcs[]]
+    Libc.free(p)  # TODO: is this legit?
+    return result, Int(nreject[])
 end
 
+#=
+# Parse binary table header (or image header?) -> Array{WCSTransform}
 function wcsbth(header::ASCIIString; nkeyrec::Integer=div(length(header),80),
                                      relax::Integer=0, ctrl::Integer=0,
                                      keysel::Integer=0)
@@ -439,6 +536,7 @@ function wcsbth(header::ASCIIString; nkeyrec::Integer=div(length(header),80),
     (a, @compat(Int(nreject[1])))
 end
 
+# WCSTransform -> header
 function wcshdo(w::wcsprm; relax::Integer=0)
     nkeyrec = Cint[0]
     header = Ptr{Uint8}[0]
