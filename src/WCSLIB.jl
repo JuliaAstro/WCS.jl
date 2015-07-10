@@ -2,7 +2,8 @@ module WCSLIB
 
 export PSCard, PVCard, WCSTransform,
        pix_to_world, pix_to_world!,
-       world_to_pix, world_to_pix!
+       world_to_pix, world_to_pix!,
+       parse_wcs, wcs_header
 
 import Base: convert, copy, deepcopy
 
@@ -373,8 +374,9 @@ function deepcopy(w::WCSTransform)
     return dst
 end
 
-# The default Julia copy would be a gotcha, as it would leave two WCSTransforms
-# linked by their underlying C-allocated arrays... only allow deepcopy.
+# The default Julia `copy` would be a gotcha, as it would leave two
+# WCSTransforms linked by their underlying C-allocated arrays;
+# only allow deepcopy.
 copy(w::WCSTransform) = deepcopy(w)
 
 # TODO: more info here.
@@ -493,24 +495,35 @@ end
 # WCSTransform <--> header
 
 """
-parse_header(header[; nkeyrec=..., relax=0, ctrl=0])
+parse_wcs(header[; nkeyrec=..., relax=0, ctrl=0])
 
 Parse the FITS image header in the ASCIIString `header`.
 
 Returns a `Vector{WCSTransform}` and an `Int` giving all the transforms
 defined in the header and the number of rejected transforms.
 """
-function parse_header(header::ASCIIString;
-                      nkeyrec::Integer=div(length(header),80),
-                      relax::Integer=0, ctrl::Integer=0)
+function parse_wcs(header::ASCIIString;
+                   nkeyrec::Integer=div(length(header),80),
+                   relax::Integer=0, ctrl::Integer=0,
+                   keysel::Integer=0, image::Bool=false)
     @assert ctrl >= 0 # < 0 modifies the header
+    colsel = convert(Ptr{Cint}, C_NULL)
     nreject = Ref{Cint}(0)
     nwcs = Ref{Cint}(0)
     wcsptr = Ref{Ptr{WCSTransform}}(0)
-    status = ccall((:wcspih, libwcs), Cint,
-                   (Ptr{UInt8}, Cint, Cint, Cint, Ref{Cint}, Ref{Cint},
-                    Ref{Ptr{WCSTransform}}),
-                   header, nkeyrec, relax, ctrl, nreject, nwcs, wcsptr)
+    status = 0
+    if image
+        status = ccall((:wcspih, libwcs), Cint,
+                       (Ptr{UInt8}, Cint, Cint, Cint, Ref{Cint}, Ref{Cint},
+                        Ref{Ptr{WCSTransform}}),
+                       header, nkeyrec, relax, ctrl, nreject, nwcs, wcsptr)
+    else
+        status = ccall((:wcsbth, libwcs), Cint,
+                       (Ptr{UInt8}, Cint, Cint, Cint, Cint, Ptr{Cint},
+                        Ref{Cint}, Ref{Cint}, Ref{Ptr{WCSTransform}}),
+                       header, nkeyrec, relax, ctrl, keysel, colsel,
+                       nreject, nwcs, wcsptr)
+    end
     assert_ok(status)
     p = wcsptr[]
     result = WCSTransform[unsafe_load(p, i) for i = 1:nwcs[]]
@@ -518,35 +531,22 @@ function parse_header(header::ASCIIString;
     return result, Int(nreject[])
 end
 
-#=
-# Parse binary table header (or image header?) -> Array{WCSTransform}
-function wcsbth(header::ASCIIString; nkeyrec::Integer=div(length(header),80),
-                                     relax::Integer=0, ctrl::Integer=0,
-                                     keysel::Integer=0)
-    @assert ctrl >= 0 # < 0 modifies the header
-    nreject = Cint[0]
-    nwcs = Cint[0]
-    wcs = Ptr{wcsprm}[0]
-    stat = wcsbth(pointer(header), nkeyrec, relax, ctrl, keysel, C_NULL,
-                  pointer(nreject), pointer(nwcs), pointer(wcs))
-    @assert stat == 0
-    p = wcs[1]
-    a = wcsprm[unsafe_load(p,i) for i = 1:nwcs[1]]
-    Libc.free(p)
-    (a, @compat(Int(nreject[1])))
+# TODO: better name?
+"""
+wcs_header(wcs[; relax=0])
+
+Write the WCSTransform `wcs` as a FITS header.
+"""
+function wcs_header(wcs::WCSTransform; relax::Integer=0)
+    nkeyrec = Ref{Cint}(0)
+    hdrptr = Ref{Ptr{Uint8}}(C_NULL)
+    status = ccall((:wcshdo, libwcs), Cint,
+                   (Cint, Ref{WCSTransform}, Ref{Cint}, Ref{Ptr{Uint8}}),
+                   relax, wcs, nkeyrec, hdrptr)
+    assert_ok(status)
+    header = bytestring(hdrptr[])
+    Libc.free(hdrptr[])
+    return header
 end
 
-# WCSTransform -> header
-function wcshdo(w::wcsprm; relax::Integer=0)
-    nkeyrec = Cint[0]
-    header = Ptr{Uint8}[0]
-    stat = wcshdo(relax, w, pointer(nkeyrec), pointer(header))
-    @assert stat == 0
-    p = header[1]
-    s = bytestring(p)
-    Libc.free(p)
-    s
-end
-=#
-
-end # module
+end  # module
