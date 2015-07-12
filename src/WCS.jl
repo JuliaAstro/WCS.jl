@@ -5,7 +5,7 @@ export PSCard, PVCard, WCSTransform,
        world_to_pix, world_to_pix!
 #       from_header, to_header
 
-import Base: convert, copy, deepcopy
+import Base: convert, copy, deepcopy, show
 
 include("../deps/deps.jl")
 
@@ -377,7 +377,7 @@ copy(w::WCSTransform) = deepcopy(w)
 
 # TODO: more info here.
 function show(io::IO, wcs::WCSTransform)
-    print(io, "WCSTransform(naxis=$wcs.naxis)")
+    print(io, "WCSTransform(naxis=$(wcs.naxis))")
 end
 
 # -----------------------------------------------------------------------------
@@ -489,18 +489,15 @@ end
 # WCSTransform <--> header
 
 """
-from_header(header[; nkeyrec=..., relax=0, ctrl=0, image=false])
+from_header(header[; relax=0, ctrl=0, table=false])
 
-Parse the FITS image header in the ASCIIString `header`.
-
-Returns a `Vector{WCSTransform}` and an `Int` giving all the transforms
-defined in the header and the number of rejected transforms.
+Parse the FITS image header in the ASCIIString `header`, returning a
+`Vector{WCSTransform}` giving all the transforms defined in the header.
 """
 function from_header(header::ASCIIString; relax::Integer=0, ctrl::Integer=0,
-                     table::Bool=false)
-    @assert ctrl >= 0 # < 0 modifies the header
+                     ignore_rejected::Bool=false, table::Bool=false)
+    @assert ctrl >= 0  # < 0 modifies the header
     nkeyrec::Integer=div(length(header), 80)
-    key
     nreject = Ref{Cint}(0)
     nwcs = Ref{Cint}(0)
     wcsptr = Ref{Ptr{WCSTransform}}(0)
@@ -521,10 +518,13 @@ function from_header(header::ASCIIString; relax::Integer=0, ctrl::Integer=0,
     end
     assert_ok(status)
     p = wcsptr[]
-    print(nwcs[])
     result = WCSTransform[unsafe_load(p, i) for i = 1:nwcs[]]
     Libc.free(p)
-    return result, Int(nreject[])
+    if !ignore_rejected && nreject[] != 0
+        error("$(nreject[]) WCS transformations were rejected; " *
+              "use ignore_rejected = true keyword to ignore")
+    end
+    return result
 end
 
 """
