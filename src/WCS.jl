@@ -1,9 +1,8 @@
 module WCS
 
-export PSCard, PVCard, WCSTransform,
+export WCSTransform,
        pix_to_world, pix_to_world!,
        world_to_pix, world_to_pix!
-#       from_header, to_header
 
 import Base: convert, copy, deepcopy, show
 

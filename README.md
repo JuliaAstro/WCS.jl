@@ -4,7 +4,7 @@ WCS.jl
 Experimental friendly fork of WCSLIB.jl:
 
 - Julia-style API
-- uses more recent [WCSLIB](http://www.atnf.csiro.au/people/mcalabre/WCS/) 5.7.
+- uses more recent [WCSLIB](http://www.atnf.csiro.au/people/mcalabre/WCS/) 5.9.
 - requires Julia 0.4-dev (mainly for NTuples & docstrings)
 
 
@@ -31,9 +31,9 @@ julia> wcs = WCSTransform(2;
 WCSTransform(naxis=2)
 
 # ... or from a FITS header
-julia> wcss = WCS.from_header(header)
+julia> wcs_array = WCS.from_header(header)
 
-julia> wcs = wcss[1]
+julia> wcs = wcs_array[1]
 
 
 # convert pixel -> world coordinates
