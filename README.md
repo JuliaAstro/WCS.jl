@@ -1,12 +1,14 @@
 WCS.jl
 ======
 
+[![Build Status](https://img.shields.io/travis/kbarbary/WCS.jl.svg?style=flat-square)](https://travis-ci.org/kbarbary/WCS.jl)
+
 Experimental friendly fork of WCSLIB.jl:
 
 - Julia-style API
-- uses more recent [WCSLIB](http://www.atnf.csiro.au/people/mcalabre/WCS/) 5.9.
-- requires Julia 0.4-dev (mainly for NTuples & docstrings)
-
+- uses more recent [WCSLIB 5](http://www.atnf.csiro.au/people/mcalabre/WCS/)
+- requires Julia 0.4
+- no developer dependency on Clang.jl
 
 Installation
 ------------
