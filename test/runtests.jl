@@ -36,5 +36,10 @@ w = ws[1]
 
 @test w.naxis == 2
 
+# Check that `to_header` succeeds and has the right number
+# of records. (Checking exact equality of input and output
+# strings is too demanding, as the exact formatting differs
+# between minor WCSLIB versions. For example,
+# `0.0E+00` vs `0.000E+00`.)
 header_out = WCS.to_header(w)
-@test header_out == header[641:end]
+@test length(header_out) == 17 * 80
