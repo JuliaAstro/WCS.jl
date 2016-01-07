@@ -9,9 +9,10 @@ provides(Sources, URI(url), wcs, unpacked_dir="wcslib-$version")
 depsdir = BinDeps.depsdir(wcs)
 builddir = joinpath(depsdir, "src/wcslib-$version")
 prefix = joinpath(depsdir, "usr")
-configopts = ["--disable-fortran", "--without-cfitsio", "--without-pgplot"]
+configopts = ["--disable-fortran", "--without-cfitsio", "--without-pgplot",
+              "--disable-utils"]
 @unix_only libfilename = "libwcs.so.$version"
-@osx_only libfilename = "libwcs.dylib"
+@osx_only libfilename = "libwcs.$version.dylib"
 provides(BuildProcess,
          (@build_steps begin
             GetSources(wcs)
@@ -21,6 +22,7 @@ provides(BuildProcess,
                        @build_steps begin
                          `./configure --prefix=$prefix $configopts`
                          `make install`
+                         @osx_only `ln -s $prefix/lib/libwcs.5.dylib $prefix/lib/libwcs.dylib`
                        end)
             end
           end),
