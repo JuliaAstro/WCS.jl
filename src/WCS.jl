@@ -4,7 +4,7 @@ export WCSTransform,
        pix_to_world, pix_to_world!,
        world_to_pix, world_to_pix!
 
-import Base: convert, copy, deepcopy, show
+import Base: convert, copy, deepcopy, show, setindex!
 
 include("../deps/deps.jl")
 
@@ -19,7 +19,7 @@ end
 
 function Base.convert{N}(::Type{NTuple{N,UInt8}}, s::ASCIIString)
     @assert length(s) < N
-    v = zeros(Uint8, N)  # intermediate array that we can fill
+    v = zeros(UInt8, N)  # intermediate array that we can fill
     copy!(v, convert(Vector{UInt8}, s))
     (v...)
 end
@@ -67,9 +67,9 @@ typealias PSCard Tuple{Cint, Cint, NTuple{72, UInt8}}  # i, m, value entries
 immutable WCSErr
     status::Cint
     line_no::Cint
-    _function::Ptr{Uint8}
-    file::Ptr{Uint8}
-    msg::NTuple{160, Uint8}
+    _function::Ptr{UInt8}
+    file::Ptr{UInt8}
+    msg::NTuple{160, UInt8}
 end
 
 immutable linprm
@@ -341,7 +341,7 @@ function setindex!(wcs::WCSTransform, v, k::Symbol)
     # char[72]
     elseif k in (:dateavg,:dateobs,:radesys,:specsys,:ssysobs,:ssyssrc,
                  :wcsname)
-        setfield!(wcs, k, convert(NTuple{72, Uint8}, v))
+        setfield!(wcs, k, convert(NTuple{72, UInt8}, v))
 
     # double[3]
     elseif k === :obsgeo
@@ -533,9 +533,9 @@ Write the WCSTransform `wcs` as a FITS header.
 """
 function to_header(wcs::WCSTransform; relax::Integer=0)
     nkeyrec = Ref{Cint}(0)
-    hdrptr = Ref{Ptr{Uint8}}(C_NULL)
+    hdrptr = Ref{Ptr{UInt8}}(C_NULL)
     status = ccall((:wcshdo, libwcs), Cint,
-                   (Cint, Ref{WCSTransform}, Ref{Cint}, Ref{Ptr{Uint8}}),
+                   (Cint, Ref{WCSTransform}, Ref{Cint}, Ref{Ptr{UInt8}}),
                    relax, wcs, nkeyrec, hdrptr)
     assert_ok(status)
     header = bytestring(hdrptr[])
