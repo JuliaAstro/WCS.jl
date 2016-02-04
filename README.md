@@ -3,19 +3,11 @@ WCS.jl
 
 [![Build Status](https://img.shields.io/travis/kbarbary/WCS.jl.svg?style=flat-square)](https://travis-ci.org/kbarbary/WCS.jl)
 
-Experimental friendly fork of WCSLIB.jl:
+Astronomical [World Coordinate
+System](http://www.atnf.csiro.au/people/mcalabre/WCS/) library for
+Julia.
 
-- Julia-style API
-- uses more recent [WCSLIB 5](http://www.atnf.csiro.au/people/mcalabre/WCS/)
-- requires Julia 0.4
-- no developer dependency on Clang.jl
-
-Installation
-------------
-
-```jlcon
-julia> Pkg.clone("git://github.com/kbarbary/WCS.jl.git")
-```
+This package wraps the WCSLIB C library.
 
 Example
 -------
@@ -58,3 +50,10 @@ julia> pixcoords = world_to_pix(wcs, worldcoords)
 # convert a WCSTransform to a FITS header
 header = WCS.to_header(wcs)
 ```
+
+License
+-------
+
+The Julia code in this repository is distributed under the MIT
+license. Note that WCS.jl wraps the WCSLIB C library, which is
+released under the LGPL license.
