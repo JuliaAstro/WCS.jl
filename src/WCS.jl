@@ -4,7 +4,7 @@ export WCSTransform,
        pix_to_world, pix_to_world!,
        world_to_pix, world_to_pix!
 
-import Base: convert, copy, deepcopy, show, setindex!
+import Base: convert, copy, deepcopy, getindex, show, setindex!
 
 include("../deps/deps.jl")
 
@@ -22,6 +22,38 @@ function Base.convert{N}(::Type{NTuple{N,UInt8}}, s::ASCIIString)
     v = zeros(UInt8, N)  # intermediate array that we can fill
     copy!(v, convert(Vector{UInt8}, s))
     (v...)
+end
+
+# load an ASCIIString from a tuple of bytes, truncating at first NULL
+function Base.convert{N}(::Type{ASCIIString}, v::NTuple{N, UInt8})
+    len = N
+
+    # reduce length if we find a null
+    i = 1
+    for i=1:N
+        if v[i] == 0x00
+            len = i-1
+            break
+        end
+    end
+    s = Array(UInt8, len)
+    copy!(s, 1, v, 1, len)
+    return ASCIIString(s)  # wraps the array `s`
+end
+
+# load a ASCIIString from a pointer, truncating at first NULL or maxlen
+function Base.convert(::Type{ASCIIString}, ptr::Ptr{UInt8}, maxlen::Int)
+    len = maxlen
+
+    # reduce length if we find a null
+    i = 1
+    for i=1:maxlen
+        if unsafe_load(ptr, i) == 0x00
+            len = i-1
+            break
+        end
+    end
+    return bytestring(ptr, len)
 end
 
 macro check_type(k, v, t)
@@ -274,6 +306,71 @@ end
 function free!(w::WCSTransform)
     status = ccall((:wcsfree, libwcs), Cint, (Ref{WCSTransform},), w)
     assert_ok(status)
+end
+
+# -----------------------------------------------------------------------------
+# getting attributes of a WCSTransform
+# These return newly-allocated memory (not views of the WCSTransform).
+
+function getindex(wcs::WCSTransform, k::Symbol)
+    @assert wcs.flag != -1
+    wcs.flag = 0
+    naxis = wcs.naxis
+
+    # double[naxis]
+    if k in (:cdelt, :crder, :crota, :crpix, :crval, :csyer)
+        v = Array(Float64, naxis)
+        unsafe_copy!(pointer(v), getfield(wcs,k), naxis)
+
+    # char[72,naxis]
+    elseif k in (:cname, :ctype, :cunit)
+        p = convert(Ptr{UInt8}, getfield(wcs, k))
+        v = Array(ASCIIString, naxis)
+        for i=1:naxis
+            pi = p + 72*(i-1)  # Ptr{UInt8} to the i-th entry.
+            v[i] = convert(ASCIIString, pi, 72)
+        end
+
+    # PVCard[]
+    elseif k === :pv
+        error("pv getter not yet implemented")
+
+    # PSCard[]
+    elseif k === :ps
+        error("ps getter not yet implemented")
+
+    # double[naxis,naxis]
+    elseif k in (:cd, :pc)
+        v = Array(Cdouble, naxis, naxis)
+        unsafe_copy!(pointer(v), getfield(wcs,k), naxis*naxis)
+
+    # double
+    elseif k in (:equinox,:latpole,:lonpole,:mjdavg,:mjdobs,
+                 :restfrq,:restwav,:velangl,:velosys,:zsource)
+        v = getfield(wcs, k)
+
+    # int
+    elseif k === :colnum
+        v = Int(getfield(wcs, k))
+
+    # char[72]
+    elseif k in (:dateavg,:dateobs,:radesys,:specsys,:ssysobs,:ssyssrc,
+                 :wcsname)
+        v = convert(ASCIIString, getfield(wcs, k))
+
+    # double[3]
+    elseif k === :obsgeo
+        v = getfield(wcs, k)  # Tuple{Cdouble, Cdouble, Cdouble}
+
+    # char[4], but only uses first
+    elseif k === :alt
+        v = Char(wcs.alt[1])
+
+    else
+        error("unrecognized keyword argument \"$k\"")
+    end
+
+    return v
 end
 
 
