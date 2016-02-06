@@ -387,11 +387,12 @@ pix_to_world(wcs, pixcoords)
 
 Convert the array of pixel coordinates `pixcoords` to world coordinates
 according to the WCSTransform `wcs`. `pixcoords` should be a 2-d array
-where \"pixcoords[:, i]\" is the i-th set of coordinates.
+where \"pixcoords[:, i]\" is the i-th set of coordinates, or a 1-d array
+representing a single set of coordinates.
 
 The return value is the same shape as `pixcoords`.
 """
-pix_to_world(wcs::WCSTransform, pixcoords::Matrix{Float64}) =
+pix_to_world(wcs::WCSTransform, pixcoords::VecOrMat{Float64}) =
     pix_to_world!(wcs, pixcoords, similar(pixcoords))
 
 
@@ -401,7 +402,8 @@ pix_to_world!(wcs, pixcoords, worldcoords[; stat=, imcoords=, phi=, theta=])
 Convert the array of pixel coordinates `pixcoords` to world coordinates
 according to the WCSTransform `wcs`, storing the result in the
 `worldcoords` and `stat` arrays. `pixcoords` should be a 2-d array where
-\"pixcoords[:, i]\" is the i-th set of coordinates. `worldcoords` must be
+\"pixcoords[:, i]\" is the i-th set of coordinates, or a 1-d array
+representing a single set of coordinates. `worldcoords` must be
 the same size and type as `pixcoords`.
 
 If given, the arrays `stat`, `imcoords`, `phi`, `theta` will be used
@@ -409,13 +411,14 @@ to store intermediate results. Their sizes and types must all match
 `pixcoords`, except for `stat` which should be the same size but of type
 Cint (typically Int32).
 """
-function pix_to_world!(wcs::WCSTransform, pixcoords::Matrix{Float64},
-                       worldcoords::Matrix{Float64};
-                       stat::Matrix{Cint}=similar(pixcoords, Cint),
-                       imcoords::Matrix{Float64}=similar(pixcoords),
-                       phi::Matrix{Float64}=similar(pixcoords),
-                       theta::Matrix{Float64}=similar(pixcoords))
-    (nelem, ncoords) = size(pixcoords)
+function pix_to_world!(wcs::WCSTransform, pixcoords::VecOrMat{Float64},
+                       worldcoords::VecOrMat{Float64};
+                       stat=similar(pixcoords, Cint),
+                       imcoords=similar(pixcoords),
+                       phi=similar(pixcoords),
+                       theta=similar(pixcoords))
+    nelem = size(pixcoords, 1)
+    ncoords = size(pixcoords, 2)
     if nelem < wcs.naxis
         error("size(pixcoords, 1) must be greater than or equal to naxis")
     end
@@ -433,16 +436,18 @@ function pix_to_world!(wcs::WCSTransform, pixcoords::Matrix{Float64},
 end
 
 
+
 """
 world_to_pix(wcs, worldcoords)
 
 Convert the array of world coordinates `worldcoords` to pixel coordinates
-according to the WCSTransform `wcs`. `worldcoords` should be a 2-d array
-where \"worldcoords[:, i]\" is the i-th set of coordinates.
+according to the WCSTransform `wcs`. `worldcoords` is a 2-d array
+where \"worldcoords[:, i]\" is the i-th set of coordinates, or a 1-d array
+representing a single set of coordinates.
 
 The return value is the same size as `worldcoords`.
 """
-world_to_pix(wcs::WCSTransform, worldcoords::Matrix{Float64}) =
+world_to_pix(wcs::WCSTransform, worldcoords::VecOrMat{Float64}) =
     world_to_pix!(wcs, worldcoords, similar(worldcoords))
 
 
@@ -452,7 +457,8 @@ world_to_pix!(wcs, worldcoords, pixcoords[; stat=, phi=, theta=, imcoords=])
 Convert the array of pixel coordinates `worldcoords` to pixel coordinates
 according to the WCSTransform `wcs`, storing the result in the
 `pixcoords` array. `worldcoords` should be a 2-d array where
-\"worldcoords[:, i]\" is the i-th set of coordinates. `pixcoords` must be
+\"worldcoords[:, i]\" is the i-th set of coordinates, or a 1-d array
+representing a single set of coordinates. `pixcoords` must be
 the same size and type as `worldcoords`.
 
 If given, the arrays `stat`, `imcoords`, `phi`, `theta` will be used
@@ -460,13 +466,14 @@ to store intermediate results. Their sizes and types must all match
 `worldcoords`, except for `stat` which should be the same size but of type
 Cint (typically Int32).
 """
-function world_to_pix!(wcs::WCSTransform, worldcoords::Matrix{Float64},
-                       pixcoords::Matrix{Float64};
-                       stat::Matrix{Cint}=similar(pixcoords, Cint),
-                       phi::Matrix{Float64}=similar(pixcoords),
-                       theta::Matrix{Float64}=similar(pixcoords),
-                       imcoords::Matrix{Float64}=similar(pixcoords))
-    (nelem, ncoords) = size(worldcoords)
+function world_to_pix!(wcs::WCSTransform, worldcoords::VecOrMat{Float64},
+                       pixcoords::VecOrMat{Float64};
+                       stat=similar(pixcoords, Cint),
+                       phi=similar(pixcoords),
+                       theta=similar(pixcoords),
+                       imcoords=similar(pixcoords))
+    nelem = size(worldcoords, 1)
+    ncoords = size(worldcoords, 2)
     if nelem < wcs.naxis
         error("size(worldcoords, 1) must be greater than or equal to naxis")
     end
