@@ -4,7 +4,7 @@ export WCSTransform,
        pix_to_world, pix_to_world!,
        world_to_pix, world_to_pix!
 
-import Base: convert, copy, deepcopy, show, setindex!
+import Base: convert, copy, deepcopy, getindex, show, setindex!
 
 include("../deps/deps.jl")
 
@@ -22,6 +22,38 @@ function Base.convert{N}(::Type{NTuple{N,UInt8}}, s::ASCIIString)
     v = zeros(UInt8, N)  # intermediate array that we can fill
     copy!(v, convert(Vector{UInt8}, s))
     (v...)
+end
+
+# load an ASCIIString from a tuple of bytes, truncating at first NULL
+function Base.convert{N}(::Type{ASCIIString}, v::NTuple{N, UInt8})
+    len = N
+
+    # reduce length if we find a null
+    i = 1
+    for i=1:N
+        if v[i] == 0x00
+            len = i-1
+            break
+        end
+    end
+    s = Array(UInt8, len)
+    copy!(s, 1, v, 1, len)
+    return ASCIIString(s)  # wraps the array `s`
+end
+
+# load a ASCIIString from a pointer, truncating at first NULL or maxlen
+function Base.convert(::Type{ASCIIString}, ptr::Ptr{UInt8}, maxlen::Int)
+    len = maxlen
+
+    # reduce length if we find a null
+    i = 1
+    for i=1:maxlen
+        if unsafe_load(ptr, i) == 0x00
+            len = i-1
+            break
+        end
+    end
+    return bytestring(ptr, len)
 end
 
 macro check_type(k, v, t)
@@ -276,6 +308,71 @@ function free!(w::WCSTransform)
     assert_ok(status)
 end
 
+# -----------------------------------------------------------------------------
+# getting attributes of a WCSTransform
+# These return newly-allocated memory (not views of the WCSTransform).
+
+function getindex(wcs::WCSTransform, k::Symbol)
+    @assert wcs.flag != -1
+    wcs.flag = 0
+    naxis = wcs.naxis
+
+    # double[naxis]
+    if k in (:cdelt, :crder, :crota, :crpix, :crval, :csyer)
+        v = Array(Float64, naxis)
+        unsafe_copy!(pointer(v), getfield(wcs,k), naxis)
+
+    # char[72,naxis]
+    elseif k in (:cname, :ctype, :cunit)
+        p = convert(Ptr{UInt8}, getfield(wcs, k))
+        v = Array(ASCIIString, naxis)
+        for i=1:naxis
+            pi = p + 72*(i-1)  # Ptr{UInt8} to the i-th entry.
+            v[i] = convert(ASCIIString, pi, 72)
+        end
+
+    # PVCard[]
+    elseif k === :pv
+        error("pv getter not yet implemented")
+
+    # PSCard[]
+    elseif k === :ps
+        error("ps getter not yet implemented")
+
+    # double[naxis,naxis]
+    elseif k in (:cd, :pc)
+        v = Array(Cdouble, naxis, naxis)
+        unsafe_copy!(pointer(v), getfield(wcs,k), naxis*naxis)
+
+    # double
+    elseif k in (:equinox,:latpole,:lonpole,:mjdavg,:mjdobs,
+                 :restfrq,:restwav,:velangl,:velosys,:zsource)
+        v = getfield(wcs, k)
+
+    # int
+    elseif k === :colnum
+        v = Int(getfield(wcs, k))
+
+    # char[72]
+    elseif k in (:dateavg,:dateobs,:radesys,:specsys,:ssysobs,:ssyssrc,
+                 :wcsname)
+        v = convert(ASCIIString, getfield(wcs, k))
+
+    # double[3]
+    elseif k === :obsgeo
+        v = getfield(wcs, k)  # Tuple{Cdouble, Cdouble, Cdouble}
+
+    # char[4], but only uses first
+    elseif k === :alt
+        v = Char(wcs.alt[1])
+
+    else
+        error("unrecognized keyword argument \"$k\"")
+    end
+
+    return v
+end
+
 
 # -----------------------------------------------------------------------------
 # modifying a WCSTransform
@@ -387,11 +484,12 @@ pix_to_world(wcs, pixcoords)
 
 Convert the array of pixel coordinates `pixcoords` to world coordinates
 according to the WCSTransform `wcs`. `pixcoords` should be a 2-d array
-where \"pixcoords[:, i]\" is the i-th set of coordinates.
+where \"pixcoords[:, i]\" is the i-th set of coordinates, or a 1-d array
+representing a single set of coordinates.
 
 The return value is the same shape as `pixcoords`.
 """
-pix_to_world(wcs::WCSTransform, pixcoords::Matrix{Float64}) =
+pix_to_world(wcs::WCSTransform, pixcoords::VecOrMat{Float64}) =
     pix_to_world!(wcs, pixcoords, similar(pixcoords))
 
 
@@ -401,7 +499,8 @@ pix_to_world!(wcs, pixcoords, worldcoords[; stat=, imcoords=, phi=, theta=])
 Convert the array of pixel coordinates `pixcoords` to world coordinates
 according to the WCSTransform `wcs`, storing the result in the
 `worldcoords` and `stat` arrays. `pixcoords` should be a 2-d array where
-\"pixcoords[:, i]\" is the i-th set of coordinates. `worldcoords` must be
+\"pixcoords[:, i]\" is the i-th set of coordinates, or a 1-d array
+representing a single set of coordinates. `worldcoords` must be
 the same size and type as `pixcoords`.
 
 If given, the arrays `stat`, `imcoords`, `phi`, `theta` will be used
@@ -409,13 +508,14 @@ to store intermediate results. Their sizes and types must all match
 `pixcoords`, except for `stat` which should be the same size but of type
 Cint (typically Int32).
 """
-function pix_to_world!(wcs::WCSTransform, pixcoords::Matrix{Float64},
-                       worldcoords::Matrix{Float64};
-                       stat::Matrix{Cint}=similar(pixcoords, Cint),
-                       imcoords::Matrix{Float64}=similar(pixcoords),
-                       phi::Matrix{Float64}=similar(pixcoords),
-                       theta::Matrix{Float64}=similar(pixcoords))
-    (nelem, ncoords) = size(pixcoords)
+function pix_to_world!(wcs::WCSTransform, pixcoords::VecOrMat{Float64},
+                       worldcoords::VecOrMat{Float64};
+                       stat=similar(pixcoords, Cint),
+                       imcoords=similar(pixcoords),
+                       phi=similar(pixcoords),
+                       theta=similar(pixcoords))
+    nelem = size(pixcoords, 1)
+    ncoords = size(pixcoords, 2)
     if nelem < wcs.naxis
         error("size(pixcoords, 1) must be greater than or equal to naxis")
     end
@@ -433,16 +533,18 @@ function pix_to_world!(wcs::WCSTransform, pixcoords::Matrix{Float64},
 end
 
 
+
 """
 world_to_pix(wcs, worldcoords)
 
 Convert the array of world coordinates `worldcoords` to pixel coordinates
-according to the WCSTransform `wcs`. `worldcoords` should be a 2-d array
-where \"worldcoords[:, i]\" is the i-th set of coordinates.
+according to the WCSTransform `wcs`. `worldcoords` is a 2-d array
+where \"worldcoords[:, i]\" is the i-th set of coordinates, or a 1-d array
+representing a single set of coordinates.
 
 The return value is the same size as `worldcoords`.
 """
-world_to_pix(wcs::WCSTransform, worldcoords::Matrix{Float64}) =
+world_to_pix(wcs::WCSTransform, worldcoords::VecOrMat{Float64}) =
     world_to_pix!(wcs, worldcoords, similar(worldcoords))
 
 
@@ -452,7 +554,8 @@ world_to_pix!(wcs, worldcoords, pixcoords[; stat=, phi=, theta=, imcoords=])
 Convert the array of pixel coordinates `worldcoords` to pixel coordinates
 according to the WCSTransform `wcs`, storing the result in the
 `pixcoords` array. `worldcoords` should be a 2-d array where
-\"worldcoords[:, i]\" is the i-th set of coordinates. `pixcoords` must be
+\"worldcoords[:, i]\" is the i-th set of coordinates, or a 1-d array
+representing a single set of coordinates. `pixcoords` must be
 the same size and type as `worldcoords`.
 
 If given, the arrays `stat`, `imcoords`, `phi`, `theta` will be used
@@ -460,13 +563,14 @@ to store intermediate results. Their sizes and types must all match
 `worldcoords`, except for `stat` which should be the same size but of type
 Cint (typically Int32).
 """
-function world_to_pix!(wcs::WCSTransform, worldcoords::Matrix{Float64},
-                       pixcoords::Matrix{Float64};
-                       stat::Matrix{Cint}=similar(pixcoords, Cint),
-                       phi::Matrix{Float64}=similar(pixcoords),
-                       theta::Matrix{Float64}=similar(pixcoords),
-                       imcoords::Matrix{Float64}=similar(pixcoords))
-    (nelem, ncoords) = size(worldcoords)
+function world_to_pix!(wcs::WCSTransform, worldcoords::VecOrMat{Float64},
+                       pixcoords::VecOrMat{Float64};
+                       stat=similar(pixcoords, Cint),
+                       phi=similar(pixcoords),
+                       theta=similar(pixcoords),
+                       imcoords=similar(pixcoords))
+    nelem = size(worldcoords, 1)
+    ncoords = size(worldcoords, 2)
     if nelem < wcs.naxis
         error("size(worldcoords, 1) must be greater than or equal to naxis")
     end
