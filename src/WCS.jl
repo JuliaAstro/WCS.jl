@@ -8,6 +8,10 @@ export WCSTransform,
 
 import Base: convert, copy, deepcopy, getindex, show, setindex!
 
+using Compat
+import Compat.ASCIIString
+
+
 include("../deps/deps.jl")
 
 # -----------------------------------------------------------------------------
@@ -19,15 +23,15 @@ function unsafe_store_vec!{T}(p::Ptr{T}, v::Vector{T})
     end
 end
 
-function Base.convert{N}(::Type{NTuple{N,UInt8}}, s::ASCIIString)
+function Base.convert{N}(::Type{NTuple{N,UInt8}}, s::Compat.ASCIIString)
     @assert length(s) < N
     v = zeros(UInt8, N)  # intermediate array that we can fill
     copy!(v, convert(Vector{UInt8}, s))
     (v...)
 end
 
-# load an ASCIIString from a tuple of bytes, truncating at first NULL
-function Base.convert{N}(::Type{ASCIIString}, v::NTuple{N, UInt8})
+# load an String from a tuple of bytes, truncating at first NULL
+function Base.convert{N}(::Type{Compat.ASCIIString}, v::NTuple{N, UInt8})
     len = N
 
     # reduce length if we find a null
@@ -40,11 +44,11 @@ function Base.convert{N}(::Type{ASCIIString}, v::NTuple{N, UInt8})
     end
     s = Array(UInt8, len)
     copy!(s, 1, v, 1, len)
-    return ASCIIString(s)  # wraps the array `s`
+    return Compat.ASCIIString(s)  # wraps the array `s`
 end
 
-# load a ASCIIString from a pointer, truncating at first NULL or maxlen
-function Base.convert(::Type{ASCIIString}, ptr::Ptr{UInt8}, maxlen::Int)
+# load a String from a pointer, truncating at first NULL or maxlen
+function Base.convert(::Type{Compat.ASCIIString}, ptr::Ptr{UInt8}, maxlen::Int)
     len = maxlen
 
     # reduce length if we find a null
@@ -55,7 +59,7 @@ function Base.convert(::Type{ASCIIString}, ptr::Ptr{UInt8}, maxlen::Int)
             break
         end
     end
-    return bytestring(ptr, len)
+    return unsafe_string(ptr, len)
 end
 
 macro check_type(k, v, t)
@@ -79,7 +83,7 @@ end
 function get_error_message(i::Cint)
     msgptrs = cglobal((:wcs_errmsg, wcslib), Ptr{Ptr{UInt8}})
     msgptr = unsafe_load(msgptrs, i+1)
-    bytestring(msgptr)
+    unsafe_string(msgptr)
 end
 
 function assert_ok(i::Cint)
@@ -327,10 +331,10 @@ function getindex(wcs::WCSTransform, k::Symbol)
     # char[72,naxis]
     elseif k in (:cname, :ctype, :cunit)
         p = convert(Ptr{UInt8}, getfield(wcs, k))
-        v = Array(ASCIIString, naxis)
+        v = Array(Compat.ASCIIString, naxis)
         for i=1:naxis
             pi = p + 72*(i-1)  # Ptr{UInt8} to the i-th entry.
-            v[i] = convert(ASCIIString, pi, 72)
+            v[i] = convert(Compat.ASCIIString, pi, 72)
         end
 
     # PVCard[]
@@ -358,7 +362,7 @@ function getindex(wcs::WCSTransform, k::Symbol)
     # char[72]
     elseif k in (:dateavg,:dateobs,:radesys,:specsys,:ssysobs,:ssyssrc,
                  :wcsname)
-        v = convert(ASCIIString, getfield(wcs, k))
+        v = convert(Compat.ASCIIString, getfield(wcs, k))
 
     # double[3]
     elseif k === :obsgeo
@@ -392,7 +396,7 @@ function setindex!(wcs::WCSTransform, v, k::Symbol)
 
     # char[72,naxis]
     elseif k in (:cname, :ctype, :cunit)
-        @check_type k v Vector{ASCIIString}
+        @check_type k v Vector{Compat.ASCIIString}
         @check_prop k length v (==) naxis
 
         p = convert(Ptr{UInt8}, getfield(wcs, k))
@@ -596,10 +600,10 @@ end
 """
 from_header(header[; relax=0, ctrl=0, table=false])
 
-Parse the FITS image header in the ASCIIString `header`, returning a
+Parse the FITS image header in the String `header`, returning a
 `Vector{WCSTransform}` giving all the transforms defined in the header.
 """
-function from_header(header::ASCIIString; relax::Integer=0, ctrl::Integer=0,
+function from_header(header::Compat.ASCIIString; relax::Integer=0, ctrl::Integer=0,
                      ignore_rejected::Bool=false, table::Bool=false)
     @assert ctrl >= 0  # < 0 modifies the header
     nkeyrec::Integer=div(length(header), 80)
@@ -644,7 +648,7 @@ function to_header(wcs::WCSTransform; relax::Integer=0)
                    (Cint, Ref{WCSTransform}, Ref{Cint}, Ref{Ptr{UInt8}}),
                    relax, wcs, nkeyrec, hdrptr)
     assert_ok(status)
-    header = bytestring(hdrptr[])
+    header = unsafe_string(hdrptr[])
     Libc.free(hdrptr[])
     return header
 end
