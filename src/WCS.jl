@@ -23,7 +23,8 @@ function unsafe_store_vec!{T}(p::Ptr{T}, v::Vector{T})
     end
 end
 
-function Base.convert{N}(::Type{NTuple{N,UInt8}}, s::Compat.ASCIIString)
+# convert a string to a tuple of bytes
+function convert_string{N}(::Type{NTuple{N,UInt8}}, s::Compat.ASCIIString)
     @assert length(s) < N
     v = zeros(UInt8, N)  # intermediate array that we can fill
     copy!(v, convert(Vector{UInt8}, s))
@@ -31,7 +32,7 @@ function Base.convert{N}(::Type{NTuple{N,UInt8}}, s::Compat.ASCIIString)
 end
 
 # load an String from a tuple of bytes, truncating at first NULL
-function Base.convert{N}(::Type{Compat.ASCIIString}, v::NTuple{N, UInt8})
+function convert_string{N}(::Type{Compat.ASCIIString}, v::NTuple{N, UInt8})
     len = N
 
     # reduce length if we find a null
@@ -48,7 +49,8 @@ function Base.convert{N}(::Type{Compat.ASCIIString}, v::NTuple{N, UInt8})
 end
 
 # load a String from a pointer, truncating at first NULL or maxlen
-function Base.convert(::Type{Compat.ASCIIString}, ptr::Ptr{UInt8}, maxlen::Int)
+function convert_string(::Type{Compat.ASCIIString}, ptr::Ptr{UInt8},
+                        maxlen::Int)
     len = maxlen
 
     # reduce length if we find a null
@@ -334,7 +336,7 @@ function getindex(wcs::WCSTransform, k::Symbol)
         v = Array(Compat.ASCIIString, naxis)
         for i=1:naxis
             pi = p + 72*(i-1)  # Ptr{UInt8} to the i-th entry.
-            v[i] = convert(Compat.ASCIIString, pi, 72)
+            v[i] = convert_string(Compat.ASCIIString, pi, 72)
         end
 
     # PVCard[]
@@ -362,7 +364,7 @@ function getindex(wcs::WCSTransform, k::Symbol)
     # char[72]
     elseif k in (:dateavg,:dateobs,:radesys,:specsys,:ssysobs,:ssyssrc,
                  :wcsname)
-        v = convert(Compat.ASCIIString, getfield(wcs, k))
+        v = convert_string(Compat.ASCIIString, getfield(wcs, k))
 
     # double[3]
     elseif k === :obsgeo
@@ -444,7 +446,7 @@ function setindex!(wcs::WCSTransform, v, k::Symbol)
     # char[72]
     elseif k in (:dateavg,:dateobs,:radesys,:specsys,:ssysobs,:ssyssrc,
                  :wcsname)
-        setfield!(wcs, k, convert(NTuple{72, UInt8}, v))
+        setfield!(wcs, k, convert_string(NTuple{72, UInt8}, v))
 
     # double[3]
     elseif k === :obsgeo
