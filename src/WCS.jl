@@ -12,6 +12,18 @@ using Compat
 import Compat.ASCIIString
 
 
+if VERSION > v"0.5.0-dev"
+   using Base.Threads
+else
+    # Pre-Julia 0.5 there are no threads
+    SpinLock() = 1
+    lock!(l) = ()
+    unlock!(l) = ()
+end
+
+wcs_lock = SpinLock()::SpinLock
+
+
 include("../deps/deps.jl")
 
 # -----------------------------------------------------------------------------
@@ -585,11 +597,13 @@ function world_to_pix!(wcs::WCSTransform, worldcoords::VecOrMat{Float64},
     @same_size phi worldcoords
     @same_size theta worldcoords
     @same_size stat worldcoords
+    lock!(wcs_lock)
     ccall((:wcss2p, libwcs), Cint,
           (Ref{WCSTransform}, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble},
            Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}),
           wcs, ncoords, nelem, worldcoords, phi, theta, imcoords, pixcoords,
           stat)
+    unlock!(wcs_lock)
     return pixcoords
 end
 
