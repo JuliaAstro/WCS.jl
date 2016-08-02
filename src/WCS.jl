@@ -13,15 +13,15 @@ import Compat.ASCIIString
 
 
 if VERSION > v"0.5.0-dev"
-   using Base.Threads
+    using Base.Threads
+    const wcs_lock = SpinLock()::SpinLock
 else
     # Pre-Julia 0.5 there are no threads
-    SpinLock() = 1
+    const wcs_lock = 1
     lock!(l) = ()
     unlock!(l) = ()
 end
 
-wcs_lock = SpinLock()::SpinLock
 
 
 include("../deps/deps.jl")
