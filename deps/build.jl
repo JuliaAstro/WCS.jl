@@ -4,7 +4,7 @@ using BinDeps
 using Compat
 
 version = "5.13"
-url = "ftp://ftp.atnf.csiro.au/pub/software/wcslib/wcslib-$version.tar.bz2"
+url = "https://cache.julialang.org/ftp://ftp.atnf.csiro.au/pub/software/wcslib/wcslib-$version.tar.bz2"
 
 wcs = library_dependency("libwcs")
 provides(Sources, URI(url), wcs, unpacked_dir="wcslib-$version")
