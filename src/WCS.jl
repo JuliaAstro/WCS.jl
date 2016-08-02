@@ -12,7 +12,7 @@ using Compat
 import Compat.ASCIIString
 
 
-if VERSION > v"0.5.0-dev"
+if isdefined(Base, :Threads)
     using Base.Threads
     const wcs_lock = SpinLock()::SpinLock
 else
@@ -626,6 +626,7 @@ function from_header(header::Compat.ASCIIString; relax::Integer=0, ctrl::Integer
     wcsptr = Ref{Ptr{WCSTransform}}(0)
     keysel = 0
     status = Cint(0)
+    lock!(wcs_lock)
     if table
         colsel = convert(Ptr{Cint}, C_NULL)
         status = ccall((:wcsbth, libwcs), Cint,
@@ -639,6 +640,7 @@ function from_header(header::Compat.ASCIIString; relax::Integer=0, ctrl::Integer
                         Ref{Ptr{WCSTransform}}),
                        header, nkeyrec, relax, ctrl, nreject, nwcs, wcsptr)
     end
+    unlock!(wcs_lock)
     assert_ok(status)
     p = wcsptr[]
     result = WCSTransform[unsafe_load(p, i) for i = 1:nwcs[]]
