@@ -18,8 +18,8 @@ if isdefined(Base, :Threads)
 else
     # Pre-Julia 0.5 there are no threads
     const wcs_lock = 1
-    lock!(l) = ()
-    unlock!(l) = ()
+    lock(l) = ()
+    unlock(l) = ()
 end
 
 
@@ -597,13 +597,13 @@ function world_to_pix!(wcs::WCSTransform, worldcoords::VecOrMat{Float64},
     @same_size phi worldcoords
     @same_size theta worldcoords
     @same_size stat worldcoords
-    lock!(wcs_lock)
+    lock(wcs_lock)
     ccall((:wcss2p, libwcs), Cint,
           (Ref{WCSTransform}, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble},
            Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}),
           wcs, ncoords, nelem, worldcoords, phi, theta, imcoords, pixcoords,
           stat)
-    unlock!(wcs_lock)
+    unlock(wcs_lock)
     return pixcoords
 end
 
@@ -626,7 +626,7 @@ function from_header(header::Compat.ASCIIString; relax::Integer=0, ctrl::Integer
     wcsptr = Ref{Ptr{WCSTransform}}(0)
     keysel = 0
     status = Cint(0)
-    lock!(wcs_lock)
+    lock(wcs_lock)
     if table
         colsel = convert(Ptr{Cint}, C_NULL)
         status = ccall((:wcsbth, libwcs), Cint,
@@ -640,7 +640,7 @@ function from_header(header::Compat.ASCIIString; relax::Integer=0, ctrl::Integer
                         Ref{Ptr{WCSTransform}}),
                        header, nkeyrec, relax, ctrl, nreject, nwcs, wcsptr)
     end
-    unlock!(wcs_lock)
+    unlock(wcs_lock)
     assert_ok(status)
     p = wcsptr[]
     result = WCSTransform[unsafe_load(p, i) for i = 1:nwcs[]]
