@@ -321,7 +321,9 @@ type WCSTransform
         end
         # wcsset is not threadsafe, so call it here so it doesn't get called
         # in wcss2p and wcsp2s.
+        lock(wcs_lock)
         status = ccall((:wcsset, libwcs), Cint, (Ref{WCSTransform},), w)
+        unlock(wcs_lock)
         return w
     end
 end
