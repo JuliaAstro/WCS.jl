@@ -319,6 +319,9 @@ type WCSTransform
         for (k, v) in kvs
             w[k] = v
         end
+        # wcsset is not threadsafe, so call it here so it doesn't get called
+        # in wcss2p and wcsp2s.
+        status = ccall((:wcsset, libwcs), Cint, (Ref{WCSTransform},), w)
         return w
     end
 end
@@ -599,13 +602,11 @@ function world_to_pix!(wcs::WCSTransform, worldcoords::VecOrMat{Float64},
     @same_size phi worldcoords
     @same_size theta worldcoords
     @same_size stat worldcoords
-    lock(wcs_lock)
     ccall((:wcss2p, libwcs), Cint,
           (Ref{WCSTransform}, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble},
            Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}),
           wcs, ncoords, nelem, worldcoords, phi, theta, imcoords, pixcoords,
           stat)
-    unlock(wcs_lock)
     return pixcoords
 end
 
