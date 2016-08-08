@@ -11,6 +11,15 @@ import Base: convert, copy, deepcopy, getindex, show, setindex!
 using Compat
 import Compat.ASCIIString
 
+if isdefined(Base, :Threads)
+    using Base.Threads
+    const wcs_lock = SpinLock()
+else
+    # Before Julia 0.5 there are no threads
+    const wcs_lock = 1
+    lock(l) = ()
+    unlock(l) = ()
+end
 
 include("../deps/deps.jl")
 
@@ -307,6 +316,13 @@ type WCSTransform
         for (k, v) in kvs
             w[k] = v
         end
+
+        # wcsset() modifies the WCSTransform, so call it here so it doesn't
+        # get called in wcss2p and wcsp2s. Otherwise, calling wcss2p / wcsp2s
+        # on the same WCSTransform object from multiple threads would create
+        # a race condition.
+        status = ccall((:wcsset, libwcs), Cint, (Ref{WCSTransform},), w)
+
         return w
     end
 end
@@ -614,6 +630,10 @@ function from_header(header::Compat.ASCIIString; relax::Integer=0, ctrl::Integer
     wcsptr = Ref{Ptr{WCSTransform}}(0)
     keysel = 0
     status = Cint(0)
+
+    # wcsbth & wcspih are not thread-safe; see
+    # http://www.atnf.csiro.au/people/mcalabre/WCS/wcslib/threads.html
+    lock(wcs_lock)
     if table
         colsel = convert(Ptr{Cint}, C_NULL)
         status = ccall((:wcsbth, libwcs), Cint,
@@ -627,10 +647,27 @@ function from_header(header::Compat.ASCIIString; relax::Integer=0, ctrl::Integer
                         Ref{Ptr{WCSTransform}}),
                        header, nkeyrec, relax, ctrl, nreject, nwcs, wcsptr)
     end
+    unlock(wcs_lock)
     assert_ok(status)
     p = wcsptr[]
     result = WCSTransform[unsafe_load(p, i) for i = 1:nwcs[]]
+
+    # Free the array of pointers allocated by wcslib. (But not the
+    # structs they point to, which we've `unsafe_load`ed into a
+    # Julia-allocated array!)
+    # TODO: this could call the wrong `free` function if wcslib is linked
+    # against a different libc than Julia.
     Libc.free(p)
+
+    # For each of the WCSTransforms, register a finalizer and finish
+    # initialization of the struct by calling wcsset. This avoids race
+    # conditions between threads using the same WCSTransform.
+    for w in result
+        finalizer(w, free!)
+        status = ccall((:wcsset, libwcs), Cint, (Ref{WCSTransform},), w)
+        assert_ok(status)
+    end
+
     if !ignore_rejected && nreject[] != 0
         error("$(nreject[]) WCS transformations were rejected; " *
               "use ignore_rejected = true keyword to ignore")
