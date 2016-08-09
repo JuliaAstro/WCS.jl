@@ -1,3 +1,17 @@
+v0.1.3 (2016-08-09)
+===================
+
+- Thread safety improvements: Added thread locks around header parsing
+  functions (known to be thread unsafe); fix for race condition in
+  `world_to_pix` and `pix_to_world`.
+- Added `WCS.wcslib_version()` function.
+- Fixed bug in throwing exceptions from WCSLIB.
+
+v0.1.2 (2016-07-28)
+===================
+
+- Fix Julia v0.5 deprecation warnings
+
 v0.1.1 (2016-02-07)
 ===================
 
