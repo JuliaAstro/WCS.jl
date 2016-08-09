@@ -2,6 +2,7 @@ WCS.jl
 ======
 
 [![Build Status](https://img.shields.io/travis/JuliaAstro/WCS.jl.svg?style=flat-square)](https://travis-ci.org/JuliaAstro/WCS.jl)
+[![Coverage Status](http://img.shields.io/coveralls/JuliaAstro/WCS.jl.svg?style=flat-square)](https://coveralls.io/r/JuliaAstro/WCS.jl?branch=master)
 
 Astronomical [World Coordinate
 System](http://www.atnf.csiro.au/people/mcalabre/WCS/) library for
