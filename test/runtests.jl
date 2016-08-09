@@ -58,3 +58,10 @@ w = ws[1]
 # `0.0E+00` vs `0.000E+00`.)
 header_out = WCS.to_header(w)
 @test length(header_out) == 17 * 80
+
+# Test that wcslib_version works at all
+@test WCS.wcslib_version() > v"5.0"
+
+# Test propagating errors from wcslib.
+# TODO: replace this with a public WCS routine that throws an error.
+@test_throws ErrorException WCS.assert_ok(Cint(1))

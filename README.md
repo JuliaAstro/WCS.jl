@@ -49,6 +49,10 @@ julia> pixcoords = world_to_pix(wcs, worldcoords)
 
 # convert a WCSTransform to a FITS header
 header = WCS.to_header(wcs)
+
+# check what underlying C library version is being used.
+julia> WCS.wcslib_version()
+v"5.13.0"
 ```
 
 License

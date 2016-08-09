@@ -92,7 +92,7 @@ end
 # error messaging
 
 function get_error_message(i::Cint)
-    msgptrs = cglobal((:wcs_errmsg, wcslib), Ptr{Ptr{UInt8}})
+    msgptrs = cglobal((:wcs_errmsg, libwcs), Ptr{UInt8})
     msgptr = unsafe_load(msgptrs, i+1)
     unsafe_string(msgptr)
 end
@@ -101,6 +101,12 @@ function assert_ok(i::Cint)
     if i != 0
         error(get_error_message(i))
     end
+end
+
+function wcslib_version()
+    vers = Array(Cint, 3)
+    ccall((:wcslib_version, libwcs), Ptr{UInt8}, (Ptr{Cint},), vers)
+    return VersionNumber(vers[1], vers[2], vers[3])
 end
 
 # -----------------------------------------------------------------------------
@@ -322,6 +328,7 @@ type WCSTransform
         # on the same WCSTransform object from multiple threads would create
         # a race condition.
         status = ccall((:wcsset, libwcs), Cint, (Ref{WCSTransform},), w)
+        assert_ok(status)
 
         return w
     end
@@ -616,7 +623,7 @@ end
 # WCSTransform <--> header
 
 """
-from_header(header[; relax=0, ctrl=0, table=false])
+from_header(header[; relax=0, ctrl=0, ignore_rejected=false, table=false])
 
 Parse the FITS image header in the String `header`, returning a
 `Vector{WCSTransform}` giving all the transforms defined in the header.
