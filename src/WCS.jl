@@ -669,11 +669,13 @@ function from_header(header::Compat.ASCIIString; relax::Integer=0, ctrl::Integer
     # For each of the WCSTransforms, register a finalizer and finish
     # initialization of the struct by calling wcsset. This avoids race
     # conditions between threads using the same WCSTransform.
+    lock(wcs_lock)
     for w in result
         finalizer(w, free!)
         status = ccall((:wcsset, libwcs), Cint, (Ref{WCSTransform},), w)
         assert_ok(status)
     end
+    unlock(wcs_lock)
 
     if !ignore_rejected && nreject[] != 0
         error("$(nreject[]) WCS transformations were rejected; " *
