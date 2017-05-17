@@ -2,6 +2,7 @@
 
 using WCS
 using Base.Test
+using Compat
 
 wcs = WCSTransform(2;
                    alt     = 'B',
@@ -24,15 +25,15 @@ worldcoords = pix_to_world(wcs, pixcoords)
 expected_world = [267.96547027 276.53931377 287.77080792;
                   -73.73660749 -71.97412809 -69.67813884]
 
-@test maximum(abs(worldcoords .- expected_world)) < 5e-9
+@test @compat maximum(abs.(worldcoords .- expected_world)) < 5e-9
 pixcoords_out = world_to_pix(wcs, worldcoords)
-@test maximum(abs(pixcoords_out .- pixcoords)) < 1e-9
+@test @compat maximum(abs.(pixcoords_out .- pixcoords)) < 1e-9
 
 # Test Array{Float64, 1} methods of above
 worldcoords = pix_to_world(wcs, pixcoords[:, 1])
-@test maximum(abs(worldcoords .- expected_world[:, 1])) < 5e-9
+@test @compat maximum(abs.(worldcoords .- expected_world[:, 1])) < 5e-9
 pixcoords_out = world_to_pix(wcs, worldcoords)
-@test maximum(abs(pixcoords_out .- pixcoords[:, 1])) < 1e-9
+@test @compat maximum(abs.(pixcoords_out .- pixcoords[:, 1])) < 1e-9
 
 # Test retrieving attributes
 @test wcs[:ctype] == ["RA---AIR", "DEC--AIR"]
