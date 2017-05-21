@@ -52,7 +52,7 @@ function convert_string{N}(::Type{Compat.ASCIIString}, v::NTuple{N, UInt8})
             break
         end
     end
-    s = Array(UInt8, len)
+    s = Array{UInt8}(len)
     copy!(s, 1, v, 1, len)
     return Compat.ASCIIString(s)  # wraps the array `s`
 end
@@ -104,7 +104,7 @@ function assert_ok(i::Cint)
 end
 
 function wcslib_version()
-    vers = Array(Cint, 3)
+    vers = Array{Cint}(3)
     ccall((:wcslib_version, libwcs), Ptr{UInt8}, (Ptr{Cint},), vers)
     return VersionNumber(vers[1], vers[2], vers[3])
 end
@@ -113,10 +113,10 @@ end
 # WCSTransform
 
 # mirror of `struct pvcard`
-typealias PVCard Tuple{Cint, Cint, Cdouble}  # i, m, value entries
+const PVCard = Tuple{Cint, Cint, Cdouble}  # i, m, value entries
 
 # mirror of `struct pscard`
-typealias PSCard Tuple{Cint, Cint, NTuple{72, UInt8}}  # i, m, value entries
+const PSCard = Tuple{Cint, Cint, NTuple{72, UInt8}}  # i, m, value entries
 
 # mirror of `struct wcserr`
 immutable WCSErr
@@ -350,13 +350,13 @@ function getindex(wcs::WCSTransform, k::Symbol)
 
     # double[naxis]
     if k in (:cdelt, :crder, :crota, :crpix, :crval, :csyer)
-        v = Array(Float64, naxis)
+        v = Array{Float64}(naxis)
         unsafe_copy!(pointer(v), getfield(wcs,k), naxis)
 
     # char[72,naxis]
     elseif k in (:cname, :ctype, :cunit)
         p = convert(Ptr{UInt8}, getfield(wcs, k))
-        v = Array(Compat.ASCIIString, naxis)
+        v = Array{Compat.ASCIIString}(naxis)
         for i=1:naxis
             pi = p + 72*(i-1)  # Ptr{UInt8} to the i-th entry.
             v[i] = convert_string(Compat.ASCIIString, pi, 72)
@@ -372,7 +372,7 @@ function getindex(wcs::WCSTransform, k::Symbol)
 
     # double[naxis,naxis]
     elseif k in (:cd, :pc)
-        v = Array(Cdouble, naxis, naxis)
+        v = Array{Cdouble}(naxis, naxis)
         unsafe_copy!(pointer(v), getfield(wcs,k), naxis*naxis)
 
     # double
