@@ -8,18 +8,8 @@ export WCSTransform,
 
 import Base: convert, copy, deepcopy, getindex, show, setindex!
 
-using Compat
-import Compat.ASCIIString
-
-if isdefined(Base, :Threads)
-    using Base.Threads
-    const wcs_lock = SpinLock()
-else
-    # Before Julia 0.5 there are no threads
-    const wcs_lock = 1
-    lock(l) = ()
-    unlock(l) = ()
-end
+using Base.Threads
+const wcs_lock = SpinLock()
 
 include("../deps/deps.jl")
 
@@ -33,15 +23,16 @@ function unsafe_store_vec!{T}(p::Ptr{T}, v::Vector{T})
 end
 
 # convert a string to a tuple of bytes
-function convert_string{N}(::Type{NTuple{N,UInt8}}, s::Compat.ASCIIString)
+function convert_string{N}(::Type{NTuple{N,UInt8}}, s::String)
     @assert length(s) < N
+    @assert isascii(s)
     v = zeros(UInt8, N)  # intermediate array that we can fill
     copy!(v, convert(Vector{UInt8}, s))
     (v...)
 end
 
 # load an String from a tuple of bytes, truncating at first NULL
-function convert_string{N}(::Type{Compat.ASCIIString}, v::NTuple{N, UInt8})
+function convert_string{N}(::Type{String}, v::NTuple{N, UInt8})
     len = N
 
     # reduce length if we find a null
@@ -54,12 +45,11 @@ function convert_string{N}(::Type{Compat.ASCIIString}, v::NTuple{N, UInt8})
     end
     s = Array{UInt8}(len)
     copy!(s, 1, v, 1, len)
-    return Compat.ASCIIString(s)  # wraps the array `s`
+    return String(s)  # wraps the array `s`
 end
 
 # load a String from a pointer, truncating at first NULL or maxlen
-function convert_string(::Type{Compat.ASCIIString}, ptr::Ptr{UInt8},
-                        maxlen::Int)
+function convert_string(::Type{String}, ptr::Ptr{UInt8}, maxlen::Int)
     len = maxlen
 
     # reduce length if we find a null
@@ -356,10 +346,10 @@ function getindex(wcs::WCSTransform, k::Symbol)
     # char[72,naxis]
     elseif k in (:cname, :ctype, :cunit)
         p = convert(Ptr{UInt8}, getfield(wcs, k))
-        v = Array{Compat.ASCIIString}(naxis)
+        v = Array{String}(naxis)
         for i=1:naxis
             pi = p + 72*(i-1)  # Ptr{UInt8} to the i-th entry.
-            v[i] = convert_string(Compat.ASCIIString, pi, 72)
+            v[i] = convert_string(String, pi, 72)
         end
 
     # PVCard[]
@@ -387,7 +377,7 @@ function getindex(wcs::WCSTransform, k::Symbol)
     # char[72]
     elseif k in (:dateavg,:dateobs,:radesys,:specsys,:ssysobs,:ssyssrc,
                  :wcsname)
-        v = convert_string(Compat.ASCIIString, getfield(wcs, k))
+        v = convert_string(String, getfield(wcs, k))
 
     # double[3]
     elseif k === :obsgeo
@@ -421,8 +411,9 @@ function setindex!(wcs::WCSTransform, v, k::Symbol)
 
     # char[72,naxis]
     elseif k in (:cname, :ctype, :cunit)
-        @check_type k v Vector{Compat.ASCIIString}
+        @check_type k v Vector{String}
         @check_prop k length v (==) naxis
+        for el in v; @assert isascii(el); end
 
         p = convert(Ptr{UInt8}, getfield(wcs, k))
         for i in 1:naxis
@@ -628,7 +619,7 @@ from_header(header[; relax=0, ctrl=0, ignore_rejected=false, table=false])
 Parse the FITS image header in the String `header`, returning a
 `Vector{WCSTransform}` giving all the transforms defined in the header.
 """
-function from_header(header::Compat.ASCIIString; relax::Integer=0, ctrl::Integer=0,
+function from_header(header::String; relax::Integer=0, ctrl::Integer=0,
                      ignore_rejected::Bool=false, table::Bool=false)
     @assert ctrl >= 0  # < 0 modifies the header
     nkeyrec::Integer=div(length(header), 80)
