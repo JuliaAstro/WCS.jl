@@ -1,8 +1,6 @@
 using BinDeps
 @BinDeps.setup
 
-using Compat
-
 version = "5.13"
 url = "https://cache.julialang.org/ftp://ftp.atnf.csiro.au/pub/software/wcslib/wcslib-$version.tar.bz2"
 
