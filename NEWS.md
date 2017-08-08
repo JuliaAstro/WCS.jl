@@ -1,3 +1,10 @@
+v0.2.0 (2017-08-07)
+===================
+
+- Drop support for Julia 0.4
+- Clear deprecation warnings in Julia 0.6, master
+- Thread safety fix in WCSTransform()
+
 v0.1.3 (2016-08-09)
 ===================
 
