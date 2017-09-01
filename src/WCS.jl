@@ -14,6 +14,39 @@ const wcs_lock = SpinLock()
 include("../deps/deps.jl")
 
 # -----------------------------------------------------------------------------
+# constants defined in WCSLIB's wcshdr.h
+
+# 'relax' flags for `from_header()`. See
+# http://docs.astropy.org/en/stable/wcs/relax.html
+# for descriptions.
+const WCSHDR_none     = 0x00000000
+const WCSHDR_all      = 0x000FFFFF
+const WCSHDR_reject   = 0x10000000
+const WCSHDR_strict   = 0x20000000
+
+const WCSHDR_CROTAia  = 0x00000001
+const WCSHDR_EPOCHa   = 0x00000002
+const WCSHDR_VELREFa  = 0x00000004
+const WCSHDR_CD00i00j = 0x00000008
+const WCSHDR_PC00i00j = 0x00000010
+const WCSHDR_PROJPn   = 0x00000020
+const WCSHDR_CD0i_0ja = 0x00000040
+const WCSHDR_PC0i_0ja = 0x00000080
+const WCSHDR_PV0i_0ma = 0x00000100
+const WCSHDR_PS0i_0ma = 0x00000200
+const WCSHDR_RADECSYS = 0x00000400
+const WCSHDR_VSOURCE  = 0x00000800
+const WCSHDR_DOBSn    = 0x00001000
+const WCSHDR_LONGKEY  = 0x00002000
+const WCSHDR_CNAMn    = 0x00004000
+const WCSHDR_AUXIMG   = 0x00008000
+const WCSHDR_ALLIMG   = 0x00010000
+
+const WCSHDR_IMGHEAD  = 0x00100000
+const WCSHDR_BIMGARR  = 0x00200000
+const WCSHDR_PIXLIST  = 0x00400000
+
+# -----------------------------------------------------------------------------
 # Utilities
 
 function unsafe_store_vec!{T}(p::Ptr{T}, v::Vector{T})
@@ -614,12 +647,17 @@ end
 # WCSTransform <--> header
 
 """
-from_header(header[; relax=0, ctrl=0, ignore_rejected=false, table=false])
+from_header(header[; relax=WCSHDR_all, ctrl=0, ignore_rejected=false, table=false])
 
 Parse the FITS image header in the String `header`, returning a
 `Vector{WCSTransform}` giving all the transforms defined in the header.
+The `relax` determines the treatment of non-standard keywords. The default is
+to accept all known non-standard keywords. Use `relax=WCS.WCSHDR_none` to
+ignore all non-standard keywords. Use, e.g.,
+`relax=(WCS.WCSHDR_RADECSYS & WCS.WCSHDR_CROTAia)` to only accept selected
+non-standard keywords.
 """
-function from_header(header::String; relax::Integer=0, ctrl::Integer=0,
+function from_header(header::String; relax::Integer=WCSHDR_all, ctrl::Integer=0,
                      ignore_rejected::Bool=false, table::Bool=false)
     @assert ctrl >= 0  # < 0 modifies the header
     nkeyrec::Integer=div(length(header), 80)
@@ -676,11 +714,11 @@ function from_header(header::String; relax::Integer=0, ctrl::Integer=0,
 end
 
 """
-to_header(wcs[; relax=0])
+to_header(wcs[; relax=WCSHDR_none])
 
 Write the WCSTransform `wcs` as a FITS header.
 """
-function to_header(wcs::WCSTransform; relax::Integer=0)
+function to_header(wcs::WCSTransform; relax::Integer=WCSHDR_none)
     nkeyrec = Ref{Cint}(0)
     hdrptr = Ref{Ptr{UInt8}}(C_NULL)
     status = ccall((:wcshdo, libwcs), Cint,
