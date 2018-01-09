@@ -49,23 +49,23 @@ const HDR_PIXLIST  = 0x00400000
 # -----------------------------------------------------------------------------
 # Utilities
 
-function unsafe_store_vec!{T}(p::Ptr{T}, v::Vector{T})
+function unsafe_store_vec!(p::Ptr{T}, v::AbstractVector{T}) where {T}
     for i = 1:length(v)
         unsafe_store!(p, v[i], i)
     end
 end
 
 # convert a string to a tuple of bytes
-function convert_string{N}(::Type{NTuple{N,UInt8}}, s::String)
+function convert_string(::Type{NTuple{N,UInt8}}, s::String) where {N}
     @assert length(s) < N
     @assert isascii(s)
     v = zeros(UInt8, N)  # intermediate array that we can fill
     copy!(v, convert(Vector{UInt8}, s))
-    (v...)
+    (v...,)
 end
 
 # load an String from a tuple of bytes, truncating at first NULL
-function convert_string{N}(::Type{String}, v::NTuple{N, UInt8})
+function convert_string(::Type{String}, v::NTuple{N, UInt8}) where {N}
     len = N
 
     # reduce length if we find a null
@@ -142,7 +142,7 @@ const PVCard = Tuple{Cint, Cint, Cdouble}  # i, m, value entries
 const PSCard = Tuple{Cint, Cint, NTuple{72, UInt8}}  # i, m, value entries
 
 # mirror of `struct wcserr`
-immutable WCSErr
+struct WCSErr
     status::Cint
     line_no::Cint
     _function::Ptr{UInt8}
@@ -150,7 +150,7 @@ immutable WCSErr
     msg::NTuple{160, UInt8}
 end
 
-immutable linprm
+struct linprm
     flag::Cint
     naxis::Cint
     crpix::Ptr{Cdouble}
@@ -175,7 +175,7 @@ immutable linprm
     m_disseq::Ptr{Void}  # Ptr{disprm}
 end
 
-immutable prjprm
+struct prjprm
     flag::Cint
     code::NTuple{4, UInt8}
     r0::Cdouble
@@ -202,7 +202,7 @@ immutable prjprm
     prjs2x::Ptr{Void}
 end
 
-immutable celprm
+struct celprm
     flag::Cint
     offset::Cint
     phi0::Cdouble
@@ -216,7 +216,7 @@ immutable celprm
     padding::Ptr{Void}
 end
 
-immutable spcprm
+struct spcprm
     flag::Cint
     _type::NTuple{8, UInt8}
     code::NTuple{4, UInt8}
@@ -256,7 +256,7 @@ julia> wcs = WCSTransform(2)
 julia> wcs[:crpix] = [1000., 1000.]
 ```
 """
-type WCSTransform
+mutable struct WCSTransform
     flag::Cint
     naxis::Cint
     crpix::Ptr{Cdouble}
