@@ -65,10 +65,10 @@ end
 
     # test relax keyword
     faulty_header = replace(header, "RADESYS = 'ICRS'", "RADECSYS= 'FK5' ")
-    wcs = WCS.from_header(faulty_header)[1]  # default is maximum relaxation
-    @test wcs[:radesys] == "FK5"
-    wcs = WCS.from_header(faulty_header; relax=WCS.HDR_NONE)[1]  # strict
-    @test wcs[:radesys] == "ICRS"  # defaults to ICRS since EQUINOX not defined
+    wcs_relaxed = WCS.from_header(faulty_header)[1]  # default is maximum relaxation
+    @test wcs_relaxed[:radesys] == "FK5"
+    wcs_strict = WCS.from_header(faulty_header; relax=WCS.HDR_NONE)[1]  # strict
+    @test wcs_strict[:radesys] == "ICRS"  # defaults to ICRS since EQUINOX not defined
 end
 
 
