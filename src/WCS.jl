@@ -11,7 +11,7 @@ import Base: convert, copy, deepcopy, getindex, show, setindex!
 using Base.Threads
 const wcs_lock = SpinLock()
 
-include("../deps/deps.jl")
+include(joinpath(@__DIR__, "..", "deps", "deps.jl"))
 
 # -----------------------------------------------------------------------------
 # constants defined in WCSLIB's wcshdr.h
