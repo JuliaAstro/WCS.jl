@@ -35,12 +35,12 @@ wcs = WCSTransform(2;
 end
 
 @testset "getindex" begin
-    @test wcs[:ctype] == ["RA---AIR", "DEC--AIR"]
-    @test wcs[:dateavg] == ""
-    @test wcs[:alt] == 'B'
-    @test wcs[:cdelt] == [-0.066667, 0.066667]
-    @test wcs[:cd] == [0.0 0.0; 0.0 0.0]
-    @test wcs[:obsgeo] == (1.0, 2.0, 3.0)
+    @test wcs.ctype == ["RA---AIR", "DEC--AIR"]
+    @test wcs.dateavg == ""
+    @test wcs.alt == 'B'
+    @test wcs.cdelt == [-0.066667, 0.066667]
+    @test wcs.cd == [0.0 0.0; 0.0 0.0]
+    @test wcs.obsgeo == (1.0, 2.0, 3.0)
 end
 
 @testset "header methods" begin
@@ -64,9 +64,9 @@ end
     # test relax keyword
     faulty_header = replace(header, "RADESYS = 'ICRS'" => "RADECSYS= 'FK5' ")
     wcs_relaxed = WCS.from_header(faulty_header)[1]  # default is maximum relaxation
-    @test wcs_relaxed[:radesys] == "FK5"
+    @test wcs_relaxed.radesys == "FK5"
     wcs_strict = WCS.from_header(faulty_header; relax=WCS.HDR_NONE)[1]  # strict
-    @test wcs_strict[:radesys] == "ICRS"  # defaults to ICRS since EQUINOX not defined
+    @test wcs_strict.radesys == "ICRS"  # defaults to ICRS since EQUINOX not defined
 end
 
 

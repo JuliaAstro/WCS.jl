@@ -6,7 +6,8 @@ export WCSTransform,
        pix_to_world, pix_to_world!,
        world_to_pix, world_to_pix!
 
-import Base: convert, copy, deepcopy, getindex, show, setindex!
+import Base: convert, copy, deepcopy, getproperty, show, setproperty!,
+    getindex, setindex!
 
 using Base.Threads
 const wcs_lock = SpinLock()
@@ -253,7 +254,7 @@ is equilvalent to:
 ```
 julia> wcs = WCSTransform(2)
 
-julia> wcs[:crpix] = [1000., 1000.]
+julia> wcs.crpix = [1000., 1000.]
 ```
 """
 mutable struct WCSTransform
@@ -343,7 +344,7 @@ mutable struct WCSTransform
         assert_ok(status)
         finalizer(free!, w)
         for (k, v) in kvs
-            w[k] = v
+            setproperty!(w, k, v)
         end
 
         # wcsset() modifies the WCSTransform, so call it here so it doesn't
@@ -366,13 +367,16 @@ end
 # getting attributes of a WCSTransform
 # These return newly-allocated memory (not views of the WCSTransform).
 
-function getindex(wcs::WCSTransform, k::Symbol)
-    @assert wcs.flag != -1
-    wcs.flag = 0
-    naxis = wcs.naxis
+function getproperty(wcs::WCSTransform, k::Symbol)
+    @assert getfield(wcs, :flag) != -1
+    setfield!(wcs, :flag, Cint(0))
+    naxis = getfield(wcs, :naxis)
+
+    if k in (:flag, :naxis, :npvmax)
+        v = getfield(wcs, k)
 
     # double[naxis]
-    if k in (:cdelt, :crder, :crota, :crpix, :crval, :csyer)
+    elseif k in (:cdelt, :crder, :crota, :crpix, :crval, :csyer)
         v = Array{Float64}(undef, naxis)
         unsafe_copyto!(pointer(v), getfield(wcs,k), naxis)
 
@@ -418,7 +422,7 @@ function getindex(wcs::WCSTransform, k::Symbol)
 
     # char[4], but only uses first
     elseif k === :alt
-        v = Char(wcs.alt[1])
+        v = Char(getfield(wcs, :alt)[1])
 
     else
         error("unrecognized keyword argument \"$k\"")
@@ -431,13 +435,16 @@ end
 # -----------------------------------------------------------------------------
 # modifying a WCSTransform
 
-function setindex!(wcs::WCSTransform, v, k::Symbol)
+function setproperty!(wcs::WCSTransform, k::Symbol, v)
     @assert wcs.flag != -1
-    wcs.flag = 0
-    naxis = wcs.naxis
+    setfield!(wcs, :flag, Cint(0))
+    naxis = getfield(wcs, :naxis)
+
+    if k in (:flag, :naxis)
+        setfield!(wcs, v, k)
 
     # double[naxis]
-    if k in (:cdelt, :crder, :crota, :crpix, :crval, :csyer)
+    elseif k in (:cdelt, :crder, :crota, :crpix, :crval, :csyer)
         @check_type k v Vector{Float64}
         @check_prop k length v (==) naxis
         unsafe_copyto!(getfield(wcs,k), pointer(v), naxis)
@@ -462,9 +469,9 @@ function setindex!(wcs::WCSTransform, v, k::Symbol)
         @check_prop k length v (<=) wcs.npvmax
         npv = length(v)
         for i in 1:npv  # TODO: what if a convert fails halfway through?
-            unsafe_store!(wcs.pv, convert(PVCard, v[i]), i)
+            unsafe_store!(getfield(wcs, :pv), convert(PVCard, v[i]), i)
         end
-        wcs.npv = npv
+        setfield!(wcs, :npv, Cint(npv))
 
     # PSCard[]
     elseif k === :ps
@@ -499,13 +506,13 @@ function setindex!(wcs::WCSTransform, v, k::Symbol)
     elseif k === :obsgeo
         @check_type k v Vector{Float64}
         @check_prop k length v (==) 3
-        wcs.obsgeo = (v[1], v[2], v[3])
+        setfield!(wcs, :obsgeo, (v[1], v[2], v[3]))
 
     # char[4], but only uses first
     elseif k === :alt
         @check_type k v Char
         (('A' <= v <= 'Z') || v == ' ') || error("alt must be 'A'-'Z' or ' '")
-        wcs.alt = (UInt8(v), 0x00, 0x00, 0x00)
+        setfield!(wcs, :alt, (UInt8(v), 0x00, 0x00, 0x00))
 
     else
         error("unrecognized keyword argument \"$k\"")
@@ -730,5 +737,8 @@ function to_header(wcs::WCSTransform; relax::Integer=HDR_NONE)
     Libc.free(hdrptr[])
     return header
 end
+
+@deprecate getindex(wcs::WCSTransform, k::Symbol)     getproperty(wcs, k)
+@deprecate setindex!(wcs::WCSTransform, v, k::Symbol) setproperty!(wcs, k, v)
 
 end  # module
