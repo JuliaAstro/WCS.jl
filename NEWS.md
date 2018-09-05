@@ -1,3 +1,11 @@
+v0.3.0 (2018-09-05)
+===================
+
+- Drop support for Julia 0.5
+- The `relax` keyword now defaults to accept all known non-standard keywords.
+  The old default behavior can be obtained with `relax=WCS.HDR_NONE`.
+- Use BinaryProvider to install the binary dependecy
+
 v0.2.0 (2017-08-07)
 ===================
 
