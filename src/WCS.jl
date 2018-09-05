@@ -60,7 +60,7 @@ function convert_string(::Type{NTuple{N,UInt8}}, s::String) where {N}
     @assert length(s) < N
     @assert isascii(s)
     v = zeros(UInt8, N)  # intermediate array that we can fill
-    copy!(v, convert(Vector{UInt8}, s))
+    copyto!(v, codeunits(s))
     (v...,)
 end
 
@@ -76,8 +76,8 @@ function convert_string(::Type{String}, v::NTuple{N, UInt8}) where {N}
             break
         end
     end
-    s = Array{UInt8}(len)
-    copy!(s, 1, v, 1, len)
+    s = Array{UInt8}(undef, len)
+    copyto!(s, 1, v, 1, len)
     return String(s)  # wraps the array `s`
 end
 
@@ -127,7 +127,7 @@ function assert_ok(i::Cint)
 end
 
 function wcslib_version()
-    vers = Array{Cint}(3)
+    vers = Array{Cint}(undef, 3)
     ccall((:wcslib_version, libwcs), Ptr{UInt8}, (Ptr{Cint},), vers)
     return VersionNumber(vers[1], vers[2], vers[3])
 end
@@ -156,8 +156,8 @@ struct linprm
     crpix::Ptr{Cdouble}
     pc::Ptr{Cdouble}
     cdelt::Ptr{Cdouble}
-    dispre::Ptr{Void}  # Ptr{disprm}
-    disseq::Ptr{Void}  # Ptr{disprm}
+    dispre::Ptr{Cvoid}  # Ptr{disprm}
+    disseq::Ptr{Cvoid}  # Ptr{disprm}
     piximg::Ptr{Cdouble}
     imgpix::Ptr{Cdouble}
     i_naxis::Cint
@@ -171,8 +171,8 @@ struct linprm
     m_crpix::Ptr{Cdouble}
     m_pc::Ptr{Cdouble}
     m_cdelt::Ptr{Cdouble}
-    m_dispre::Ptr{Void}  # Ptr{disprm}
-    m_disseq::Ptr{Void}  # Ptr{disprm}
+    m_dispre::Ptr{Cvoid}  # Ptr{disprm}
+    m_disseq::Ptr{Cvoid}  # Ptr{disprm}
 end
 
 struct prjprm
@@ -194,12 +194,12 @@ struct prjprm
     x0::Cdouble
     y0::Cdouble
     err::Ptr{WCSErr}
-    padding::Ptr{Void}
+    padding::Ptr{Cvoid}
     w::NTuple{10, Cdouble}
     m::Cint
     n::Cint
-    prjx2s::Ptr{Void}
-    prjs2x::Ptr{Void}
+    prjx2s::Ptr{Cvoid}
+    prjs2x::Ptr{Cvoid}
 end
 
 struct celprm
@@ -213,7 +213,7 @@ struct celprm
     latpreq::Cint
     isolat::Cint
     err::Ptr{WCSErr}
-    padding::Ptr{Void}
+    padding::Ptr{Cvoid}
 end
 
 struct spcprm
@@ -228,11 +228,11 @@ struct spcprm
     isGrism::Cint
     padding1::Cint
     err::Ptr{WCSErr}
-    padding2::Ptr{Void}
-    spxX2P::Ptr{Void}
-    spxP2S::Ptr{Void}
-    spxS2P::Ptr{Void}
-    spxP2X::Ptr{Void}
+    padding2::Ptr{Cvoid}
+    spxX2P::Ptr{Cvoid}
+    spxP2S::Ptr{Cvoid}
+    spxS2P::Ptr{Cvoid}
+    spxP2X::Ptr{Cvoid}
 end
 
 # mirror of `wcsprm` struct in wcslib
@@ -263,8 +263,8 @@ mutable struct WCSTransform
     pc::Ptr{Cdouble}
     cdelt::Ptr{Cdouble}
     crval::Ptr{Cdouble}
-    cunit::Ptr{Void}
-    ctype::Ptr{Void}
+    cunit::Ptr{Cvoid}
+    ctype::Ptr{Cvoid}
     lonpole::Cdouble
     latpole::Cdouble
     restfrq::Cdouble
@@ -282,7 +282,7 @@ mutable struct WCSTransform
     alt::NTuple{4, UInt8}
     colnum::Cint
     colax::Ptr{Cint}
-    cname::Ptr{Void}
+    cname::Ptr{Cvoid}
     crder::Ptr{Cdouble}
     csyer::Ptr{Cdouble}
     dateavg::NTuple{72, UInt8}
@@ -301,8 +301,8 @@ mutable struct WCSTransform
     wcsname::NTuple{72, UInt8}
     ntab::Cint
     nwtb::Cint
-    tab::Ptr{Void}  # Ptr{tabprm}
-    wtb::Ptr{Void}  # Ptr{wtbarr}
+    tab::Ptr{Cvoid}  # Ptr{tabprm}
+    wtb::Ptr{Cvoid}  # Ptr{wtbarr}
     lngtyp::NTuple{8, UInt8}
     lattyp::NTuple{8, UInt8}
     lng::Cint
@@ -310,30 +310,30 @@ mutable struct WCSTransform
     spec::Cint
     cubeface::Cint
     types::Ptr{Cint}
-    padding::Ptr{Void}
+    padding::Ptr{Cvoid}
     lin::linprm
     cel::celprm
     spc::spcprm
     err::Ptr{WCSErr}
-    m_padding::Ptr{Void}
+    m_padding::Ptr{Cvoid}
     m_flag::Cint
     m_naxis::Cint
     m_crpix::Ptr{Cdouble}
     m_pc::Ptr{Cdouble}
     m_cdelt::Ptr{Cdouble}
     m_crval::Ptr{Cdouble}
-    m_cunit::Ptr{Void}
-    m_ctype::Ptr{Void}
+    m_cunit::Ptr{Cvoid}
+    m_ctype::Ptr{Cvoid}
     m_pv::Ptr{PVCard}
     m_ps::Ptr{PSCard}
     m_cd::Ptr{Cdouble}
     m_crota::Ptr{Cdouble}
     m_colax::Ptr{Cint}
-    m_cname::Ptr{Void}
+    m_cname::Ptr{Cvoid}
     m_crder::Ptr{Cdouble}
     m_csyer::Ptr{Cdouble}
-    m_tab::Ptr{Void}  # Ptr{tabprm}
-    m_wtb::Ptr{Void}  # Ptr{wtbarr}
+    m_tab::Ptr{Cvoid}  # Ptr{tabprm}
+    m_wtb::Ptr{Cvoid}  # Ptr{wtbarr}
 
     function WCSTransform(naxis::Integer; kvs...)
         w = new(-1)
@@ -341,7 +341,7 @@ mutable struct WCSTransform
                        (Cint, Cint, Ref{WCSTransform}),
                        1, naxis, w)
         assert_ok(status)
-        finalizer(w, free!)
+        finalizer(free!, w)
         for (k, v) in kvs
             w[k] = v
         end
@@ -373,13 +373,13 @@ function getindex(wcs::WCSTransform, k::Symbol)
 
     # double[naxis]
     if k in (:cdelt, :crder, :crota, :crpix, :crval, :csyer)
-        v = Array{Float64}(naxis)
-        unsafe_copy!(pointer(v), getfield(wcs,k), naxis)
+        v = Array{Float64}(undef, naxis)
+        unsafe_copyto!(pointer(v), getfield(wcs,k), naxis)
 
     # char[72,naxis]
     elseif k in (:cname, :ctype, :cunit)
         p = convert(Ptr{UInt8}, getfield(wcs, k))
-        v = Array{String}(naxis)
+        v = Array{String}(undef, naxis)
         for i=1:naxis
             pi = p + 72*(i-1)  # Ptr{UInt8} to the i-th entry.
             v[i] = convert_string(String, pi, 72)
@@ -395,8 +395,8 @@ function getindex(wcs::WCSTransform, k::Symbol)
 
     # double[naxis,naxis]
     elseif k in (:cd, :pc)
-        v = Array{Cdouble}(naxis, naxis)
-        unsafe_copy!(pointer(v), getfield(wcs,k), naxis*naxis)
+        v = Array{Cdouble}(undef, naxis, naxis)
+        unsafe_copyto!(pointer(v), getfield(wcs,k), naxis*naxis)
 
     # double
     elseif k in (:equinox,:latpole,:lonpole,:mjdavg,:mjdobs,
@@ -440,7 +440,7 @@ function setindex!(wcs::WCSTransform, v, k::Symbol)
     if k in (:cdelt, :crder, :crota, :crpix, :crval, :csyer)
         @check_type k v Vector{Float64}
         @check_prop k length v (==) naxis
-        unsafe_copy!(getfield(wcs,k), pointer(v), naxis)
+        unsafe_copyto!(getfield(wcs,k), pointer(v), naxis)
 
     # char[72,naxis]
     elseif k in (:cname, :ctype, :cunit)
@@ -453,7 +453,7 @@ function setindex!(wcs::WCSTransform, v, k::Symbol)
             pi = p + 72*(i-1)  # Ptr{UInt8} to i-th entry.
             n = length(v[i])
             @assert n < 72
-            unsafe_copy!(pi, pointer(v[i]), n)
+            unsafe_copyto!(pi, pointer(v[i]), n)
             unsafe_store!(pi, 0x00, n+1)  # trailing null
         end
 
@@ -700,7 +700,7 @@ function from_header(header::String; relax::Integer=HDR_ALL, ctrl::Integer=0,
     # conditions between threads using the same WCSTransform.
     lock(wcs_lock)
     for w in result
-        finalizer(w, free!)
+        finalizer(free!, w)
         status = ccall((:wcsset, libwcs), Cint, (Ref{WCSTransform},), w)
         assert_ok(status)
     end
