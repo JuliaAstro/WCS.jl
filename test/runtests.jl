@@ -1,7 +1,5 @@
-#!/usr/bin/env julia
-
 using WCS
-using Base.Test
+using Test
 
 wcs = WCSTransform(2;
                    alt     = 'B',
@@ -64,7 +62,7 @@ end
     @test length(header_out) == 17 * 80
 
     # test relax keyword
-    faulty_header = replace(header, "RADESYS = 'ICRS'", "RADECSYS= 'FK5' ")
+    faulty_header = replace(header, "RADESYS = 'ICRS'" => "RADECSYS= 'FK5' ")
     wcs_relaxed = WCS.from_header(faulty_header)[1]  # default is maximum relaxation
     @test wcs_relaxed[:radesys] == "FK5"
     wcs_strict = WCS.from_header(faulty_header; relax=WCS.HDR_NONE)[1]  # strict
