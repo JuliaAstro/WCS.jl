@@ -6,8 +6,7 @@ export WCSTransform,
        pix_to_world, pix_to_world!,
        world_to_pix, world_to_pix!
 
-import Base: convert, copy, deepcopy, getproperty, show, setproperty!,
-    getindex, setindex!
+import Base: convert, copy, deepcopy, getproperty, show, setproperty!
 
 using Base.Threads
 const wcs_lock = SpinLock()
@@ -738,7 +737,13 @@ function to_header(wcs::WCSTransform; relax::Integer=HDR_NONE)
     return header
 end
 
-@deprecate getindex(wcs::WCSTransform, k::Symbol)     getproperty(wcs, k)
-@deprecate setindex!(wcs::WCSTransform, v, k::Symbol) setproperty!(wcs, k, v)
+function Base.getindex(wcs::WCSTransform, k::Symbol)
+    Base.depwarn("`wcs[:$k]` is deprecated, use `wcs.$k` instead.", :getindex)
+    getproperty(wcs, k)
+end
+function Base.setindex!(wcs::WCSTransform, v, k::Symbol)
+    Base.depwarn("`wcs[:$k] = $v` is deprecated, use `wcs.$k = $v` instead.", :getindex)
+    setproperty!(wcs, k, v)
+end
 
 end  # module

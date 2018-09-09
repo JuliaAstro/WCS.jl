@@ -34,7 +34,7 @@ wcs = WCSTransform(2;
     @test maximum(abs.(pixcoords_out .- pixcoords[:, 1])) < 1e-9
 end
 
-@testset "getindex" begin
+@testset "getproperty" begin
     @test wcs.ctype == ["RA---AIR", "DEC--AIR"]
     @test wcs.dateavg == ""
     @test wcs.alt == 'B'
