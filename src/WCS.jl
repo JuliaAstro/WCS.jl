@@ -371,7 +371,7 @@ function getproperty(wcs::WCSTransform, k::Symbol)
     setfield!(wcs, :flag, Cint(0))
     naxis = getfield(wcs, :naxis)
 
-    if k in (:flag, :naxis, :npvmax)
+    if k in (:flag, :naxis)
         v = getfield(wcs, k)
 
     # double[naxis]
@@ -439,11 +439,8 @@ function setproperty!(wcs::WCSTransform, k::Symbol, v)
     setfield!(wcs, :flag, Cint(0))
     naxis = getfield(wcs, :naxis)
 
-    if k in (:flag, :naxis)
-        setfield!(wcs, v, k)
-
     # double[naxis]
-    elseif k in (:cdelt, :crder, :crota, :crpix, :crval, :csyer)
+    if k in (:cdelt, :crder, :crota, :crpix, :crval, :csyer)
         @check_type k v Vector{Float64}
         @check_prop k length v (==) naxis
         unsafe_copyto!(getfield(wcs,k), pointer(v), naxis)
@@ -465,7 +462,7 @@ function setproperty!(wcs::WCSTransform, k::Symbol, v)
 
     # PVCard[]
     elseif k === :pv
-        @check_prop k length v (<=) wcs.npvmax
+        @check_prop k length v (<=) getfield(wcs, :npvmax)
         npv = length(v)
         for i in 1:npv  # TODO: what if a convert fails halfway through?
             unsafe_store!(getfield(wcs, :pv), convert(PVCard, v[i]), i)
@@ -486,7 +483,7 @@ function setproperty!(wcs::WCSTransform, k::Symbol, v)
         @check_type k v Matrix{Float64}
         @check_prop k size v (==) (naxis,naxis)
         unsafe_store_vec!(getfield(wcs,k), vec(v'))
-        
+
     # double
     elseif k in (:equinox,:latpole,:lonpole,:mjdavg,:mjdobs,
                  :restfrq,:restwav,:velangl,:velosys,:zsource)
