@@ -41,6 +41,14 @@ end
     @test wcs.cdelt == [-0.066667, 0.066667]
     @test wcs.cd == [0.0 0.0; 0.0 0.0]
     @test wcs.obsgeo == (1.0, 2.0, 3.0)
+    # Test that all public properties can be obtained
+    for k in propertynames(wcs)
+        @test getproperty(wcs, k) == getproperty(wcs, k)
+    end
+    # Test that accessing all private properties results in an error
+    for k in setdiff(propertynames(wcs, true), propertynames(wcs))
+        @test_throws ErrorException getproperty(wcs, k)
+    end
 end
 
 @testset "header methods" begin

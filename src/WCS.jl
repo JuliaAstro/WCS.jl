@@ -6,7 +6,7 @@ export WCSTransform,
        pix_to_world, pix_to_world!,
        world_to_pix, world_to_pix!
 
-import Base: convert, copy, deepcopy, getproperty, show, setproperty!
+import Base: convert, copy, deepcopy, getproperty, show, setproperty!, propertynames
 
 using Base.Threads
 const wcs_lock = SpinLock()
@@ -362,6 +362,18 @@ function free!(w::WCSTransform)
     assert_ok(status)
 end
 
+function propertynames(::WCSTransform, private::Bool=false)
+    if private
+        return fieldnames(WCSTransform)
+    else
+        return (:flag, :naxis, :cdelt, :crder, :crota, :crpix, :crval, :csyer,
+                :cname, :ctype, :cunit, :cd, :pc, :equinox, :latpole, :lonpole,
+                :mjdavg, :mjdobs, :restfrq, :restwav, :velangl, :velosys, :zsource, :colnum,
+                :dateavg, :dateobs, :radesys, :specsys, :ssysobs, :ssyssrc, :wcsname,
+                :obsgeo, :alt)
+    end
+end
+
 # -----------------------------------------------------------------------------
 # getting attributes of a WCSTransform
 # These return newly-allocated memory (not views of the WCSTransform).
@@ -424,7 +436,7 @@ function getproperty(wcs::WCSTransform, k::Symbol)
         v = Char(getfield(wcs, :alt)[1])
 
     else
-        error("unrecognized keyword argument \"$k\"")
+        error("no property \"$k\" available")
     end
 
     return v
@@ -511,7 +523,7 @@ function setproperty!(wcs::WCSTransform, k::Symbol, v)
         setfield!(wcs, :alt, (UInt8(v), 0x00, 0x00, 0x00))
 
     else
-        error("unrecognized keyword argument \"$k\"")
+        error("no property \"$k\" available")
     end
 end
 
