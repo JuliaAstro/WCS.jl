@@ -366,7 +366,7 @@ function propertynames(::WCSTransform, private::Bool=false)
     if private
         return fieldnames(WCSTransform)
     else
-        return (:flag, :naxis, :cdelt, :crder, :crota, :crpix, :crval, :csyer,
+        return (:naxis, :cdelt, :crder, :crota, :crpix, :crval, :csyer,
                 :cname, :ctype, :cunit, :cd, :pc, :equinox, :latpole, :lonpole,
                 :mjdavg, :mjdobs, :restfrq, :restwav, :velangl, :velosys, :zsource, :colnum,
                 :dateavg, :dateobs, :radesys, :specsys, :ssysobs, :ssyssrc, :wcsname,
@@ -383,7 +383,7 @@ function getproperty(wcs::WCSTransform, k::Symbol)
     setfield!(wcs, :flag, Cint(0))
     naxis = getfield(wcs, :naxis)
 
-    if k in (:flag, :naxis)
+    if k == :naxis
         v = getfield(wcs, k)
 
     # double[naxis]
@@ -447,7 +447,7 @@ end
 # modifying a WCSTransform
 
 function setproperty!(wcs::WCSTransform, k::Symbol, v)
-    @assert wcs.flag != -1
+    @assert getfield(wcs, :flag) != -1
     setfield!(wcs, :flag, Cint(0))
     naxis = getfield(wcs, :naxis)
 
