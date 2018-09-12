@@ -34,13 +34,21 @@ wcs = WCSTransform(2;
     @test maximum(abs.(pixcoords_out .- pixcoords[:, 1])) < 1e-9
 end
 
-@testset "getindex" begin
-    @test wcs[:ctype] == ["RA---AIR", "DEC--AIR"]
-    @test wcs[:dateavg] == ""
-    @test wcs[:alt] == 'B'
-    @test wcs[:cdelt] == [-0.066667, 0.066667]
-    @test wcs[:cd] == [0.0 0.0; 0.0 0.0]
-    @test wcs[:obsgeo] == (1.0, 2.0, 3.0)
+@testset "getproperty" begin
+    @test wcs.ctype == ["RA---AIR", "DEC--AIR"]
+    @test wcs.dateavg == ""
+    @test wcs.alt == 'B'
+    @test wcs.cdelt == [-0.066667, 0.066667]
+    @test wcs.cd == [0.0 0.0; 0.0 0.0]
+    @test wcs.obsgeo == (1.0, 2.0, 3.0)
+    # Test that all public properties can be obtained
+    for k in propertynames(wcs)
+        @test getproperty(wcs, k) == getproperty(wcs, k)
+    end
+    # Test that accessing all private properties results in an error
+    for k in setdiff(propertynames(wcs, true), propertynames(wcs))
+        @test_throws ErrorException getproperty(wcs, k)
+    end
 end
 
 @testset "header methods" begin
@@ -64,9 +72,9 @@ end
     # test relax keyword
     faulty_header = replace(header, "RADESYS = 'ICRS'" => "RADECSYS= 'FK5' ")
     wcs_relaxed = WCS.from_header(faulty_header)[1]  # default is maximum relaxation
-    @test wcs_relaxed[:radesys] == "FK5"
+    @test wcs_relaxed.radesys == "FK5"
     wcs_strict = WCS.from_header(faulty_header; relax=WCS.HDR_NONE)[1]  # strict
-    @test wcs_strict[:radesys] == "ICRS"  # defaults to ICRS since EQUINOX not defined
+    @test wcs_strict.radesys == "ICRS"  # defaults to ICRS since EQUINOX not defined
 end
 
 
