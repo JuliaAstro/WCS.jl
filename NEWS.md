@@ -1,7 +1,12 @@
-v0.3.0 (2018-??-??)
+v0.4.0 (2018-09-16)
 ===================
 
 - Drop support for Julia 0.6
+- The syntax to access properties of a `WCSTransform` object has been changed
+  from `wcs[:ctype]` to the more familiar `wcs.ctype`.  Likewise, the new syntax
+  to set these properties is `wcs.ctype = foo`.  The old syntaxes are still
+  available but deprecated, they will be completely removed in a future version
+  of the package.
 
 v0.3.0 (2018-09-05)
 ===================
