@@ -285,20 +285,45 @@ mutable struct WCSTransform
     cname::Ptr{Cvoid}
     crder::Ptr{Cdouble}
     csyer::Ptr{Cdouble}
-    dateavg::NTuple{72, UInt8}
+    czphs::Ptr{Cdouble}
+    cperi::Ptr{Cdouble}
+    wcsname::NTuple{72, UInt8}
+    timesys::NTuple{72, UInt8}
+    trefpos::NTuple{72, UInt8}
+    trefdir::NTuple{72, UInt8}
+    plephem::NTuple{72, UInt8}
+    timeunit::NTuple{72, UInt8}
+    dateref::NTuple{72, UInt8}
+    mjdref::NTuple{2, Cdouble}
+    timeoffs::Cdouble
     dateobs::NTuple{72, UInt8}
-    equinox::Cdouble
-    mjdavg::Cdouble
+    datebeg::NTuple{72, UInt8}
+    dateavg::NTuple{72, UInt8}
+    dateend::NTuple{72, UInt8}
     mjdobs::Cdouble
-    obsgeo::NTuple{3, Cdouble}
+    mjdbeg::Cdouble
+    mjdavg::Cdouble
+    mjdend::Cdouble
+    jepoch::Cdouble
+    bepoch::Cdouble
+    tstart::Cdouble
+    tstop::Cdouble
+    xposure::Cdouble
+    telapse::Cdouble
+    timsyer::Cdouble
+    timrder::Cdouble
+    timedel::Cdouble
+    timepixr::Cdouble
+    obsgeo::NTuple{6, Cdouble}
+    obsorbit::NTuple{72, UInt8}
     radesys::NTuple{72, UInt8}
+    equinox::Cdouble
     specsys::NTuple{72, UInt8}
     ssysobs::NTuple{72, UInt8}
     velosys::Cdouble
     zsource::Cdouble
     ssyssrc::NTuple{72, UInt8}
     velangl::Cdouble
-    wcsname::NTuple{72, UInt8}
     ntab::Cint
     nwtb::Cint
     tab::Ptr{Cvoid}  # Ptr{tabprm}
@@ -310,12 +335,10 @@ mutable struct WCSTransform
     spec::Cint
     cubeface::Cint
     types::Ptr{Cint}
-    padding::Ptr{Cvoid}
     lin::linprm
     cel::celprm
     spc::spcprm
     err::Ptr{WCSErr}
-    m_padding::Ptr{Cvoid}
     m_flag::Cint
     m_naxis::Cint
     m_crpix::Ptr{Cdouble}
@@ -332,6 +355,8 @@ mutable struct WCSTransform
     m_cname::Ptr{Cvoid}
     m_crder::Ptr{Cdouble}
     m_csyer::Ptr{Cdouble}
+    m_czphs::Ptr{Cdouble}
+    m_cperi::Ptr{Cdouble}
     m_tab::Ptr{Cvoid}  # Ptr{tabprm}
     m_wtb::Ptr{Cvoid}  # Ptr{wtbarr}
 
@@ -427,7 +452,7 @@ function getproperty(wcs::WCSTransform, k::Symbol)
                  :wcsname)
         v = convert_string(String, getfield(wcs, k))
 
-    # double[3]
+    # double[6]
     elseif k === :obsgeo
         v = getfield(wcs, k)  # Tuple{Cdouble, Cdouble, Cdouble}
 
@@ -510,11 +535,11 @@ function setproperty!(wcs::WCSTransform, k::Symbol, v)
                  :wcsname)
         setfield!(wcs, k, convert_string(NTuple{72, UInt8}, v))
 
-    # double[3]
+    # double[6]
     elseif k === :obsgeo
         @check_type k v Vector{Float64}
-        @check_prop k length v (==) 3
-        setfield!(wcs, :obsgeo, (v[1], v[2], v[3]))
+        @check_prop k length v (==) 6
+        setfield!(wcs, :obsgeo, (v[1], v[2], v[3], v[4], v[5], v[6]))
 
     # char[4], but only uses first
     elseif k === :alt

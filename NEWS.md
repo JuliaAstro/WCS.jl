@@ -1,3 +1,10 @@
+v0.6.0 (2018-??-??)
+===================
+
+- WCSLIB has been upgraded to v6.2. Note that now the `obsgeo` field of
+  `WCSTransform` is a 6-element vector, instead of the previous 3-element
+  vector.
+
 v0.5.0 (2018-11-06)
 ===================
 

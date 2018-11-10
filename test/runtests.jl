@@ -8,7 +8,7 @@ wcs = WCSTransform(2;
                    ctype   = ["RA---AIR", "DEC--AIR"],
                    crpix   = [-234.75, 8.3393],
                    crval   = [0.0, -90.0],
-                   obsgeo  = [1.0, 2.0, 3.0],
+                   obsgeo  = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0],
                    pc      = [1.0 0.0; 0.0 1.0],
                    pv      = [(2, 1, 45.0)],
                    velangl = 3,
@@ -40,7 +40,7 @@ end
     @test wcs.alt == 'B'
     @test wcs.cdelt == [-0.066667, 0.066667]
     @test wcs.cd == [0.0 0.0; 0.0 0.0]
-    @test wcs.obsgeo == (1.0, 2.0, 3.0)
+    @test wcs.obsgeo == (1.0, 2.0, 3.0, 4.0, 5.0, 6.0)
     # Test that all public properties can be obtained
     for k in propertynames(wcs)
         @test getproperty(wcs, k) == getproperty(wcs, k)
