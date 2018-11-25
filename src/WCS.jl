@@ -46,6 +46,9 @@ const HDR_IMGHEAD  = 0x00100000
 const HDR_BIMGARR  = 0x00200000
 const HDR_PIXLIST  = 0x00400000
 
+# Constants defined in wcsmath.h
+const UNDEFINED    = 987654321.0e99
+
 # -----------------------------------------------------------------------------
 # Utilities
 
@@ -121,7 +124,8 @@ function get_error_message(i::Cint)
 end
 
 function assert_ok(i::Cint)
-    if i != 0
+    # Negative values aren't usually an error
+    if i > 0
         error(get_error_message(i))
     end
 end
@@ -399,6 +403,12 @@ function propertynames(::WCSTransform, private::Bool=false)
     end
 end
 
+function obsfix(ctrl::Integer, wcs::WCSTransform)
+    status = ccall((:obsfix, libwcs), Cint, (Cint, Ref{WCSTransform}),
+                   ctrl, wcs)
+    assert_ok(status)
+end
+
 # -----------------------------------------------------------------------------
 # getting attributes of a WCSTransform
 # These return newly-allocated memory (not views of the WCSTransform).
@@ -538,8 +548,16 @@ function setproperty!(wcs::WCSTransform, k::Symbol, v)
     # double[6]
     elseif k === :obsgeo
         @check_type k v Vector{Float64}
-        @check_prop k length v (==) 6
-        setfield!(wcs, :obsgeo, (v[1], v[2], v[3], v[4], v[5], v[6]))
+        if length(v) == 3
+            # For compatibility with previous versions of WCSLIB which required a 3-element
+            # vector.
+            setfield!(wcs, :obsgeo, (v[1], v[2], v[3], UNDEFINED, UNDEFINED, UNDEFINED))
+            obsfix(0, wcs)
+        else
+            @check_prop k length v (==) 6
+            setfield!(wcs, :obsgeo, (v[1], v[2], v[3], v[4], v[5], v[6]))
+            obsfix(2, wcs)
+        end
 
     # char[4], but only uses first
     elseif k === :alt
