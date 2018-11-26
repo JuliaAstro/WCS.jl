@@ -53,7 +53,7 @@ header = WCS.to_header(wcs)
 
 # check what underlying C library version is being used.
 julia> WCS.wcslib_version()
-v"5.20.0"
+v"6.2.0"
 ```
 
 License

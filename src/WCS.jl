@@ -403,6 +403,31 @@ function propertynames(::WCSTransform, private::Bool=false)
     end
 end
 
+"""
+    obsfix(ctrl::Integer, wcs::WCSTransform)
+
+Complete the `obsgeo` field `wcs` of observatory coordinates.  That is, if only the (x,y,z)
+Cartesian coordinate triplet or the (l,b,h) geodetic coordinate triplet are set, then it
+derives the other triplet from it. If both triplets are set, then it checks for consistency
+at the level of 1 metre.
+
+Arguments:
+
+* `ctrl`: flag that controls behaviour if one triplet is defined and the other is only
+  partially defined:
+    * 0: Reset only the undefined elements of an incomplete coordinate triplet.
+    * 1: Reset all elements of an incomplete triplet.
+    * 2: Don't make any changes, check for consistency only. Returns an error if either of
+      the two triplets is incomplete.
+* `wcs`: Coordinate transformation parameters. Its `obsgeo` field may be changed.
+
+Return values:
+
+* -1: No change required (not an error).
+*  0: Success.
+*  1: Null wcsprm pointer passed.
+*  5: Invalid parameter value.
+"""
 function obsfix(ctrl::Integer, wcs::WCSTransform)
     status = ccall((:obsfix, libwcs), Cint, (Cint, Ref{WCSTransform}),
                    ctrl, wcs)
