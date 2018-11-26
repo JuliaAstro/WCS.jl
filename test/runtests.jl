@@ -40,7 +40,8 @@ end
     @test wcs.alt == 'B'
     @test wcs.cdelt == [-0.066667, 0.066667]
     @test wcs.cd == [0.0 0.0; 0.0 0.0]
-    @test wcs.obsgeo == (1.0, 2.0, 3.0)
+    @test wcs.obsgeo == (1.0, 2.0, 3.0,
+                         63.43494882292201, -0.004025899381340196, -6.37813776403742e6)
     # Test that all public properties can be obtained
     for k in propertynames(wcs)
         @test getproperty(wcs, k) == getproperty(wcs, k)
@@ -79,6 +80,17 @@ end
 
 
 @testset "utilities" begin
+    @test_throws ErrorException wcs.obsgeo = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0]
+    for ctrl in 0:2; @test_throws ErrorException WCS.obsfix(ctrl, wcs); end
+    @test_throws ErrorException wcs.obsgeo = [1.0, 2.0, 3.0, 4.0, 5.0, WCS.UNDEFINED]
+    WCS.obsfix(1, wcs)
+    @test wcs.obsgeo == (1.0, 2.0, 3.0,
+                         63.43494882292201, -0.004025899381340196, -6.37813776403742e6)
+    @test_throws ErrorException wcs.obsgeo = [1.0, 2.0, 3.0, 4.0, 5.0, WCS.UNDEFINED]
+    for ctrl in (0, 2); @test_throws ErrorException WCS.obsfix(ctrl, wcs); end
+    # `obsfix(0, wcs)` errored but also reset the last element
+    @test wcs.obsgeo == (1.0, 2.0, 3.0, 4.0, 5.0, -6.37813776403742e6)
+
     @test WCS.wcslib_version() > v"5.0"  # just check that it works
 
     # Test propagating errors from wcslib.

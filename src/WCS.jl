@@ -46,6 +46,9 @@ const HDR_IMGHEAD  = 0x00100000
 const HDR_BIMGARR  = 0x00200000
 const HDR_PIXLIST  = 0x00400000
 
+# Constants defined in wcsmath.h
+const UNDEFINED    = 987654321.0e99
+
 # -----------------------------------------------------------------------------
 # Utilities
 
@@ -121,7 +124,8 @@ function get_error_message(i::Cint)
 end
 
 function assert_ok(i::Cint)
-    if i != 0
+    # Negative values aren't usually an error
+    if i > 0
         error(get_error_message(i))
     end
 end
@@ -285,20 +289,45 @@ mutable struct WCSTransform
     cname::Ptr{Cvoid}
     crder::Ptr{Cdouble}
     csyer::Ptr{Cdouble}
-    dateavg::NTuple{72, UInt8}
+    czphs::Ptr{Cdouble}
+    cperi::Ptr{Cdouble}
+    wcsname::NTuple{72, UInt8}
+    timesys::NTuple{72, UInt8}
+    trefpos::NTuple{72, UInt8}
+    trefdir::NTuple{72, UInt8}
+    plephem::NTuple{72, UInt8}
+    timeunit::NTuple{72, UInt8}
+    dateref::NTuple{72, UInt8}
+    mjdref::NTuple{2, Cdouble}
+    timeoffs::Cdouble
     dateobs::NTuple{72, UInt8}
-    equinox::Cdouble
-    mjdavg::Cdouble
+    datebeg::NTuple{72, UInt8}
+    dateavg::NTuple{72, UInt8}
+    dateend::NTuple{72, UInt8}
     mjdobs::Cdouble
-    obsgeo::NTuple{3, Cdouble}
+    mjdbeg::Cdouble
+    mjdavg::Cdouble
+    mjdend::Cdouble
+    jepoch::Cdouble
+    bepoch::Cdouble
+    tstart::Cdouble
+    tstop::Cdouble
+    xposure::Cdouble
+    telapse::Cdouble
+    timsyer::Cdouble
+    timrder::Cdouble
+    timedel::Cdouble
+    timepixr::Cdouble
+    obsgeo::NTuple{6, Cdouble}
+    obsorbit::NTuple{72, UInt8}
     radesys::NTuple{72, UInt8}
+    equinox::Cdouble
     specsys::NTuple{72, UInt8}
     ssysobs::NTuple{72, UInt8}
     velosys::Cdouble
     zsource::Cdouble
     ssyssrc::NTuple{72, UInt8}
     velangl::Cdouble
-    wcsname::NTuple{72, UInt8}
     ntab::Cint
     nwtb::Cint
     tab::Ptr{Cvoid}  # Ptr{tabprm}
@@ -310,12 +339,10 @@ mutable struct WCSTransform
     spec::Cint
     cubeface::Cint
     types::Ptr{Cint}
-    padding::Ptr{Cvoid}
     lin::linprm
     cel::celprm
     spc::spcprm
     err::Ptr{WCSErr}
-    m_padding::Ptr{Cvoid}
     m_flag::Cint
     m_naxis::Cint
     m_crpix::Ptr{Cdouble}
@@ -332,6 +359,8 @@ mutable struct WCSTransform
     m_cname::Ptr{Cvoid}
     m_crder::Ptr{Cdouble}
     m_csyer::Ptr{Cdouble}
+    m_czphs::Ptr{Cdouble}
+    m_cperi::Ptr{Cdouble}
     m_tab::Ptr{Cvoid}  # Ptr{tabprm}
     m_wtb::Ptr{Cvoid}  # Ptr{wtbarr}
 
@@ -372,6 +401,37 @@ function propertynames(::WCSTransform, private::Bool=false)
                 :dateavg, :dateobs, :radesys, :specsys, :ssysobs, :ssyssrc, :wcsname,
                 :obsgeo, :alt)
     end
+end
+
+"""
+    obsfix(ctrl::Integer, wcs::WCSTransform)
+
+Complete the `obsgeo` field `wcs` of observatory coordinates.  That is, if only the (x,y,z)
+Cartesian coordinate triplet or the (l,b,h) geodetic coordinate triplet are set, then it
+derives the other triplet from it. If both triplets are set, then it checks for consistency
+at the level of 1 metre.
+
+Arguments:
+
+* `ctrl`: flag that controls behaviour if one triplet is defined and the other is only
+  partially defined:
+    * 0: Reset only the undefined elements of an incomplete coordinate triplet.
+    * 1: Reset all elements of an incomplete triplet.
+    * 2: Don't make any changes, check for consistency only. Returns an error if either of
+      the two triplets is incomplete.
+* `wcs`: Coordinate transformation parameters. Its `obsgeo` field may be changed.
+
+Return values:
+
+* -1: No change required (not an error).
+*  0: Success.
+*  1: Null wcsprm pointer passed.
+*  5: Invalid parameter value.
+"""
+function obsfix(ctrl::Integer, wcs::WCSTransform)
+    status = ccall((:obsfix, libwcs), Cint, (Cint, Ref{WCSTransform}),
+                   ctrl, wcs)
+    assert_ok(status)
 end
 
 # -----------------------------------------------------------------------------
@@ -427,7 +487,7 @@ function getproperty(wcs::WCSTransform, k::Symbol)
                  :wcsname)
         v = convert_string(String, getfield(wcs, k))
 
-    # double[3]
+    # double[6]
     elseif k === :obsgeo
         v = getfield(wcs, k)  # Tuple{Cdouble, Cdouble, Cdouble}
 
@@ -510,11 +570,19 @@ function setproperty!(wcs::WCSTransform, k::Symbol, v)
                  :wcsname)
         setfield!(wcs, k, convert_string(NTuple{72, UInt8}, v))
 
-    # double[3]
+    # double[6]
     elseif k === :obsgeo
         @check_type k v Vector{Float64}
-        @check_prop k length v (==) 3
-        setfield!(wcs, :obsgeo, (v[1], v[2], v[3]))
+        if length(v) == 3
+            # For compatibility with previous versions of WCSLIB which required a 3-element
+            # vector.
+            setfield!(wcs, :obsgeo, (v[1], v[2], v[3], UNDEFINED, UNDEFINED, UNDEFINED))
+            obsfix(0, wcs)
+        else
+            @check_prop k length v (==) 6
+            setfield!(wcs, :obsgeo, (v[1], v[2], v[3], v[4], v[5], v[6]))
+            obsfix(2, wcs)
+        end
 
     # char[4], but only uses first
     elseif k === :alt
