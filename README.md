@@ -71,4 +71,3 @@ License
 The Julia code in this repository is distributed under the MIT
 license. Note that WCS.jl wraps the WCSLIB C library, which is
 released under the LGPL license.
-
