@@ -1,0 +1,6 @@
+[deps]
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+WCS = "15f3aee2-9e10-537f-b834-a6fb8bdb944d"
+
+[compat]
+Documenter = "≥ 0.23.0"
