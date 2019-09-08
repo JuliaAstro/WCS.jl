@@ -74,7 +74,9 @@ julia> pixcoords = world_to_pix(wcs, worldcoords)
 
 ## API/Reference
 
-
+```@autodocs
+Modules = [WCS]
+```
 
 ## Index
 

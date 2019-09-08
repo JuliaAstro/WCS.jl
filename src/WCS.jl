@@ -241,7 +241,7 @@ end
 
 # mirror of `wcsprm` struct in wcslib
 """
-WCSTransform(naxis; kvs...)
+    WCSTransform(naxis; kwds...)
 
 Construct a WCS transformation with the given number of axes `naxis`.
 Keyword arguments can be passed to set various attributes of the
@@ -259,6 +259,44 @@ julia> wcs = WCSTransform(2)
 
 julia> wcs.crpix = [1000., 1000.]
 ```
+
+# Properties
+Below is the entire list of public properties for a `WCSTransform`
+
+| Keyword | Type | Description |
+|--------:|:-----------------------------------------|:--------------------------------------------------------------------------------|
+| naxis | `Int` | Number of dimensions |
+| crval | `Vector{Float}[naxis]` | coordinate value at reference point |
+| crpix | `Vector{Float}[naxis]` | array location of the reference point in pixels |
+| cdelt | `Vector{Float}[naxis]` | coordinate increment at reference point |
+| crder | `Vector{Float}[naxis]` | random error in coordinate |
+| csyer | `Vector{Float}[naxis]` | systematic error in coordinate |
+| ctype | `Vector{String}[naxis]` | axis type (8 characters) |
+| crota | `Vector{Float}[naxis]` | rotation from stated coordinate type |
+| cunit | `Vector{String}[naxis]` | units of axes |
+| cunit | `Vector{String}[naxis]` | names of axes |
+| pc | `Matrix{Float}[naxis, naxis]` | linear transformation matrix |
+| cd | `Matrix{Float}[naxis, naxis]` | linear transformation matrix (with scale) |
+| equinox | `Float` | the equinox associated with dynamical equatorial or ecliptic coordinate systems |
+| latpole | `Float` | the native latitude of the celestial pole |
+| lonpole | `Float` | the native longitude of the celestial pole |
+| mjdavg | `Float` | Modified Julian Date corresponding to `DATE-AVG` |
+| mjdobs | `Float` | Modified Julian Date corresponding to `DATE-OBS` |
+| restfrq | `Float` | rest frequency (Hz) |
+| restwav | `Float` | rest wavelength (m) |
+| velangl | `Float` | velocity angle |
+| velosys | `Float` | relative radial velocity |
+| zsource | `Float` | the redshift of the source |
+| colnum | `Int` | column of FITS binary table associated with this WCS |
+| dateavg | `String` | representative mid-point of the date of observation |
+| dateobs | `String` | start of the date of observation |
+| radesys | `String` | the equatorial or ecliptic coordinate system type |
+| specsys | `String` | spectral reference frame (standard of rest) |
+| ssysobs | `String` | spectral reference frame |
+| ssyssrc | `String` | spectral reference frame for redshift |
+| wcsname | `String` | name of this transform |
+| obsgeo | `Vector{Float}[3]` or `Vector{Float}[6]` | location of the observer in a standard terrestrial reference frame |
+| alt | `String` | character code for alternate coordinate descriptions |
 """
 mutable struct WCSTransform
     flag::Cint
@@ -364,14 +402,14 @@ mutable struct WCSTransform
     m_tab::Ptr{Cvoid}  # Ptr{tabprm}
     m_wtb::Ptr{Cvoid}  # Ptr{wtbarr}
 
-    function WCSTransform(naxis::Integer; kvs...)
+    function WCSTransform(naxis::Integer; kwds...)
         w = new(-1)
         status = ccall((:wcsini, libwcs), Cint,
                        (Cint, Cint, Ref{WCSTransform}),
                        1, naxis, w)
         assert_ok(status)
         finalizer(free!, w)
-        for (k, v) in kvs
+        for (k, v) in kwds
             setproperty!(w, k, v)
         end
 
@@ -411,7 +449,7 @@ Cartesian coordinate triplet or the (l,b,h) geodetic coordinate triplet are set,
 derives the other triplet from it. If both triplets are set, then it checks for consistency
 at the level of 1 metre.
 
-Arguments:
+# Parameters
 
 * `ctrl`: flag that controls behaviour if one triplet is defined and the other is only
   partially defined:
@@ -421,7 +459,7 @@ Arguments:
       the two triplets is incomplete.
 * `wcs`: Coordinate transformation parameters. Its `obsgeo` field may be changed.
 
-Return values:
+# Returns
 
 * -1: No change required (not an error).
 *  0: Success.
@@ -618,7 +656,7 @@ end
 # transforms
 
 """
-pix_to_world(wcs, pixcoords)
+    pix_to_world(wcs, pixcoords)
 
 Convert the array of pixel coordinates `pixcoords` to world coordinates
 according to the WCSTransform `wcs`. `pixcoords` should be a 2-d array
@@ -632,7 +670,7 @@ pix_to_world(wcs::WCSTransform, pixcoords::VecOrMat{Float64}) =
 
 
 """
-pix_to_world!(wcs, pixcoords, worldcoords[; stat=, imcoords=, phi=, theta=])
+    pix_to_world!(wcs, pixcoords, worldcoords[; stat=, imcoords=, phi=, theta=])
 
 Convert the array of pixel coordinates `pixcoords` to world coordinates
 according to the WCSTransform `wcs`, storing the result in the
@@ -673,7 +711,7 @@ end
 
 
 """
-world_to_pix(wcs, worldcoords)
+    world_to_pix(wcs, worldcoords)
 
 Convert the array of world coordinates `worldcoords` to pixel coordinates
 according to the WCSTransform `wcs`. `worldcoords` is a 2-d array
@@ -730,7 +768,7 @@ end
 # WCSTransform <--> header
 
 """
-from_header(header[; relax=WCS.HDR_ALL, ctrl=0, ignore_rejected=false, table=false])
+    from_header(header[; relax=WCS.HDR_ALL, ctrl=0, ignore_rejected=false, table=false])
 
 Parse the FITS image header in the String `header`, returning a
 `Vector{WCSTransform}` giving all the transforms defined in the header.
@@ -797,7 +835,7 @@ function from_header(header::String; relax::Integer=HDR_ALL, ctrl::Integer=0,
 end
 
 """
-to_header(wcs[; relax=WCS.HDR_NONE])
+    to_header(wcs[; relax=WCS.HDR_NONE])
 
 Encode the WCSTransform `wcs` as a FITS header string. The `relax` keyword
 controls how non-standard extensions to the WCS standard are handled.
