@@ -3,9 +3,7 @@ using WCS
 
 makedocs(
     sitename = "WCS.jl",
-    format = Documenter.HTML(
-        # assets = ["assets/logo.gif"]
-    ),
+    format = Documenter.HTML(),
     modules = [WCS],
     strict = true,
 )
