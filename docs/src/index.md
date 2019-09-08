@@ -1,7 +1,15 @@
 # WCS.jl
 
-Astronomical [World Coordinate System](http://www.atnf.csiro.au/people/mcalabre/WCS/) library for Julia. This package wraps the WCSLIB C library.
+Astronomical [World Coordinate System](http://www.atnf.csiro.au/people/mcalabre/WCS/) library for Julia. This package wraps 
+the WCSLIB C library. This is a tool made for users who are already familiar with WCS transformations. If you are not, please 
+reference the following manuscripts
 
+1. [Representation of world coordinates in FITS](http://www.atnf.csiro.au/people/mcalabre/WCS/wcs.pdf)
+2. [Representations of celestial coordinates in FITS](http://www.atnf.csiro.au/people/mcalabre/WCS/ccs.pdf)
+3. [Representations of spectral coordinates in FITS](http://www.atnf.csiro.au/people/mcalabre/WCS/scs.pdf)
+4. [Representations of distortions in FITS world coordinate systems](http://www.atnf.csiro.au/people/mcalabre/WCS/dcs_20040422.pdf)
+
+## Table of Contents
 ```@contents
 ```
 
