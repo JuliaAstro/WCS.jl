@@ -1,14 +1,23 @@
 WCS.jl
 ======
 
-[![Build Status](https://img.shields.io/travis/JuliaAstro/WCS.jl.svg?style=flat-square)](https://travis-ci.org/JuliaAstro/WCS.jl)
-[![Coverage Status](http://img.shields.io/coveralls/JuliaAstro/WCS.jl.svg?style=flat-square)](https://coveralls.io/r/JuliaAstro/WCS.jl?branch=master)
+<!-- Storage for badge urls -->
+[docs-latest-img]: https://img.shields.io/badge/docs-latest-blue.svg
+[docs-latest-url]: https://juliaastro.github.io/WCS.jl/latest/
+
+[travis-img]: https://travis-ci.org/JuliaAstro/WCS.jl.svg?branch=master
+[travis-url]: https://travis-ci.org/JuliaAstro/WCS.jl
+
+[coveralls-img]: https://img.shields.io/coveralls/JuliaAstro/WCS.jl.svg
+[coveralls-url]: https://coveralls.io/r/JuliaAstro/WCS.jl?branch=master
+
+[![Build Status][travis-img]][travis-url]
+[![Doc Status][docs-latest-img]][docs-latest-url]
+[![Coverage Status][coveralls-img]][coveralls-url]
 
 Astronomical [World Coordinate
 System](http://www.atnf.csiro.au/people/mcalabre/WCS/) library for
-Julia.
-
-This package wraps the WCSLIB C library.
+Julia. This package wraps the WCSLIB C library.
 
 Example
 -------

@@ -68,14 +68,14 @@ function convert_string(::Type{NTuple{N,UInt8}}, s::String) where {N}
 end
 
 # load an String from a tuple of bytes, truncating at first NULL
-function convert_string(::Type{String}, v::NTuple{N, UInt8}) where {N}
+function convert_string(::Type{String}, v::NTuple{N,UInt8}) where {N}
     len = N
 
     # reduce length if we find a null
     i = 1
-    for i=1:N
+    for i = 1:N
         if v[i] == 0x00
-            len = i-1
+            len = i - 1
             break
         end
     end
@@ -90,9 +90,9 @@ function convert_string(::Type{String}, ptr::Ptr{UInt8}, maxlen::Int)
 
     # reduce length if we find a null
     i = 1
-    for i=1:maxlen
+    for i = 1:maxlen
         if unsafe_load(ptr, i) == 0x00
-            len = i-1
+            len = i - 1
             break
         end
     end
@@ -100,18 +100,18 @@ function convert_string(::Type{String}, ptr::Ptr{UInt8}, maxlen::Int)
 end
 
 macro check_type(k, v, t)
-    :(typeof($(esc(v))) <: $t || error($(esc(k))," must have type ",$t))
+    :(typeof($(esc(v))) <: $t || error($(esc(k)), " must have type ", $t))
 end
 
 macro check_prop(k, prop, v, op, n)
     en = esc(n)
     :(($op)($prop($(esc(v))), $en) ||
-      error($(esc(k))," must have ",$prop," ",$op," ",$en))
+      error($(esc(k)), " must have ", $prop, " ", $op, " ", $en))
 end
 
 macro same_size(a, b)
     :(size($(esc(a))) == size($(esc(b))) ||
-      error($(string(a))," must have the same dimensions as ",$(string(b))))
+      error($(string(a)), " must have the same dimensions as ", $(string(b))))
 end
 
 # -----------------------------------------------------------------------------
@@ -119,7 +119,7 @@ end
 
 function get_error_message(i::Cint)
     msgptrs = cglobal((:wcs_errmsg, libwcs), Ptr{UInt8})
-    msgptr = unsafe_load(msgptrs, i+1)
+    msgptr = unsafe_load(msgptrs, i + 1)
     unsafe_string(msgptr)
 end
 
@@ -140,10 +140,10 @@ end
 # WCSTransform
 
 # mirror of `struct pvcard`
-const PVCard = Tuple{Cint, Cint, Cdouble}  # i, m, value entries
+const PVCard = Tuple{Cint,Cint,Cdouble}  # i, m, value entries
 
 # mirror of `struct pscard`
-const PSCard = Tuple{Cint, Cint, NTuple{72, UInt8}}  # i, m, value entries
+const PSCard = Tuple{Cint,Cint,NTuple{72,UInt8}}  # i, m, value entries
 
 # mirror of `struct wcserr`
 struct WCSErr
@@ -151,7 +151,7 @@ struct WCSErr
     line_no::Cint
     _function::Ptr{UInt8}
     file::Ptr{UInt8}
-    msg::NTuple{160, UInt8}
+    msg::NTuple{160,UInt8}
 end
 
 struct linprm
@@ -181,13 +181,13 @@ end
 
 struct prjprm
     flag::Cint
-    code::NTuple{4, UInt8}
+    code::NTuple{4,UInt8}
     r0::Cdouble
-    pv::NTuple{30, Cdouble}
+    pv::NTuple{30,Cdouble}
     phi0::Cdouble
     theta0::Cdouble
     bounds::Cint
-    name::NTuple{40, UInt8}
+    name::NTuple{40,UInt8}
     category::Cint
     pvrange::Cint
     simplezen::Cint
@@ -199,7 +199,7 @@ struct prjprm
     y0::Cdouble
     err::Ptr{WCSErr}
     padding::Ptr{Cvoid}
-    w::NTuple{10, Cdouble}
+    w::NTuple{10,Cdouble}
     m::Cint
     n::Cint
     prjx2s::Ptr{Cvoid}
@@ -211,9 +211,9 @@ struct celprm
     offset::Cint
     phi0::Cdouble
     theta0::Cdouble
-    ref::NTuple{4, Cdouble}
+    ref::NTuple{4,Cdouble}
     prj::prjprm
-    euler::NTuple{5, Cdouble}
+    euler::NTuple{5,Cdouble}
     latpreq::Cint
     isolat::Cint
     err::Ptr{WCSErr}
@@ -222,13 +222,13 @@ end
 
 struct spcprm
     flag::Cint
-    _type::NTuple{8, UInt8}
-    code::NTuple{4, UInt8}
+    _type::NTuple{8,UInt8}
+    code::NTuple{4,UInt8}
     crval::Cdouble
     restfrq::Cdouble
     restwav::Cdouble
-    pv::NTuple{7, Cdouble}
-    w::NTuple{6, Cdouble}
+    pv::NTuple{7,Cdouble}
+    w::NTuple{6,Cdouble}
     isGrism::Cint
     padding1::Cint
     err::Ptr{WCSErr}
@@ -241,7 +241,7 @@ end
 
 # mirror of `wcsprm` struct in wcslib
 """
-WCSTransform(naxis; kvs...)
+    WCSTransform(naxis; kwds...)
 
 Construct a WCS transformation with the given number of axes `naxis`.
 Keyword arguments can be passed to set various attributes of the
@@ -259,6 +259,44 @@ julia> wcs = WCSTransform(2)
 
 julia> wcs.crpix = [1000., 1000.]
 ```
+
+# Properties
+Below is the entire list of public properties for a `WCSTransform`
+
+| Keyword | Type | Description |
+|--------:|:-----------------------------------------|:--------------------------------------------------------------------------------|
+| naxis | `Int` | Number of dimensions |
+| crval | `Vector{Float}[naxis]` | coordinate value at reference point |
+| crpix | `Vector{Float}[naxis]` | array location of the reference point in pixels |
+| cdelt | `Vector{Float}[naxis]` | coordinate increment at reference point |
+| crder | `Vector{Float}[naxis]` | random error in coordinate |
+| csyer | `Vector{Float}[naxis]` | systematic error in coordinate |
+| ctype | `Vector{String}[naxis]` | axis type (8 characters) |
+| crota | `Vector{Float}[naxis]` | rotation from stated coordinate type |
+| cunit | `Vector{String}[naxis]` | units of axes |
+| cunit | `Vector{String}[naxis]` | names of axes |
+| pc | `Matrix{Float}[naxis, naxis]` | linear transformation matrix |
+| cd | `Matrix{Float}[naxis, naxis]` | linear transformation matrix (with scale) |
+| equinox | `Float` | the equinox associated with dynamical equatorial or ecliptic coordinate systems |
+| latpole | `Float` | the native latitude of the celestial pole |
+| lonpole | `Float` | the native longitude of the celestial pole |
+| mjdavg | `Float` | Modified Julian Date corresponding to `DATE-AVG` |
+| mjdobs | `Float` | Modified Julian Date corresponding to `DATE-OBS` |
+| restfrq | `Float` | rest frequency (Hz) |
+| restwav | `Float` | rest wavelength (m) |
+| velangl | `Float` | velocity angle |
+| velosys | `Float` | relative radial velocity |
+| zsource | `Float` | the redshift of the source |
+| colnum | `Int` | column of FITS binary table associated with this WCS |
+| dateavg | `String` | representative mid-point of the date of observation |
+| dateobs | `String` | start of the date of observation |
+| radesys | `String` | the equatorial or ecliptic coordinate system type |
+| specsys | `String` | spectral reference frame (standard of rest) |
+| ssysobs | `String` | spectral reference frame |
+| ssyssrc | `String` | spectral reference frame for redshift |
+| wcsname | `String` | name of this coordinate representation |
+| obsgeo | `Vector{Float}[3]` or `Vector{Float}[6]` | location of the observer in a standard terrestrial reference frame |
+| alt | `String` | character code for alternate coordinate descriptions |
 """
 mutable struct WCSTransform
     flag::Cint
@@ -283,7 +321,7 @@ mutable struct WCSTransform
     crota::Ptr{Cdouble}
     altlin::Cint
     velref::Cint
-    alt::NTuple{4, UInt8}
+    alt::NTuple{4,UInt8}
     colnum::Cint
     colax::Ptr{Cint}
     cname::Ptr{Cvoid}
@@ -291,19 +329,19 @@ mutable struct WCSTransform
     csyer::Ptr{Cdouble}
     czphs::Ptr{Cdouble}
     cperi::Ptr{Cdouble}
-    wcsname::NTuple{72, UInt8}
-    timesys::NTuple{72, UInt8}
-    trefpos::NTuple{72, UInt8}
-    trefdir::NTuple{72, UInt8}
-    plephem::NTuple{72, UInt8}
-    timeunit::NTuple{72, UInt8}
-    dateref::NTuple{72, UInt8}
-    mjdref::NTuple{2, Cdouble}
+    wcsname::NTuple{72,UInt8}
+    timesys::NTuple{72,UInt8}
+    trefpos::NTuple{72,UInt8}
+    trefdir::NTuple{72,UInt8}
+    plephem::NTuple{72,UInt8}
+    timeunit::NTuple{72,UInt8}
+    dateref::NTuple{72,UInt8}
+    mjdref::NTuple{2,Cdouble}
     timeoffs::Cdouble
-    dateobs::NTuple{72, UInt8}
-    datebeg::NTuple{72, UInt8}
-    dateavg::NTuple{72, UInt8}
-    dateend::NTuple{72, UInt8}
+    dateobs::NTuple{72,UInt8}
+    datebeg::NTuple{72,UInt8}
+    dateavg::NTuple{72,UInt8}
+    dateend::NTuple{72,UInt8}
     mjdobs::Cdouble
     mjdbeg::Cdouble
     mjdavg::Cdouble
@@ -318,22 +356,22 @@ mutable struct WCSTransform
     timrder::Cdouble
     timedel::Cdouble
     timepixr::Cdouble
-    obsgeo::NTuple{6, Cdouble}
-    obsorbit::NTuple{72, UInt8}
-    radesys::NTuple{72, UInt8}
+    obsgeo::NTuple{6,Cdouble}
+    obsorbit::NTuple{72,UInt8}
+    radesys::NTuple{72,UInt8}
     equinox::Cdouble
-    specsys::NTuple{72, UInt8}
-    ssysobs::NTuple{72, UInt8}
+    specsys::NTuple{72,UInt8}
+    ssysobs::NTuple{72,UInt8}
     velosys::Cdouble
     zsource::Cdouble
-    ssyssrc::NTuple{72, UInt8}
+    ssyssrc::NTuple{72,UInt8}
     velangl::Cdouble
     ntab::Cint
     nwtb::Cint
     tab::Ptr{Cvoid}  # Ptr{tabprm}
     wtb::Ptr{Cvoid}  # Ptr{wtbarr}
-    lngtyp::NTuple{8, UInt8}
-    lattyp::NTuple{8, UInt8}
+    lngtyp::NTuple{8,UInt8}
+    lattyp::NTuple{8,UInt8}
     lng::Cint
     lat::Cint
     spec::Cint
@@ -364,14 +402,14 @@ mutable struct WCSTransform
     m_tab::Ptr{Cvoid}  # Ptr{tabprm}
     m_wtb::Ptr{Cvoid}  # Ptr{wtbarr}
 
-    function WCSTransform(naxis::Integer; kvs...)
+    function WCSTransform(naxis::Integer; kwds...)
         w = new(-1)
         status = ccall((:wcsini, libwcs), Cint,
                        (Cint, Cint, Ref{WCSTransform}),
                        1, naxis, w)
         assert_ok(status)
         finalizer(free!, w)
-        for (k, v) in kvs
+        for (k, v) in kwds
             setproperty!(w, k, v)
         end
 
@@ -391,7 +429,7 @@ function free!(w::WCSTransform)
     assert_ok(status)
 end
 
-function propertynames(::WCSTransform, private::Bool=false)
+function propertynames(::WCSTransform, private::Bool = false)
     if private
         return fieldnames(WCSTransform)
     else
@@ -411,7 +449,7 @@ Cartesian coordinate triplet or the (l,b,h) geodetic coordinate triplet are set,
 derives the other triplet from it. If both triplets are set, then it checks for consistency
 at the level of 1 metre.
 
-Arguments:
+# Parameters
 
 * `ctrl`: flag that controls behaviour if one triplet is defined and the other is only
   partially defined:
@@ -421,7 +459,7 @@ Arguments:
       the two triplets is incomplete.
 * `wcs`: Coordinate transformation parameters. Its `obsgeo` field may be changed.
 
-Return values:
+# Returns
 
 * -1: No change required (not an error).
 *  0: Success.
@@ -449,14 +487,14 @@ function getproperty(wcs::WCSTransform, k::Symbol)
     # double[naxis]
     elseif k in (:cdelt, :crder, :crota, :crpix, :crval, :csyer)
         v = Array{Float64}(undef, naxis)
-        unsafe_copyto!(pointer(v), getfield(wcs,k), naxis)
+        unsafe_copyto!(pointer(v), getfield(wcs, k), naxis)
 
     # char[72,naxis]
     elseif k in (:cname, :ctype, :cunit)
         p = convert(Ptr{UInt8}, getfield(wcs, k))
         v = Array{String}(undef, naxis)
-        for i=1:naxis
-            pi = p + 72*(i-1)  # Ptr{UInt8} to the i-th entry.
+        for i = 1:naxis
+            pi = p + 72 * (i - 1)  # Ptr{UInt8} to the i-th entry.
             v[i] = convert_string(String, pi, 72)
         end
 
@@ -471,11 +509,11 @@ function getproperty(wcs::WCSTransform, k::Symbol)
     # double[naxis,naxis]
     elseif k in (:cd, :pc)
         v = Array{Cdouble}(undef, naxis, naxis)
-        unsafe_copyto!(pointer(v), getfield(wcs,k), naxis*naxis)
+        unsafe_copyto!(pointer(v), getfield(wcs, k), naxis * naxis)
 
     # double
-    elseif k in (:equinox,:latpole,:lonpole,:mjdavg,:mjdobs,
-                 :restfrq,:restwav,:velangl,:velosys,:zsource)
+    elseif k in (:equinox, :latpole, :lonpole, :mjdavg, :mjdobs,
+                 :restfrq, :restwav, :velangl, :velosys, :zsource)
         v = getfield(wcs, k)
 
     # int
@@ -483,7 +521,7 @@ function getproperty(wcs::WCSTransform, k::Symbol)
         v = Int(getfield(wcs, k))
 
     # char[72]
-    elseif k in (:dateavg,:dateobs,:radesys,:specsys,:ssysobs,:ssyssrc,
+    elseif k in (:dateavg, :dateobs, :radesys, :specsys, :ssysobs, :ssyssrc,
                  :wcsname)
         v = convert_string(String, getfield(wcs, k))
 
@@ -515,7 +553,7 @@ function setproperty!(wcs::WCSTransform, k::Symbol, v)
     if k in (:cdelt, :crder, :crota, :crpix, :crval, :csyer)
         @check_type k v Vector{Float64}
         @check_prop k length v (==) naxis
-        unsafe_copyto!(getfield(wcs,k), pointer(v), naxis)
+        unsafe_copyto!(getfield(wcs, k), pointer(v), naxis)
 
     # char[72,naxis]
     elseif k in (:cname, :ctype, :cunit)
@@ -525,11 +563,11 @@ function setproperty!(wcs::WCSTransform, k::Symbol, v)
 
         p = convert(Ptr{UInt8}, getfield(wcs, k))
         for i in 1:naxis
-            pi = p + 72*(i-1)  # Ptr{UInt8} to i-th entry.
+            pi = p + 72 * (i - 1)  # Ptr{UInt8} to i-th entry.
             n = length(v[i])
             @assert n < 72
             unsafe_copyto!(pi, pointer(v[i]), n)
-            unsafe_store!(pi, 0x00, n+1)  # trailing null
+            unsafe_store!(pi, 0x00, n + 1)  # trailing null
         end
 
     # PVCard[]
@@ -553,22 +591,22 @@ function setproperty!(wcs::WCSTransform, k::Symbol, v)
     # double[naxis,naxis]
     elseif k in (:cd, :pc)
         @check_type k v Matrix{Float64}
-        @check_prop k size v (==) (naxis,naxis)
-        unsafe_store_vec!(getfield(wcs,k), vec(v'))
+        @check_prop k size v (==) (naxis, naxis)
+        unsafe_store_vec!(getfield(wcs, k), vec(v'))
 
     # double
-    elseif k in (:equinox,:latpole,:lonpole,:mjdavg,:mjdobs,
-                 :restfrq,:restwav,:velangl,:velosys,:zsource)
-        setfield!(wcs, k, convert(Float64,v))
+    elseif k in (:equinox, :latpole, :lonpole, :mjdavg, :mjdobs,
+                 :restfrq, :restwav, :velangl, :velosys, :zsource)
+        setfield!(wcs, k, convert(Float64, v))
 
     # int
     elseif k === :colnum
         setfield!(wcs, k, convert(Cint, v))
 
     # char[72]
-    elseif k in (:dateavg,:dateobs,:radesys,:specsys,:ssysobs,:ssyssrc,
+    elseif k in (:dateavg, :dateobs, :radesys, :specsys, :ssysobs, :ssyssrc,
                  :wcsname)
-        setfield!(wcs, k, convert_string(NTuple{72, UInt8}, v))
+        setfield!(wcs, k, convert_string(NTuple{72,UInt8}, v))
 
     # double[6]
     elseif k === :obsgeo
@@ -618,7 +656,7 @@ end
 # transforms
 
 """
-pix_to_world(wcs, pixcoords)
+    pix_to_world(wcs, pixcoords)
 
 Convert the array of pixel coordinates `pixcoords` to world coordinates
 according to the WCSTransform `wcs`. `pixcoords` should be a 2-d array
@@ -632,7 +670,7 @@ pix_to_world(wcs::WCSTransform, pixcoords::VecOrMat{Float64}) =
 
 
 """
-pix_to_world!(wcs, pixcoords, worldcoords[; stat=, imcoords=, phi=, theta=])
+    pix_to_world!(wcs, pixcoords, worldcoords[; stat=, imcoords=, phi=, theta=])
 
 Convert the array of pixel coordinates `pixcoords` to world coordinates
 according to the WCSTransform `wcs`, storing the result in the
@@ -648,10 +686,10 @@ Cint (typically Int32).
 """
 function pix_to_world!(wcs::WCSTransform, pixcoords::VecOrMat{Float64},
                        worldcoords::VecOrMat{Float64};
-                       stat=similar(pixcoords, Cint),
-                       imcoords=similar(pixcoords),
-                       phi=similar(pixcoords),
-                       theta=similar(pixcoords))
+                       stat = similar(pixcoords, Cint),
+                       imcoords = similar(pixcoords),
+                       phi = similar(pixcoords),
+                       theta = similar(pixcoords))
     nelem = size(pixcoords, 1)
     ncoords = size(pixcoords, 2)
     if nelem < wcs.naxis
@@ -673,7 +711,7 @@ end
 
 
 """
-world_to_pix(wcs, worldcoords)
+    world_to_pix(wcs, worldcoords)
 
 Convert the array of world coordinates `worldcoords` to pixel coordinates
 according to the WCSTransform `wcs`. `worldcoords` is a 2-d array
@@ -687,7 +725,7 @@ world_to_pix(wcs::WCSTransform, worldcoords::VecOrMat{Float64}) =
 
 
 """
-world_to_pix!(wcs, worldcoords, pixcoords[; stat=, phi=, theta=, imcoords=])
+    world_to_pix!(wcs, worldcoords, pixcoords[; stat=, phi=, theta=, imcoords=])
 
 Convert the array of pixel coordinates `worldcoords` to pixel coordinates
 according to the WCSTransform `wcs`, storing the result in the
@@ -703,10 +741,10 @@ Cint (typically Int32).
 """
 function world_to_pix!(wcs::WCSTransform, worldcoords::VecOrMat{Float64},
                        pixcoords::VecOrMat{Float64};
-                       stat=similar(pixcoords, Cint),
-                       phi=similar(pixcoords),
-                       theta=similar(pixcoords),
-                       imcoords=similar(pixcoords))
+                       stat = similar(pixcoords, Cint),
+                       phi = similar(pixcoords),
+                       theta = similar(pixcoords),
+                       imcoords = similar(pixcoords))
     nelem = size(worldcoords, 1)
     ncoords = size(worldcoords, 2)
     if nelem < wcs.naxis
@@ -730,7 +768,7 @@ end
 # WCSTransform <--> header
 
 """
-from_header(header[; relax=WCS.HDR_ALL, ctrl=0, ignore_rejected=false, table=false])
+    from_header(header[; relax=WCS.HDR_ALL, ctrl=0, ignore_rejected=false, table=false])
 
 Parse the FITS image header in the String `header`, returning a
 `Vector{WCSTransform}` giving all the transforms defined in the header.
@@ -740,10 +778,10 @@ ignore all non-standard keywords. Use, e.g.,
 `relax=(WCS.HDR_RADECSYS & WCS.HDR_CROTAia)` to only accept selected
 non-standard keywords.
 """
-function from_header(header::String; relax::Integer=HDR_ALL, ctrl::Integer=0,
-                     ignore_rejected::Bool=false, table::Bool=false)
+function from_header(header::String; relax::Integer = HDR_ALL, ctrl::Integer = 0,
+                     ignore_rejected::Bool = false, table::Bool = false)
     @assert ctrl >= 0  # < 0 modifies the header
-    nkeyrec::Integer=div(length(header), 80)
+    nkeyrec::Integer = div(length(header), 80)
     nreject = Ref{Cint}(0)
     nwcs = Ref{Cint}(0)
     wcsptr = Ref{Ptr{WCSTransform}}(0)
@@ -797,12 +835,12 @@ function from_header(header::String; relax::Integer=HDR_ALL, ctrl::Integer=0,
 end
 
 """
-to_header(wcs[; relax=WCS.HDR_NONE])
+    to_header(wcs[; relax=WCS.HDR_NONE])
 
 Encode the WCSTransform `wcs` as a FITS header string. The `relax` keyword
 controls how non-standard extensions to the WCS standard are handled.
 """
-function to_header(wcs::WCSTransform; relax::Integer=HDR_NONE)
+function to_header(wcs::WCSTransform; relax::Integer = HDR_NONE)
     nkeyrec = Ref{Cint}(0)
     hdrptr = Ref{Ptr{UInt8}}(C_NULL)
     status = ccall((:wcshdo, libwcs), Cint,

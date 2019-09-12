@@ -1,3 +1,7 @@
 # emacs
 *~
 /deps/build.log
+
+docs/build/
+docs/site/
+**/Manifest.toml
