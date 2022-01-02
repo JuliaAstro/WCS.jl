@@ -9,7 +9,7 @@ export WCSTransform,
 import Base: convert, copy, deepcopy, getproperty, show, setproperty!, propertynames
 
 using Base.Threads
-const wcs_lock = SpinLock()
+const wcs_lock = ReentrantLock()
 
 include(joinpath(@__DIR__, "..", "deps", "deps.jl"))
 
@@ -806,6 +806,7 @@ function from_header(header::String; relax::Integer = HDR_ALL, ctrl::Integer = 0
         end
         return status
     end
+    @show status
     assert_ok(status)
     p = wcsptr[]
     result = WCSTransform[unsafe_load(p, i) for i = 1:nwcs[]]
@@ -824,6 +825,7 @@ function from_header(header::String; relax::Integer = HDR_ALL, ctrl::Integer = 0
         for w in result
             finalizer(free!, w)
             status = ccall((:wcsset, libwcs), Cint, (Ref{WCSTransform},), w)
+            @show status
             assert_ok(status)
         end
     end
@@ -863,3 +865,13 @@ function Base.setindex!(wcs::WCSTransform, v, k::Symbol)
 end
 
 end  # module
+
+
+function __init__()
+
+    # Redirect error message from stderr to internal string buffer
+    ccall((:wcsprintf_set, libwcs), Cvoid, (Ptr{Nothing},), C_NULL)
+
+    # Enable verbose error logging system
+    ccall((:wcserr_enable, libwcs), Cvoid, (Cint,), 1)
+end
