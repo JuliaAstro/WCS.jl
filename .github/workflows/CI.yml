@@ -60,8 +60,8 @@ jobs:
         with:
           version: '1'
       - uses: julia-actions/julia-buildpkg@v1
-      - run: julia -e 'using Pkg; Pkg.add("Aqua")'
-      - run: julia --project=@. -e 'using Aqua, WCS; Aqua.test_all(WCS, ambiguities=false)'
+      - run: julia --color=yes -e 'using Pkg; Pkg.add("Aqua")'
+      - run: julia --color=yes --project=@. -e 'using Aqua, WCS; Aqua.test_all(WCS, ambiguities=false)'
   docs:
     name: Documentation
     runs-on: ubuntu-latest
