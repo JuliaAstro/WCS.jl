@@ -11,7 +11,7 @@ import Base: convert, copy, deepcopy, getproperty, show, setproperty!, propertyn
 using Base.Threads
 const wcs_lock = ReentrantLock()
 
-include(joinpath(@__DIR__, "..", "deps", "deps.jl"))
+include(joinpath(@__DIR__, "..", "deps", "build.jl"))
 
 # -----------------------------------------------------------------------------
 # constants defined in WCSLIB's wcshdr.h
