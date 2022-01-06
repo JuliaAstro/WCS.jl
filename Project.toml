@@ -1,10 +1,10 @@
 name = "WCS"
 uuid = "15f3aee2-9e10-537f-b834-a6fb8bdb944d"
-version = "0.5.1"
+version = "0.5.2"
 
 [deps]
 WCS_jll = "550c8279-ae0e-5d1b-948f-937f2608a23e"
 
 [compat]
-WCS_jll = "6.4"
+WCS_jll = "7"
 julia = "1.3"
