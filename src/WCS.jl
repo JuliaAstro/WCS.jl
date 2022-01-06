@@ -863,13 +863,3 @@ function Base.setindex!(wcs::WCSTransform, v, k::Symbol)
 end
 
 end  # module
-
-
-function __init__()
-
-    # Redirect error message from stderr to internal string buffer
-    ccall((:wcsprintf_set, libwcs), Cvoid, (Ptr{Nothing},), C_NULL)
-
-    # Enable verbose error logging system
-    ccall((:wcserr_enable, libwcs), Cvoid, (Cint,), 1)
-end
