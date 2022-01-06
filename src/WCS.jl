@@ -2,6 +2,8 @@ __precompile__()
 
 module WCS
 
+using WCS_jll
+
 export WCSTransform,
        pix_to_world, pix_to_world!,
        world_to_pix, world_to_pix!
@@ -10,8 +12,6 @@ import Base: convert, copy, deepcopy, getproperty, show, setproperty!, propertyn
 
 using Base.Threads
 const wcs_lock = ReentrantLock()
-
-include(joinpath(@__DIR__, "..", "deps", "build.jl"))
 
 # -----------------------------------------------------------------------------
 # constants defined in WCSLIB's wcshdr.h
