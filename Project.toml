@@ -1,6 +1,6 @@
 name = "WCS"
 uuid = "15f3aee2-9e10-537f-b834-a6fb8bdb944d"
-version = "0.5.0"
+version = "0.5.1"
 
 [deps]
 WCS_jll = "550c8279-ae0e-5d1b-948f-937f2608a23e"
