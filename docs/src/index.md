@@ -1,7 +1,13 @@
 # WCS.jl
 
-Astronomical [World Coordinate System](http://www.atnf.csiro.au/people/mcalabre/WCS/) library for Julia. This package wraps 
-the WCSLIB C library. This is a tool made for users who are already familiar with WCS transformations. If you are not, please 
+[![Code](https://img.shields.io/badge/Code-GitHub-black.svg)](https://github.com/JuliaAstro/WCS.jl)
+[![Build Status](https://github.com/JuliaAstro/WCS.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/JuliaAstro/WCS.jl/actions/workflows/CI.yml?query=branch%3Amain)
+[![PkgEval](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/W/WCS.svg)](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/report.html)
+[![Coverage](https://codecov.io/gh/JuliaAstro/WCS.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/JuliaAstro/WCS.jl)
+[![License](https://img.shields.io/github/license/JuliaAstro/WCS.jl?color=yellow)](https://github.com/JuliaAstro/WCS.jl/blob/master/LICENSE)
+
+Astronomical [World Coordinate System](http://www.atnf.csiro.au/people/mcalabre/WCS/) library for Julia. This package wraps
+the WCSLIB C library. This is a tool made for users who are already familiar with WCS transformations. If you are not, please
 reference the following manuscripts
 
 1. [Representation of world coordinates in FITS](http://www.atnf.csiro.au/people/mcalabre/WCS/wcs.pdf)
@@ -56,7 +62,7 @@ julia> wcs = wcs_array[1]
 
 ```
 
-Now we can do conversions between pixel and world coordinates. 
+Now we can do conversions between pixel and world coordinates.
 
 !!! note
     that WCS transforms use pixel `(0, 0)` as the top-left corner (not 1-indexed!!!)
@@ -65,16 +71,16 @@ Now we can do conversions between pixel and world coordinates.
 # convert pixel -> world coordinates
 julia> pixcoords = [0.0  24.0  45.0;  # x coordinates
                     0.0  38.0  98.0]  # y coordinates
-2×3 Array{Float64,2}:
+2×3 Matrix{Float64}:
  0.0  24.0  45.0
  0.0  38.0  98.0
 
 julia> worldcoords = pix_to_world(wcs, pixcoords)
-2×3 Array{Float64,2}:
+2×3 Matrix{Float64}:
  267.965   276.539   287.771
  -73.7366  -71.9741  -69.6781
 julia> pixcoords = world_to_pix(wcs, worldcoords)
-2×3 Array{Float64,2}:
+2×3 Matrix{Float64}:
   1.16529e-12  24.0  45.0
  -7.10543e-14  38.0  98.0
 
