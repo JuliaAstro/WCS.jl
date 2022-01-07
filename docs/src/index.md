@@ -1,9 +1,9 @@
 # WCS.jl
 
 [![Code](https://img.shields.io/badge/Code-GitHub-black.svg)](https://github.com/JuliaAstro/WCS.jl)
-[![Build Status](https://github.com/JuliaAstro/WCS.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/JuliaAstro/WCS.jl/actions/workflows/CI.yml?query=branch%3Amain)
+[![Build Status](https://github.com/JuliaAstro/WCS.jl/actions/workflows/CI.yml/badge.svg?branch=master)](https://github.com/JuliaAstro/WCS.jl/actions/workflows/CI.yml?query=branch%3Amaster)
 [![PkgEval](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/W/WCS.svg)](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/report.html)
-[![Coverage](https://codecov.io/gh/JuliaAstro/WCS.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/JuliaAstro/WCS.jl)
+[![Coverage](https://codecov.io/gh/JuliaAstro/WCS.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/JuliaAstro/WCS.jl)
 [![License](https://img.shields.io/github/license/JuliaAstro/WCS.jl?color=yellow)](https://github.com/JuliaAstro/WCS.jl/blob/master/LICENSE)
 
 Astronomical [World Coordinate System](http://www.atnf.csiro.au/people/mcalabre/WCS/) library for Julia. This package wraps
