@@ -68,7 +68,7 @@ end
     # between minor WCSLIB versions. For example,
     # `0.0E+00` vs `0.000E+00`.)
     header_out = WCS.to_header(w)
-    @test length(header_out) == 17 * 80
+    @test length(header_out) == 18 * 80
 
     # test relax keyword
     faulty_header = replace(header, "RADESYS = 'ICRS'" => "RADECSYS= 'FK5' ")
