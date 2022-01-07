@@ -366,6 +366,7 @@ mutable struct WCSTransform
     zsource::Cdouble
     ssyssrc::NTuple{72,UInt8}
     velangl::Cdouble
+    aux::Ptr{Cvoid}  # Ptr{auxprm}
     ntab::Cint
     nwtb::Cint
     tab::Ptr{Cvoid}  # Ptr{tabprm}
@@ -399,6 +400,7 @@ mutable struct WCSTransform
     m_csyer::Ptr{Cdouble}
     m_czphs::Ptr{Cdouble}
     m_cperi::Ptr{Cdouble}
+    m_aux::Ptr{Cvoid}  # Ptr{auxprm}
     m_tab::Ptr{Cvoid}  # Ptr{tabprm}
     m_wtb::Ptr{Cvoid}  # Ptr{wtbarr}
 
