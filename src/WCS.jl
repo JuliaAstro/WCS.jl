@@ -649,6 +649,7 @@ end
 # only allow deepcopy.
 copy(w::WCSTransform) = deepcopy(w)
 
+# Show a short summary
 function show(io::IO, wcs::WCSTransform)
     expr = join(["$k=$(getproperty(wcs, Symbol(k)))"
                  for k in ["naxis","cdelt","crval","crpix"]], ",")
