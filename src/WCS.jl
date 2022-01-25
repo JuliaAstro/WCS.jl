@@ -239,6 +239,8 @@ struct spcprm
     spxP2X::Ptr{Cvoid}
 end
 
+abstract type AbstractWCSTransform end
+
 # mirror of `wcsprm` struct in wcslib
 """
     WCSTransform(naxis; kwds...)
@@ -298,7 +300,7 @@ Below is the entire list of public properties for a `WCSTransform`
 | obsgeo | `Vector{Float}[3]` or `Vector{Float}[6]` | location of the observer in a standard terrestrial reference frame |
 | alt | `String` | character code for alternate coordinate descriptions |
 """
-mutable struct WCSTransform
+mutable struct WCSTransform <: AbstractWCSTransform
     flag::Cint
     naxis::Cint
     crpix::Ptr{Cdouble}
