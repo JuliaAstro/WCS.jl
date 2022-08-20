@@ -660,6 +660,11 @@ function show(io::IO, wcs::WCSTransform)
 end
 
 
+function ConstructionBase.getproperties(obj::WCSTransform)
+    fnames = propertynames(obj)
+    NamedTuple{fnames}(getproperty.(Ref(obj), fnames))
+end
+
 function ConstructionBase.setproperties(obj::WCSTransform, patch::NamedTuple)
     res = deepcopy(obj)
     for (k, v) in pairs(patch)
