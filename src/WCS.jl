@@ -9,6 +9,7 @@ export WCSTransform,
        world_to_pix, world_to_pix!
 
 import Base: convert, copy, deepcopy, getproperty, show, setproperty!, propertynames
+import ConstructionBase
 
 using Base.Threads
 const wcs_lock = ReentrantLock()
@@ -656,6 +657,15 @@ function show(io::IO, wcs::WCSTransform)
     expr = join(["$k=$(getproperty(wcs, Symbol(k)))"
                  for k in ["naxis","cdelt","crval","crpix"]], ",")
     print(io, "WCSTransform($expr)")
+end
+
+
+function ConstructionBase.setproperties(obj::WCSTransform, patch::NamedTuple)
+    res = deepcopy(obj)
+    for (k, v) in pairs(patch)
+        setproperty!(res, k, v)
+    end
+    return res
 end
 
 # -----------------------------------------------------------------------------
