@@ -2,7 +2,7 @@ using WCS
 using Documenter
 
 DocMeta.setdocmeta!(WCS, :DocTestSetup, :(using WCS); recursive=true)
-
+include("pages.jl")
 makedocs(;
     modules=[WCS],
     authors="JuliaAstro contributors",
@@ -13,9 +13,7 @@ makedocs(;
         canonical="https://JuliaAstro.github.io/WCS.jl",
         assets=String[],
     ),
-    pages=[
-        "Home" => "index.md",
-    ],
+    pages=pages
 )
 
 deploydocs(;
