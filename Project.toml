@@ -1,6 +1,6 @@
 name = "WCS"
 uuid = "15f3aee2-9e10-537f-b834-a6fb8bdb944d"
-version = "0.6.1"
+version = "0.6.2"
 
 [deps]
 ConstructionBase = "187b0558-2788-49d3-abe0-74a17ed4e7c9"
