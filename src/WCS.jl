@@ -705,12 +705,16 @@ to store intermediate results. Their sizes and types must all match
 `pixcoords`, except for `stat` which should be the same size but of type
 Cint (typically Int32).
 """
-function pix_to_world!(wcs::WCSTransform, pixcoords::VecOrMat{Float64},
-                       worldcoords::VecOrMat{Float64};
-                       stat = similar(pixcoords, Cint),
+pix_to_world!(wcs::WCSTransform, pixcoords, worldcoords; kwargs...) =
+    pix_to_world_full(wcs, pixcoords, worldcoords; kwargs...).worldcoords
+
+
+function pix_to_world_full(wcs::WCSTransform, pixcoords::VecOrMat{Float64},
+                       worldcoords::VecOrMat{Float64}=similar(pixcoords),
+                       stat = similar(pixcoords, Cint, size(pixcoords, 2)),
                        imcoords = similar(pixcoords),
-                       phi = similar(pixcoords),
-                       theta = similar(pixcoords))
+                       phi = similar(pixcoords, size(pixcoords, 2)),
+                       theta = similar(pixcoords, size(pixcoords, 2)))
     nelem = size(pixcoords, 1)
     ncoords = size(pixcoords, 2)
     if nelem < wcs.naxis
@@ -718,15 +722,13 @@ function pix_to_world!(wcs::WCSTransform, pixcoords::VecOrMat{Float64},
     end
     @same_size worldcoords pixcoords
     @same_size imcoords pixcoords
-    @same_size phi pixcoords
-    @same_size theta pixcoords
-    @same_size stat pixcoords
     ccall((:wcsp2s, libwcs), Cint,
           (Ref{WCSTransform}, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble},
            Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}),
           wcs, ncoords, nelem, pixcoords, imcoords, phi, theta, worldcoords,
           stat)
-    return worldcoords
+    return (; pixcoords=pixcoords, worldcoords=worldcoords,
+              stat=stat, imcoords=imcoords, phi=phi, theta=theta)
 end
 
 
@@ -760,11 +762,15 @@ to store intermediate results. Their sizes and types must all match
 `worldcoords`, except for `stat` which should be the same size but of type
 Cint (typically Int32).
 """
-function world_to_pix!(wcs::WCSTransform, worldcoords::VecOrMat{Float64},
-                       pixcoords::VecOrMat{Float64};
-                       stat = similar(pixcoords, Cint),
-                       phi = similar(pixcoords),
-                       theta = similar(pixcoords),
+world_to_pix!(wcs::WCSTransform, worldcoords, pixcoords; kwargs...) =
+    world_to_pix_full(wcs, worldcoords, pixcoords; kwargs...).pixcoords
+
+
+function world_to_pix_full(wcs::WCSTransform, worldcoords::VecOrMat{Float64},
+                       pixcoords::VecOrMat{Float64}=similar(worldcoords);
+                       stat = similar(pixcoords, Cint, size(worldcoords, 2)),
+                       phi = similar(pixcoords, size(worldcoords, 2)),
+                       theta = similar(pixcoords, size(worldcoords, 2)),
                        imcoords = similar(pixcoords))
     nelem = size(worldcoords, 1)
     ncoords = size(worldcoords, 2)
@@ -773,15 +779,13 @@ function world_to_pix!(wcs::WCSTransform, worldcoords::VecOrMat{Float64},
     end
     @same_size pixcoords worldcoords
     @same_size imcoords worldcoords
-    @same_size phi worldcoords
-    @same_size theta worldcoords
-    @same_size stat worldcoords
     ccall((:wcss2p, libwcs), Cint,
           (Ref{WCSTransform}, Cint, Cint, Ptr{Cdouble}, Ptr{Cdouble},
            Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cdouble}, Ptr{Cint}),
           wcs, ncoords, nelem, worldcoords, phi, theta, imcoords, pixcoords,
           stat)
-    return pixcoords
+    return (; pixcoords=pixcoords, worldcoords=worldcoords,
+              stat=stat, imcoords=imcoords, phi=phi, theta=theta)
 end
 
 

@@ -33,6 +33,21 @@ wcs = WCSTransform(2;
     @test maximum(abs.(worldcoords .- expected_world[:, 1])) < 5e-9
     pixcoords_out = world_to_pix(wcs, worldcoords)
     @test maximum(abs.(pixcoords_out .- pixcoords[:, 1])) < 1e-9
+
+    p2w = WCS.pix_to_world_full(wcs, pixcoords[:, 1])
+    @test p2w.pixcoords == pixcoords[:, 1]
+    @test p2w.worldcoords ≈ expected_world[:, 1]
+    @test p2w.stat == [0]
+    @test p2w.imcoords ≈ [-15.65007825, -0.5559561131]
+    @test p2w.phi ≈ [-87.96547027027647]
+    @test p2w.theta ≈ [73.73660748999083]
+    w2p = WCS.world_to_pix_full(wcs, worldcoords)
+    @test w2p.pixcoords ≈ [0, 0]  atol=1e-10
+    @test w2p.worldcoords ≈ expected_world[:, 1]
+    @test w2p.stat == [0]
+    @test w2p.imcoords ≈ [-15.65007825, -0.5559561131]
+    @test w2p.phi ≈ [-87.96547027027647]
+    @test w2p.theta ≈ [73.73660748999083]
 end
 
 @testset "properties" begin
