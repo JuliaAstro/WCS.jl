@@ -271,40 +271,40 @@ WCSTransform(naxis=2, cdelt=[1.0, 1.0], crval=[0.0, 0.0], crpix=[1000.0, 1000.0]
 # Properties
 Below is the entire list of public properties for a `WCSTransform`
 
-| Keyword | Type | Description |
-|--------:|:-----------------------------------------|:--------------------------------------------------------------------------------|
-| naxis | `Int` | Number of dimensions |
-| crval | `Vector{Float}[naxis]` | coordinate value at reference point |
-| crpix | `Vector{Float}[naxis]` | array location of the reference point in pixels |
-| cdelt | `Vector{Float}[naxis]` | coordinate increment at reference point |
-| crder | `Vector{Float}[naxis]` | random error in coordinate |
-| csyer | `Vector{Float}[naxis]` | systematic error in coordinate |
-| ctype | `Vector{String}[naxis]` | axis type (8 characters) |
-| crota | `Vector{Float}[naxis]` | rotation from stated coordinate type |
-| cunit | `Vector{String}[naxis]` | units of axes |
-| cunit | `Vector{String}[naxis]` | names of axes |
-| pc | `Matrix{Float}[naxis, naxis]` | linear transformation matrix |
-| cd | `Matrix{Float}[naxis, naxis]` | linear transformation matrix (with scale) |
-| equinox | `Float` | the equinox associated with dynamical equatorial or ecliptic coordinate systems |
-| latpole | `Float` | the native latitude of the celestial pole |
-| lonpole | `Float` | the native longitude of the celestial pole |
-| mjdavg | `Float` | Modified Julian Date corresponding to `DATE-AVG` |
-| mjdobs | `Float` | Modified Julian Date corresponding to `DATE-OBS` |
-| restfrq | `Float` | rest frequency (Hz) |
-| restwav | `Float` | rest wavelength (m) |
-| velangl | `Float` | velocity angle |
-| velosys | `Float` | relative radial velocity |
-| zsource | `Float` | the redshift of the source |
-| colnum | `Int` | column of FITS binary table associated with this WCS |
-| dateavg | `String` | representative mid-point of the date of observation |
-| dateobs | `String` | start of the date of observation |
-| radesys | `String` | the equatorial or ecliptic coordinate system type |
-| specsys | `String` | spectral reference frame (standard of rest) |
-| ssysobs | `String` | spectral reference frame |
-| ssyssrc | `String` | spectral reference frame for redshift |
-| wcsname | `String` | name of this coordinate representation |
-| obsgeo | `Vector{Float}[3]` or `Vector{Float}[6]` | location of the observer in a standard terrestrial reference frame |
-| alt | `String` | character code for alternate coordinate descriptions |
+| Keyword | Type                                  | Description |
+|--------:|:--------------------------------------|:-----------------------------------------------------------------|
+| naxis   | `Int32`                               | Number of dimensions |
+| crval   | `Vector{Float64}` (length\ua0`naxis`) | coordinate value at reference point |
+| crpix   | `Vector{Float64}` (length\ua0`naxis`) | array location of the reference point in pixels |
+| cdelt   | `Vector{Float64}` (length\ua0`naxis`) | coordinate increment at reference point |
+| crder   | `Vector{Float64}` (length\ua0`naxis`) | random error in coordinate |
+| csyer   | `Vector{Float64}` (length\ua0`naxis`) | systematic error in coordinate |
+| ctype   | `Vector{String}` (length\ua0`naxis`)  | axis type (8 characters) |
+| crota   | `Vector{Float64}` (length\ua0`naxis`) | rotation from stated coordinate type |
+| cunit   | `Vector{String}` (length\ua0`naxis`)  | units of axes |
+| cunit   | `Vector{String}` (length\ua0`naxis`)  | names of axes |
+| pc      | `Matrix{Float64}` (size\ua0`naxis`\ua0×\ua0`naxis`) | linear transformation matrix |
+| cd      | `Matrix{Float64}` (size\ua0`naxis`\ua0×\ua0`naxis`) | linear transformation matrix (with scale) |
+| equinox | `Float64` | the equinox associated with dynamical equatorial or ecliptic coordinate systems |
+| latpole | `Float64` | the native latitude of the celestial pole |
+| lonpole | `Float64` | the native longitude of the celestial pole |
+| mjdavg  | `Float64` | Modified Julian Date corresponding to `DATE-AVG` |
+| mjdobs  | `Float64` | Modified Julian Date corresponding to `DATE-OBS` |
+| restfrq | `Float64` | rest frequency (Hz) |
+| restwav | `Float64` | rest wavelength (m) |
+| velangl | `Float64` | velocity angle |
+| velosys | `Float64` | relative radial velocity |
+| zsource | `Float64` | the redshift of the source |
+| colnum  | `Int32`   | column of FITS binary table associated with this WCS |
+| dateavg | `String`  | representative mid-point of the date of observation |
+| dateobs | `String`  | start of the date of observation |
+| radesys | `String`  | the equatorial or ecliptic coordinate system type |
+| specsys | `String`  | spectral reference frame (standard of rest) |
+| ssysobs | `String`  | spectral reference frame |
+| ssyssrc | `String`  | spectral reference frame for redshift |
+| wcsname | `String`  | name of this coordinate representation |
+| obsgeo  | `Vector{Float64}` (length 3 or 6) | location of the observer in a standard terrestrial reference frame |
+| alt     | `String`  | character code for alternate coordinate descriptions |
 """
 mutable struct WCSTransform <: AbstractWCSTransform
     flag::Cint
