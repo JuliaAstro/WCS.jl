@@ -251,16 +251,21 @@ Keyword arguments can be passed to set various attributes of the
 transform. Specifying keyword arguments is equivalent to setting them
 after construction:
 
-```
+```jldoctest
 julia> wcs = WCSTransform(2; crpix=[1000., 1000.])
+WCSTransform(naxis=2, cdelt=[1.0, 1.0], crval=[0.0, 0.0], crpix=[1000.0, 1000.0])
 ```
 
 is equilvalent to:
 
-```
+```jldoctest
 julia> wcs = WCSTransform(2)
+WCSTransform(naxis=2, cdelt=[1.0, 1.0], crval=[0.0, 0.0], crpix=[0.0, 0.0])
 
-julia> wcs.crpix = [1000., 1000.]
+julia> wcs.crpix = [1000., 1000.];
+
+julia> wcs
+WCSTransform(naxis=2, cdelt=[1.0, 1.0], crval=[0.0, 0.0], crpix=[1000.0, 1000.0])
 ```
 
 # Properties
