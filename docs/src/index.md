@@ -24,7 +24,7 @@ reference the following manuscripts
 From the REPL, press `]` to enter Pkg mode
 
 ```
-(v 1.2) pkg> add WCS
+pkg> add WCS
 ```
 
 ## Usage
@@ -54,21 +54,18 @@ WCSTransform(naxis=2,cdelt=[-0.066667, 0.066667],crval=[0.0, -90.0],crpix=[-234.
 ```
 
 We can also create one from a FITS header if it contains the appropriate keywords
-```julia
-# Or from a FITS header with appropriate keywords
+```julia-repl
 julia> wcs_array = WCS.from_header(header)
 
 julia> wcs = wcs_array[1]
-
 ```
 
 Now we can do conversions between pixel and world coordinates.
 
 !!! note
-    that WCS transforms use pixel `(0, 0)` as the top-left corner (not 1-indexed!!!)
+    WCS transforms use pixel `(0, 0)` as the top-left corner (not 1-indexed!!)
 
 ```jldoctest wcs
-# convert pixel -> world coordinates
 julia> pixcoords = [0.0  24.0  45.0;  # x coordinates
                     0.0  38.0  98.0]  # y coordinates
 2×3 Matrix{Float64}:
@@ -79,11 +76,11 @@ julia> worldcoords = pix_to_world(wcs, pixcoords)
 2×3 Matrix{Float64}:
  267.965   276.539   287.771
  -73.7366  -71.9741  -69.6781
+
 julia> pixcoords = world_to_pix(wcs, worldcoords)
 2×3 Matrix{Float64}:
   1.16529e-12  24.0  45.0
  -7.10543e-14  38.0  98.0
-
 ```
 
 ## API/Reference
