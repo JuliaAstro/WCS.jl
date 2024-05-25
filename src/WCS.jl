@@ -54,7 +54,7 @@ const UNDEFINED    = 987654321.0e99
 # Utilities
 
 function unsafe_store_vec!(p::Ptr{T}, v::AbstractVector{T}) where {T}
-    for i = 1:length(v)
+    for i = eachindex(v)
         unsafe_store!(p, v[i], i)
     end
 end
