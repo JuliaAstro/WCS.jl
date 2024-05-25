@@ -3,9 +3,11 @@ using ConstructionBase
 using Test
 using Documenter
 
-@testset "Doctests" begin
-    DocMeta.setdocmeta!(WCS, :DocTestSetup, :(using WCS); recursive=true)
-    doctest(WCS)
+if VERSION >= v"1.6.0"
+    @testset "Doctests" begin
+        DocMeta.setdocmeta!(WCS, :DocTestSetup, :(using WCS); recursive=true)
+        doctest(WCS)
+    end
 end
 
 wcs = WCSTransform(2;
