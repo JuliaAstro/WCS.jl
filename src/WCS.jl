@@ -686,7 +686,7 @@ end
 
 Convert the array of pixel coordinates `pixcoords` to world coordinates
 according to the WCSTransform `wcs`. `pixcoords` should be a 2-d array
-where \"pixcoords[:, i]\" is the i-th set of coordinates, or a 1-d array
+where `pixcoords[:, i]` is the i-th set of coordinates, or a 1-d array
 representing a single set of coordinates.
 
 The return value is the same shape as `pixcoords`.
@@ -701,7 +701,7 @@ pix_to_world(wcs::WCSTransform, pixcoords::VecOrMat{Float64}) =
 Convert the array of pixel coordinates `pixcoords` to world coordinates
 according to the WCSTransform `wcs`, storing the result in the
 `worldcoords` and `stat` arrays. `pixcoords` should be a 2-d array where
-\"pixcoords[:, i]\" is the i-th set of coordinates, or a 1-d array
+`pixcoords[:, i]` is the i-th set of coordinates, or a 1-d array
 representing a single set of coordinates. `worldcoords` must be
 the same size and type as `pixcoords`.
 
@@ -743,7 +743,7 @@ end
 
 Convert the array of world coordinates `worldcoords` to pixel coordinates
 according to the WCSTransform `wcs`. `worldcoords` is a 2-d array
-where \"worldcoords[:, i]\" is the i-th set of coordinates, or a 1-d array
+where `worldcoords[:, i]` is the i-th set of coordinates, or a 1-d array
 representing a single set of coordinates.
 
 The return value is the same size as `worldcoords`.
@@ -758,7 +758,7 @@ world_to_pix(wcs::WCSTransform, worldcoords::VecOrMat{Float64}) =
 Convert the array of pixel coordinates `worldcoords` to pixel coordinates
 according to the WCSTransform `wcs`, storing the result in the
 `pixcoords` array. `worldcoords` should be a 2-d array where
-\"worldcoords[:, i]\" is the i-th set of coordinates, or a 1-d array
+`worldcoords[:, i]` is the i-th set of coordinates, or a 1-d array
 representing a single set of coordinates. `pixcoords` must be
 the same size and type as `worldcoords`.
 
