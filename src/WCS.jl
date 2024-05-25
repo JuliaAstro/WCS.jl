@@ -101,7 +101,7 @@ function convert_string(::Type{String}, ptr::Ptr{UInt8}, maxlen::Int)
 end
 
 macro check_type(k, v, t)
-    :(typeof($(esc(v))) <: $t || error($(esc(k)), " must have type ", $t))
+    :(typeof($(esc(v))) <: $t || throw(TypeError($(esc(k)), " must have type ", $t)))
 end
 
 macro check_prop(k, prop, v, op, n)
@@ -112,7 +112,7 @@ end
 
 macro same_size(a, b)
     :(size($(esc(a))) == size($(esc(b))) ||
-      error($(string(a)), " must have the same dimensions as ", $(string(b))))
+      throw(DimensionMismatch($(string(a)), " must have the same dimensions as ", $(string(b)))))
 end
 
 # -----------------------------------------------------------------------------
@@ -810,7 +810,9 @@ non-standard keywords.
 """
 function from_header(header::String; relax::Integer = HDR_ALL, ctrl::Integer = 0,
                      ignore_rejected::Bool = false, table::Bool = false)
-    @assert ctrl >= 0  # < 0 modifies the header
+    if ctrl < 0  # < 0 modifies the header
+        throw(DomainError("`ctrl` must be >= 0"))
+    end
     nkeyrec::Integer = div(length(header), 80)
     nreject = Ref{Cint}(0)
     nwcs = Ref{Cint}(0)
