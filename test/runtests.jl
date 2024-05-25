@@ -130,5 +130,5 @@ end
     @test_throws AssertionError WCS.convert_string(NTuple{72, UInt8}, "àèìoù")
 
     # Test repr of WCSTransform
-    @test repr(wcs) == "WCSTransform(naxis=2,cdelt=[-0.066667, 0.066667],crval=[0.0, -90.0],crpix=[-234.75, 8.3393])"
+    @test repr(wcs) == "WCSTransform(naxis=2, cdelt=[-0.066667, 0.066667], crval=[0.0, -90.0], crpix=[-234.75, 8.3393])"
 end
