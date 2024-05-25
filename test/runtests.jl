@@ -1,6 +1,12 @@
 using WCS
 using ConstructionBase
 using Test
+using Documenter
+
+@testset "Doctests" begin
+    DocMeta.setdocmeta!(WCS, :DocTestSetup, :(using WCS); recursive=true)
+    doctest(WCS)
+end
 
 wcs = WCSTransform(2;
                    alt     = 'B',
