@@ -1,12 +1,13 @@
 using WCS
 using Documenter
+using Documenter.Remotes: GitHub
 
 DocMeta.setdocmeta!(WCS, :DocTestSetup, :(using WCS); recursive=true)
 include("pages.jl")
 makedocs(;
     modules=[WCS],
     authors="JuliaAstro contributors",
-    repo="https://github.com/JuliaAstro/WCS.jl/blob/{commit}{path}#{line}",
+    repo=GitHub("JuliaAstro/WCS.jl"),
     sitename="WCS.jl",
     format=Documenter.HTML(;
         prettyurls=get(ENV, "CI", "false") == "true",
