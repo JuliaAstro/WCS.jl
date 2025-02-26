@@ -822,7 +822,7 @@ function from_header(header::String; relax::Integer = HDR_ALL, ctrl::Integer = 0
 
     # wcsbth & wcspih are not thread-safe; see
     # http://www.atnf.csiro.au/people/mcalabre/WCS/wcslib/threads.html
-    status = lock(wcs_lock) do 
+    status = lock(wcs_lock) do
         if table
             colsel = convert(Ptr{Cint}, C_NULL)
             status = ccall((:wcsbth, libwcs), Cint,
@@ -852,7 +852,7 @@ function from_header(header::String; relax::Integer = HDR_ALL, ctrl::Integer = 0
     # For each of the WCSTransforms, register a finalizer and finish
     # initialization of the struct by calling wcsset. This avoids race
     # conditions between threads using the same WCSTransform.
-    lock(wcs_lock) do 
+    lock(wcs_lock) do
         for w in result
             finalizer(free!, w)
             status = ccall((:wcsset, libwcs), Cint, (Ref{WCSTransform},), w)
