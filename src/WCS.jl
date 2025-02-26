@@ -256,7 +256,7 @@ julia> wcs = WCSTransform(2; crpix=[1000., 1000.])
 WCSTransform(naxis=2, cdelt=[1.0, 1.0], crval=[0.0, 0.0], crpix=[1000.0, 1000.0])
 ```
 
-is equilvalent to:
+is equivalent to:
 
 ```jldoctest
 julia> wcs = WCSTransform(2)
@@ -454,8 +454,8 @@ end
 """
     obsfix(ctrl::Integer, wcs::WCSTransform)
 
-Complete the `obsgeo` field `wcs` of observatory coordinates.  That is, if only the (x,y,z)
-Cartesian coordinate triplet or the (l,b,h) geodetic coordinate triplet are set, then it
+Complete the `obsgeo` field `wcs` of observatory coordinates.  That is, if only the `(x,y,z)`
+Cartesian coordinate triplet or the `(l,b,h)` geodetic coordinate triplet are set, then it
 derives the other triplet from it. If both triplets are set, then it checks for consistency
 at the level of 1 metre.
 
@@ -686,7 +686,7 @@ end
 
 Convert the array of pixel coordinates `pixcoords` to world coordinates
 according to the WCSTransform `wcs`. `pixcoords` should be a 2-d array
-where `pixcoords[:, i]` is the i-th set of coordinates, or a 1-d array
+where `pixcoords[:, i]` is the `i`-th set of coordinates, or a 1-d array
 representing a single set of coordinates.
 
 The return value is the same shape as `pixcoords`.
@@ -696,7 +696,7 @@ pix_to_world(wcs::WCSTransform, pixcoords::VecOrMat{Float64}) =
 
 
 """
-    pix_to_world!(wcs, pixcoords, worldcoords[; stat=, imcoords=, phi=, theta=])
+    pix_to_world!(wcs, pixcoords, worldcoords[; stat, imcoords, phi, theta])
 
 Convert the array of pixel coordinates `pixcoords` to world coordinates
 according to the WCSTransform `wcs`, storing the result in the
@@ -708,7 +708,7 @@ the same size and type as `pixcoords`.
 If given, the arrays `stat`, `imcoords`, `phi`, `theta` will be used
 to store intermediate results. Their sizes and types must all match
 `pixcoords`, except for `stat` which should be the same size but of type
-Cint (typically Int32).
+`Cint` (typically `Int32`).
 """
 pix_to_world!(wcs::WCSTransform, pixcoords, worldcoords; kwargs...) =
     pix_to_world_full(wcs, pixcoords, worldcoords; kwargs...).worldcoords
@@ -753,19 +753,19 @@ world_to_pix(wcs::WCSTransform, worldcoords::VecOrMat{Float64}) =
 
 
 """
-    world_to_pix!(wcs, worldcoords, pixcoords[; stat=, phi=, theta=, imcoords=])
+    world_to_pix!(wcs, worldcoords, pixcoords[; stat, phi, theta, imcoords])
 
 Convert the array of pixel coordinates `worldcoords` to pixel coordinates
 according to the WCSTransform `wcs`, storing the result in the
 `pixcoords` array. `worldcoords` should be a 2-d array where
-`worldcoords[:, i]` is the i-th set of coordinates, or a 1-d array
+`worldcoords[:, i]` is the `i`-th set of coordinates, or a 1-d array
 representing a single set of coordinates. `pixcoords` must be
 the same size and type as `worldcoords`.
 
 If given, the arrays `stat`, `imcoords`, `phi`, `theta` will be used
 to store intermediate results. Their sizes and types must all match
 `worldcoords`, except for `stat` which should be the same size but of type
-Cint (typically Int32).
+`Cint` (typically `Int32`).
 """
 world_to_pix!(wcs::WCSTransform, worldcoords, pixcoords; kwargs...) =
     world_to_pix_full(wcs, worldcoords, pixcoords; kwargs...).pixcoords
@@ -822,7 +822,7 @@ function from_header(header::String; relax::Integer = HDR_ALL, ctrl::Integer = 0
 
     # wcsbth & wcspih are not thread-safe; see
     # http://www.atnf.csiro.au/people/mcalabre/WCS/wcslib/threads.html
-    status = lock(wcs_lock) do 
+    status = lock(wcs_lock) do
         if table
             colsel = convert(Ptr{Cint}, C_NULL)
             status = ccall((:wcsbth, libwcs), Cint,
@@ -852,7 +852,7 @@ function from_header(header::String; relax::Integer = HDR_ALL, ctrl::Integer = 0
     # For each of the WCSTransforms, register a finalizer and finish
     # initialization of the struct by calling wcsset. This avoids race
     # conditions between threads using the same WCSTransform.
-    lock(wcs_lock) do 
+    lock(wcs_lock) do
         for w in result
             finalizer(free!, w)
             status = ccall((:wcsset, libwcs), Cint, (Ref{WCSTransform},), w)
