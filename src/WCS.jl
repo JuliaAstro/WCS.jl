@@ -256,7 +256,7 @@ julia> wcs = WCSTransform(2; crpix=[1000., 1000.])
 WCSTransform(naxis=2, cdelt=[1.0, 1.0], crval=[0.0, 0.0], crpix=[1000.0, 1000.0])
 ```
 
-is equilvalent to:
+is equivalent to:
 
 ```jldoctest
 julia> wcs = WCSTransform(2)
