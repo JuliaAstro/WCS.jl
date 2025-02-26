@@ -696,7 +696,7 @@ pix_to_world(wcs::WCSTransform, pixcoords::VecOrMat{Float64}) =
 
 
 """
-    pix_to_world!(wcs, pixcoords, worldcoords[; stat=, imcoords=, phi=, theta=])
+    pix_to_world!(wcs, pixcoords, worldcoords[; stat, imcoords, phi, theta])
 
 Convert the array of pixel coordinates `pixcoords` to world coordinates
 according to the WCSTransform `wcs`, storing the result in the
@@ -753,7 +753,7 @@ world_to_pix(wcs::WCSTransform, worldcoords::VecOrMat{Float64}) =
 
 
 """
-    world_to_pix!(wcs, worldcoords, pixcoords[; stat=, phi=, theta=, imcoords=])
+    world_to_pix!(wcs, worldcoords, pixcoords[; stat, phi, theta, imcoords])
 
 Convert the array of pixel coordinates `worldcoords` to pixel coordinates
 according to the WCSTransform `wcs`, storing the result in the
