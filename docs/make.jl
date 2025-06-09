@@ -11,13 +11,15 @@ makedocs(;
     sitename="WCS.jl",
     format=Documenter.HTML(;
         prettyurls=get(ENV, "CI", "false") == "true",
-        canonical="https://JuliaAstro.github.io/WCS.jl",
+        canonical="https://juliaastro.org/WCS/stable/",
         assets=String[],
     ),
     pages=pages
 )
 
 deploydocs(;
-    repo="github.com/JuliaAstro/WCS.jl",
-    devbranch="master",
+    repo = "github.com/JuliaAstro/WCS.jl",
+    devbranch = "master",
+    push_preview = true,
+    versions = ["stable" => "v^", "v#.#"], # Restrict to minor releases
 )

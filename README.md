@@ -1,13 +1,13 @@
 WCS.jl
 ======
 
-[![Build Status](https://github.com/JuliaAstro/WCS.jl/actions/workflows/CI.yml/badge.svg?branch=master)](https://github.com/JuliaAstro/WCS.jl/actions/workflows/CI.yml?query=branch%3Amaster)
-[![PkgEval](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/W/WCS.svg)](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/report.html)
-[![Coverage](https://codecov.io/gh/JuliaAstro/WCS.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/JuliaAstro/WCS.jl)
-[![License](https://img.shields.io/github/license/JuliaAstro/WCS.jl?color=yellow)](LICENSE)
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://juliaastro.org/WCS/stable/)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://juliaastro.org/WCS.jl/dev/)
 
-[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://JuliaAstro.github.io/WCS.jl/stable)
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://JuliaAstro.github.io/WCS.jl/dev)
+[![CI](https://github.com/JuliaAstro/WCS.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/JuliaAstro/WCS.jl/actions/workflows/CI.yml)
+[![PkgEval](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/W/WCS.svg)](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/report.html)
+[![codecov](https://codecov.io/gh/JuliaAstro/WCS.jl/graph/badge.svg?token=IkcEB1e4Ib)](https://codecov.io/gh/JuliaAstro/WCS.jl)
+![License](https://img.shields.io/github/license/JuliaAstro/WCS.jl?color=yellow)]
 
 Astronomical [World Coordinate
 System](http://www.atnf.csiro.au/people/mcalabre/WCS/) library for
