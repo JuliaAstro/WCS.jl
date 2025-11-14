@@ -1,5 +1,4 @@
-WCS.jl
-======
+# WCS.jl
 
 [![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://juliaastro.org/WCS/stable/)
 [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://juliaastro.org/WCS.jl/dev/)
@@ -9,14 +8,11 @@ WCS.jl
 [![codecov](https://codecov.io/gh/JuliaAstro/WCS.jl/graph/badge.svg?token=IkcEB1e4Ib)](https://codecov.io/gh/JuliaAstro/WCS.jl)
 ![License](https://img.shields.io/github/license/JuliaAstro/WCS.jl?color=yellow)]
 
-Astronomical [World Coordinate
-System](http://www.atnf.csiro.au/people/mcalabre/WCS/) library for
-Julia. This package wraps the WCSLIB C library.
+Astronomical [World Coordinate System](http://www.atnf.csiro.au/people/mcalabre/WCS/) library for Julia. This package wraps the WCSLIB C library.
 
-Example
--------
+## Example
 
-```julia
+```julia-repl
 julia> using WCS
 
 # create a transformation from scratch
@@ -59,8 +55,49 @@ julia> WCS.wcslib_version()
 v"6.2.0"
 ```
 
-License
--------
+## Development documentation
+
+### Tests
+
+Tests are run with [ParallelTestRunner.jl](https://github.com/JuliaTesting/ParallelTestRunner.jl), which hooks into the standard `Pkg.test` harness for more granular control. See below for some brief usage examples run from the package root directory:
+
+```julia-repl
+julia --proj
+
+julia> using Pkg
+```
+
+**List available testsets:**
+
+```julia-repl
+julia> Pkg.test("WCS"; test_args = `--list`)
+```
+
+**Run all tests**
+
+```julia-repl
+pkg> test
+```
+
+**Run specific tests**
+
+```julia-repl
+julia> Pkg.test("WCS"; test_args = `--verbose <testset name>`, julia_args = `--threads=auto`)
+```
+
+### Documentation
+
+Add [LiveServer.jl](https://github.com/JuliaDocs/LiveServer.jl) to your global env and then run the following from the package root directory:
+
+```julia-repl
+julia --proj=docs/
+
+julia> using LiveServer
+
+julia> servedocs()
+```
+
+## License
 
 The Julia code in this repository is distributed under the MIT
 license. Note that WCS.jl wraps the WCSLIB C library, which is
