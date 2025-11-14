@@ -6,7 +6,7 @@
 [![CI](https://github.com/JuliaAstro/WCS.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/JuliaAstro/WCS.jl/actions/workflows/CI.yml)
 [![PkgEval](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/W/WCS.svg)](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/report.html)
 [![codecov](https://codecov.io/gh/JuliaAstro/WCS.jl/graph/badge.svg?token=IkcEB1e4Ib)](https://codecov.io/gh/JuliaAstro/WCS.jl)
-![License](https://img.shields.io/github/license/JuliaAstro/WCS.jl?color=yellow)]
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Astronomical [World Coordinate System](http://www.atnf.csiro.au/people/mcalabre/WCS/) library for Julia. This package wraps the WCSLIB C library.
 
@@ -17,11 +17,12 @@ julia> using WCS
 
 # create a transformation from scratch
 julia> wcs = WCSTransform(2;
-                          cdelt = [-0.066667, 0.066667],
-                          ctype = ["RA---AIR", "DEC--AIR"],
-                          crpix = [-234.75, 8.3393],
-                          crval = [0., -90],
-                          pv    = [(2, 1, 45.0)])
+           cdelt = [-0.066667, 0.066667],
+           ctype = ["RA---AIR", "DEC--AIR"],
+           crpix = [-234.75, 8.3393],
+           crval = [0., -90],
+           pv    = [(2, 1, 45.0)],
+       )
 WCSTransform(naxis=2)
 
 # ... or from a FITS header
