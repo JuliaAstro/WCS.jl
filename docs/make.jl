@@ -2,7 +2,7 @@ using WCS
 using Documenter
 using Documenter.Remotes: GitHub
 
-# DocMeta.setdocmeta!(WCS, :DocTestSetup, :(using WCS); recursive = true)
+DocMeta.setdocmeta!(WCS, :DocTestSetup, :(using WCS); recursive = true)
 
 makedocs(;
     modules = [WCS],
