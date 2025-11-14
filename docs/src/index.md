@@ -48,15 +48,12 @@ julia> wcs = WCSTransform(2;
 WCSTransform(naxis=2, cdelt=[-0.066667, 0.066667], crval=[0.0, -90.0], crpix=[-234.75, 8.3393])
 ```
 
-We can also create one from a FITS header if it contains the appropriate keywords:
+We can also create one from a FITS `header` loaded into our environment if it contains the appropriate keywords:
 
 ```julia-repl
-julia> header = WCS.to_header(wcs); # Generate a sample header
+julia> wcs_array = WCS.from_header(header)
 
-julia> wcs_array = WCS.from_header(header);
-
-julia> wcs_array[1]
-WCSTransform(naxis=2,cdelt=[-0.066667, 0.066667],crval=[0.0, -90.0],crpix=[-234.75, 8.3393])
+julia> wcs_array[1];
 ```
 
 Now we can do conversions between pixel and world coordinates.
