@@ -1,10 +1,18 @@
+```@meta
+DocTestSetup = quote
+    using WCS
+end
+```
+
 # WCS.jl
 
-[![Code](https://img.shields.io/badge/Code-GitHub-black.svg)](https://github.com/JuliaAstro/WCS.jl)
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://juliaastro.org/WCS/stable/)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://juliaastro.org/WCS.jl/dev/)
+
 [![CI](https://github.com/JuliaAstro/WCS.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/JuliaAstro/WCS.jl/actions/workflows/CI.yml)
 [![PkgEval](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/W/WCS.svg)](https://juliaci.github.io/NanosoldierReports/pkgeval_badges/report.html)
 [![codecov](https://codecov.io/gh/JuliaAstro/WCS.jl/graph/badge.svg?token=IkcEB1e4Ib)](https://codecov.io/gh/JuliaAstro/WCS.jl)
-![License](https://img.shields.io/github/license/JuliaAstro/WCS.jl?color=yellow)]
+![License](https://img.shields.io/github/license/JuliaAstro/WCS.jl?color=yellow)
 
 Astronomical [World Coordinate System](http://www.atnf.csiro.au/people/mcalabre/WCS/) library for Julia. This package wraps
 the WCSLIB C library. This is a tool made for users who are already familiar with WCS transformations. If you are not, please
@@ -15,49 +23,37 @@ reference the following manuscripts
 3. [Representations of spectral coordinates in FITS](http://www.atnf.csiro.au/people/mcalabre/WCS/scs.pdf)
 4. [Representations of distortions in FITS world coordinate systems](http://www.atnf.csiro.au/people/mcalabre/WCS/dcs_20040422.pdf)
 
-## Table of Contents
-```@contents
-```
-
 ## Installation
 
 From the REPL, press `]` to enter Pkg mode
 
-```
+```julia-repl
 pkg> add WCS
 ```
 
 ## Usage
 
-Import the library
+Import the library:
 
-```@meta
-DocTestSetup = quote
-    using WCS
-end
-```
-
-```jldoctest
-julia> using WCS
-```
-
-There are many ways to utilize WCS transformations. Let's make one for a 2-dimensional array (like an image) from scratch.
+There are many ways to utilize WCS transformations. Let's make one for a 2-dimensional array (like an image) from scratch:
 
 ```jldoctest wcs
 julia> wcs = WCSTransform(2;
-                          cdelt = [-0.066667, 0.066667],
-                          ctype = ["RA---AIR", "DEC--AIR"],
-                          crpix = [-234.75, 8.3393],
-                          crval = [0., -90],
-                          pv    = [(2, 1, 45.0)])
+           cdelt = [-0.066667, 0.066667],
+           ctype = ["RA---AIR", "DEC--AIR"],
+           crpix = [-234.75, 8.3393],
+           crval = [0., -90],
+           pv    = [(2, 1, 45.0)],
+       )
 WCSTransform(naxis=2, cdelt=[-0.066667, 0.066667], crval=[0.0, -90.0], crpix=[-234.75, 8.3393])
 ```
 
-We can also create one from a FITS header if it contains the appropriate keywords
-```julia-repl
-julia> wcs_array = WCS.from_header(header)
+We can also create one from a FITS header if it contains the appropriate keywords:
 
-julia> wcs = wcs_array[1]
+```julia-repl
+wcs_array = WCS.from_header(header)
+
+wcs = wcs_array[1]
 ```
 
 Now we can do conversions between pixel and world coordinates.
