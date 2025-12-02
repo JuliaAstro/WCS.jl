@@ -825,16 +825,20 @@ function from_header(header::String; relax::Integer = HDR_ALL, ctrl::Integer = 0
     status = lock(wcs_lock) do
         if table
             colsel = convert(Ptr{Cint}, C_NULL)
-            status = ccall((:wcsbth, libwcs), Cint,
-                        (Ptr{UInt8}, Cint, Cint, Cint, Cint, Ptr{Cint},
-                            Ref{Cint}, Ref{Cint}, Ref{Ptr{WCSTransform}}),
-                        header, nkeyrec, relax, ctrl, keysel, colsel,
-                        nreject, nwcs, wcsptr)
+            status = redirect_stdio(; stdout = devnull, stderr = devnull) do
+                ccall((:wcsbth, libwcs), Cint,
+                            (Ptr{UInt8}, Cint, Cint, Cint, Cint, Ptr{Cint},
+                                Ref{Cint}, Ref{Cint}, Ref{Ptr{WCSTransform}}),
+                            header, nkeyrec, relax, ctrl, keysel, colsel,
+                            nreject, nwcs, wcsptr)
+            end
         else
-            status = ccall((:wcspih, libwcs), Cint,
-                        (Ptr{UInt8}, Cint, Cint, Cint, Ref{Cint}, Ref{Cint},
-                            Ref{Ptr{WCSTransform}}),
-                        header, nkeyrec, relax, ctrl, nreject, nwcs, wcsptr)
+            status = redirect_stdio(; stdout = devnull, stderr = devnull) do
+                ccall((:wcspih, libwcs), Cint,
+                            (Ptr{UInt8}, Cint, Cint, Cint, Ref{Cint}, Ref{Cint},
+                                Ref{Ptr{WCSTransform}}),
+                            header, nkeyrec, relax, ctrl, nreject, nwcs, wcsptr)
+            end
         end
         return status
     end
