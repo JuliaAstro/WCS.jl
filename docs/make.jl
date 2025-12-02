@@ -2,7 +2,7 @@ using WCS
 using Documenter, DocumenterInterLinks
 using Documenter.Remotes: GitHub
 
-using FITSIO # Precompile package extensions
+using FITSIO: FITSIO, read_header # Precompile package extensions
 
 DocMeta.setdocmeta!(WCS, :DocTestSetup, :(using WCS); recursive = true)
 
