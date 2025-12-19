@@ -1,11 +1,17 @@
 using WCS
-using Documenter
+using Documenter, DocumenterInterLinks
 using Documenter.Remotes: GitHub
+
+using FITSIO: FITSIO, read_header # Precompile package extensions
 
 DocMeta.setdocmeta!(WCS, :DocTestSetup, :(using WCS); recursive = true)
 
+links = InterLinks(
+    "FITSIO" => "https://juliaastro.org/FITSIO/stable/",
+)
+
 makedocs(;
-    modules = [WCS],
+    modules = [WCS, Base.get_extension(WCS, :FITSIOExt)],
     authors = "JuliaAstro contributors",
     repo = GitHub("JuliaAstro/WCS.jl"),
     sitename = "WCS.jl",
@@ -15,7 +21,8 @@ makedocs(;
     ),
     pages = [
         "Home" => "index.md",
-    ]
+    ],
+    plugins = [links],
 )
 
 # CI only: deploy docs
