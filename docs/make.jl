@@ -30,7 +30,7 @@ in_CI_env = get(ENV, "CI", "false") == "true"
 if in_CI_env
     deploydocs(;
         repo = "github.com/JuliaAstro/WCS.jl",
-        devbranch = "master",
+        devbranch = "main",
         push_preview = true,
         versions = ["stable" => "v^", "v#.#"], # Restrict to minor releases
     )
