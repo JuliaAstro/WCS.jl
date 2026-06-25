@@ -12,3 +12,4 @@ WCS = {path = ".."}
 
 [compat]
 ConstructionBase = "1"
+ParallelTestRunner = "2.6.2"
