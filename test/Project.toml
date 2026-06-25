@@ -12,3 +12,4 @@ WCS = {path = ".."}
 
 [compat]
 ConstructionBase = "1"
+FITSIO = "0.17.5"
