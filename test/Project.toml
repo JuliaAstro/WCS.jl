@@ -12,4 +12,4 @@ WCS = {path = ".."}
 
 [compat]
 ConstructionBase = "1"
-Documenter = "1.17.0"
+Documenter = "1"
