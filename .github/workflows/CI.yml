@@ -57,5 +57,6 @@ jobs:
       - name: Install Aqua
         run: using Pkg; Pkg.add("Aqua")
         shell: julia --color=yes {0}
-      - run: using Aqua, WCS; Aqua.test_all(WCS, ambiguities=false)
+      - name: Run Aqua tests
+        run: using Aqua, WCS; Aqua.test_all(WCS, ambiguities=false)
         shell: julia --color=yes --project=@. {0}
