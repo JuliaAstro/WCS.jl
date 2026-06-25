@@ -12,3 +12,4 @@ WCS = {path = ".."}
 
 [compat]
 ConstructionBase = "1"
+Downloads = "1.7.0"
