@@ -1,12 +1,10 @@
 name: Documentation
 on:
   push:
-    branches:
-      - main
+    branches: [main]
     tags: '*'
   pull_request:
-    branches:
-      - main
+    branches: [main]
 concurrency:
   # Skip intermediate builds: always.
   # Cancel intermediate builds: only if it is a pull request build.

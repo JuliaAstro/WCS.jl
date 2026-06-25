@@ -1,12 +1,10 @@
 name: CI
 on:
   push:
-    branches:
-      - main
+    branches: [main]
     tags: '*'
   pull_request:
-    branches:
-      - main
+    branches: [main]
 concurrency:
   # Skip intermediate builds: always.
   # Cancel intermediate builds: only if it is a pull request build.
@@ -56,5 +54,9 @@ jobs:
           version: '1'
       - uses: julia-actions/cache@v3
       - uses: julia-actions/julia-buildpkg@v1
-      - run: julia --color=yes -e 'using Pkg; Pkg.add("Aqua")'
-      - run: julia --color=yes --project=@. -e 'using Aqua, WCS; Aqua.test_all(WCS, ambiguities=false)'
+      - name: Install Aqua
+        run: using Pkg; Pkg.add("Aqua")
+        shell: julia --color=yes {0}
+      - name: Run Aqua tests
+        run: using Aqua, WCS; Aqua.test_all(WCS, ambiguities=false)
+        shell: julia --color=yes --project=@. {0}
