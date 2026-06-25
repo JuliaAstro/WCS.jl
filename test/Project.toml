@@ -12,3 +12,6 @@ WCS = {path = ".."}
 
 [compat]
 ConstructionBase = "1"
+Documenter = "1"
+Downloads = "1"
+ParallelTestRunner = "2"
