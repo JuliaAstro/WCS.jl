@@ -13,6 +13,6 @@ WCS = {path = ".."}
 [compat]
 ConstructionBase = "1"
 Documenter = "1"
-Downloads = "1"
+Downloads = "1, < 0.0.1"
 FITSIO = "0.17.5"
 ParallelTestRunner = "2"
